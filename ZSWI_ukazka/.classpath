@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/tags/release 1.0/Ukazka/JenaBeanExtension_1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/arq-2.8.7.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/jena-2.6.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/jena-2.6.4-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/owlapi-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/J.o.3/Plocha/Anotace/lib/owlapi-bin_1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
