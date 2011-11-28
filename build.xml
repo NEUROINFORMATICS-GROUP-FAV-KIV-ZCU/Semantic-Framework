@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Cp1250" ?>
 
-<project name="JenaBeanAnnotationExtension" default="srcjar">
+<project name="JenaBeanAnnotationExtension" default="distjar">
 
 	<description>
 			Author: Jakub Krauz
@@ -13,7 +13,8 @@
 				clean	  - deletes everything except sources
 	</description>
 
-	<property name="jar.file" value="tags/jenabeanextension-2.2.jar" />
+	<property name="jar.file" value="tags/jenabeanextension-2.3.jar" />
+	<property name="srcjar.file" value="tags/jenabeanextension-2.3-src.jar" />
 		
 	<property name="src.dir" value="./src" />
 	<property name="bin.dir" value="./bin" />
@@ -62,24 +63,18 @@
 		
 		<!-- ==============================================================================
 			target: srcjar
-			creates JAR containing class files and sources
+			creates JAR containing source files
 		=============================================================================== -->
-		<target name="srcjar" depends="compile">
+		<target name="srcjar">
 			<property name="temp.dir" value="./temp" />
 			<mkdir dir="${temp.dir}" />
 			<copy todir="${temp.dir}">
-				<fileset dir="${bin.dir}">
-					<exclude name="data/" />
-					<exclude name="*.*" />
-				</fileset>
-			</copy>
-			<copy todir="${temp.dir}/src">
 				<fileset dir="${src.dir}">
 					<exclude name="data/" />
 					<exclude name="*.*" />
 				</fileset>
 			</copy>
-			<jar destfile="${jar.file}" basedir="${temp.dir}" />
+			<jar destfile="${srcjar.file}" basedir="${temp.dir}" />
 			<delete dir="${temp.dir}" />
 		</target>
 		
