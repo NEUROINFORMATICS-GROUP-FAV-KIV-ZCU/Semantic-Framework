@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Cp1250" ?>
+
+<project name="JenaBeanAnnotationExtension" default="srcjar">
+
+	<description>
+			Author: Jakub Krauz
+			
+			Commands:
+				compile   - compiles the project
+				javadoc	  - creates the javadoc documentation
+				distjar   - creates JAR without sources
+				srcjar    - creates JAR containing source files (default)
+				clean	  - deletes everything except sources
+	</description>
+
+	<property name="jar.file" value="tags/jenabeanextension-2.2.jar" />
+		
+	<property name="src.dir" value="./src" />
+	<property name="bin.dir" value="./bin" />
+	<property name="doc.dir" value="./doc" />
+		
+		
+		<!-- ==============================================================================
+			target: compile
+			compiles this project
+		=============================================================================== -->
+		<target name="compile">
+			<mkdir dir="${bin.dir}" />
+			<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false" />
+		</target>
+
+		
+		<!-- ==============================================================================
+			target: javadoc
+			creates javadoc documentation
+		=============================================================================== -->
+		<target name="javadoc">
+			<mkdir dir="${doc.dir}" />
+			<javadoc destdir="${doc.dir}">
+				<fileset dir="${src.dir}" includes="**/*.java" />
+			</javadoc>
+		</target>
+		
+		
+		<!-- ==============================================================================
+			target: distjar
+			creates JAR containing class files
+		=============================================================================== -->
+		<target name="distjar" depends="compile">
+			<property name="temp.dir" value="./temp" />
+			<mkdir dir="${temp.dir}" />
+			<copy todir="${temp.dir}">
+				<fileset dir="${bin.dir}">
+					<exclude name="data/" />
+					<exclude name="*.*" />
+				</fileset>
+			</copy>
+			<jar destfile="${jar.file}" basedir="${temp.dir}" />
+			<delete dir="${temp.dir}" />
+		</target>
+		
+		
+		<!-- ==============================================================================
+			target: srcjar
+			creates JAR containing class files and sources
+		=============================================================================== -->
+		<target name="srcjar" depends="compile">
+			<property name="temp.dir" value="./temp" />
+			<mkdir dir="${temp.dir}" />
+			<copy todir="${temp.dir}">
+				<fileset dir="${bin.dir}">
+					<exclude name="data/" />
+					<exclude name="*.*" />
+				</fileset>
+			</copy>
+			<copy todir="${temp.dir}/src">
+				<fileset dir="${src.dir}">
+					<exclude name="data/" />
+					<exclude name="*.*" />
+				</fileset>
+			</copy>
+			<jar destfile="${jar.file}" basedir="${temp.dir}" />
+			<delete dir="${temp.dir}" />
+		</target>
+		
+		
+		<!-- ==============================================================================
+			target: clean
+			deletes class files, javadoc documentation and JAR file
+		=============================================================================== -->
+		<target name="clean">
+			<delete dir="${bin.dir}" />
+			<delete dir="${doc.dir}" />
+			<delete file="${jar.file}" />
+		</target>
+	
+</project>
