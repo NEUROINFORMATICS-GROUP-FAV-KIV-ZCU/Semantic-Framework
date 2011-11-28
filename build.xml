@@ -13,8 +13,8 @@
 				clean	  - deletes everything except sources
 	</description>
 
-	<property name="jar.file" value="tags/jenabeanextension-2.3.jar" />
-	<property name="srcjar.file" value="tags/jenabeanextension-2.3-src.jar" />
+	<property name="jar.file" value="jenabeanextension-2.3.jar" />
+	<property name="srcjar.file" value="jenabeanextension-src-2.3.jar" />
 		
 	<property name="src.dir" value="./src" />
 	<property name="bin.dir" value="./bin" />
