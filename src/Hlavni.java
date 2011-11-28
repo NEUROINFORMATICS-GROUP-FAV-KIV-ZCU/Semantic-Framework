@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import tools.JenaBeanExtensionTool;
-import tools.OwlApiTool;
 
 
 /**
@@ -23,11 +22,12 @@ public class Hlavni {
     	/* vytvoreni objektu - musi provadet uzivatel knihovny sam */
     	//ExampleHodneDat ex = new ExampleHodneDat(10);
     	Example ex = new Example();
+    	//ExamplePerson ex = new ExamplePerson();
     	List<Object> dataList = ex.getVstupniPole();
     	
     	
     	JenaBeanExtensionTool jenaBean;
-    	OwlApiTool owlApi;
+    	//OwlApiTool owlApi;
 		try {
 			long time1 = System.currentTimeMillis();
 			jenaBean = new JenaBeanExtensionTool(dataList);
@@ -36,19 +36,21 @@ public class Hlavni {
 			is = jenaBean.getOntologyDocument();
 			long time3 = System.currentTimeMillis();
 			vypisTrvani(time3 - time2, "JenaBean creating output");
-			//owlApi = new OwlApiTool(is);
+			
+			/*owlApi = new OwlApiTool(is);
 			long time4 = System.currentTimeMillis();
 			vypisTrvani(time4 - time3, "OwlApi loading");
-			//is = owlApi.convertToSemanticStandard("owl");
+			is = owlApi.convertToSemanticStandard("owl");
 			long time5 = System.currentTimeMillis();
-			vypisTrvani(time5 - time4, "OwlApi creating output");
+			vypisTrvani(time5 - time4, "OwlApi creating output");*/
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
     	
     	
-    	writeSemanticToFile("document3.owl");
+    	writeSemanticToFile("ontologyDocument.owl");
 
     }
     

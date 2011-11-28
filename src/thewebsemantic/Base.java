@@ -9,6 +9,7 @@ import java.lang.reflect.ParameterizedType;
 import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DataRange;
+import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
@@ -136,6 +137,12 @@ public class Base {
 
 		if (ctx.isAnnotatedBy(Label.class)) {
 			op.setLabel(ctx.getAnnotation(Label.class).value(), null);
+		}
+		
+		if (ctx.isAnnotatedBy(EquivalentProperty.class)) {
+			String uri = ctx.getAnnotation(EquivalentProperty.class).value();
+			Property eqProp = ResourceFactory.createProperty(uri);	
+			op.addEquivalentProperty(eqProp);
 		}
 		
 		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {

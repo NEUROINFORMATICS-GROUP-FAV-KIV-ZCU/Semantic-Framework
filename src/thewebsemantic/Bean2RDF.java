@@ -30,7 +30,6 @@ import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
-import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
@@ -269,16 +268,6 @@ public class Bean2RDF extends Base {
             OntClass oc = om.createClass(getURI(bean));
             OntClass oc2 = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
             oc.addEquivalentClass(oc2);
-        }
-        
-        // EquivalentProperty
-        if (bean.getClass().isAnnotationPresent(EquivalentProperty.class)){
-            /* OntProperty op = om.createOntProperty(getURI(bean));
-               OntProperty op2 = om.createOntProperty(AnnotationValues.getBeanEquivalentClass(bean));
-               op.addEquivalentProperty(op2); */
-            ObjectProperty opr = om.createObjectProperty(getURI(bean));
-            ObjectProperty opr2 = om.createObjectProperty(bean.getClass().getAnnotation(EquivalentProperty.class).value());
-            opr.addEquivalentProperty(opr2);
         }
         
         // SameAs

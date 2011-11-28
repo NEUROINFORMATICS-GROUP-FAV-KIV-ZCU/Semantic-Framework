@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * equivalent property
  *
  **/
-@Target({ElementType.TYPE})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EquivalentProperty {
     String value();
