@@ -88,6 +88,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 	/** XML document describing semantic model */
 	private ByteArrayOutputStream ontologyDocument;
+	
+	/** language of the ontology document */
+	private String ontDocumentLang;
 
 
 	/**
@@ -115,8 +118,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 	@Override
 	public InputStream getOntologyDocument() throws IOException {
-		if (ontologyDocument == null)
+		if (ontologyDocument == null || !ontDocumentLang.equals(RDF_XML)) {
 			createInputStream(null);
+			ontDocumentLang = RDF_XML;
+		}
 		ByteArrayInputStream out = new ByteArrayInputStream(ontologyDocument.toByteArray());
 		out.close();
 		return out;
@@ -125,8 +130,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public InputStream getOntologyDocument(String lang) throws IOException {
-		if (ontologyDocument == null)
+		if (ontologyDocument == null || !ontDocumentLang.equals(lang)) {
 			createInputStream(lang);
+			ontDocumentLang = lang;
+		}
 		ByteArrayInputStream out = new ByteArrayInputStream(ontologyDocument.toByteArray());
 		out.close();
 		return out;
