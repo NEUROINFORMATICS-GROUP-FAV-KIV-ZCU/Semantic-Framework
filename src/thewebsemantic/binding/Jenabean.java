@@ -54,18 +54,10 @@ public class Jenabean  {
 	}
 	
 	/**
-	 * Writes a serialization of the model as a RDF/XML document.
-	 * @param out The output stream which the XML will be written to.
-	 */
-	public void writeModel(OutputStream out) {
-		model.write(out);
-	}
-	
-	/**
 	 * Writes a serialization of the model as an ontology document
 	 * in a specified language.
-	 * @param out The output stream which the XML will be written to.
-	 * @param lang Required language for the ontology document.
+	 * @param out The output stream to which the XML will be written.
+	 * @param lang Language of the ontology document.
 	 */
 	public void writeModel(OutputStream out, String lang) {
 		model.write(out, lang);

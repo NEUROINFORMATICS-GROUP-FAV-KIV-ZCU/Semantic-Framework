@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.List;
 
 import tools.JenaBeanExtensionTool;
+import tools.OwlApiTool;
+import tools.Syntax;
 
 
 /**
@@ -25,37 +27,30 @@ public class Hlavni {
     	//ExamplePerson ex = new ExamplePerson();
     	List<Object> dataList = ex.getVstupniPole();
     	
-    	
     	JenaBeanExtensionTool jenaBean;
     	//OwlApiTool owlApi;
 		try {
-			long time1 = System.currentTimeMillis();
-			jenaBean = new JenaBeanExtensionTool(dataList);
-			long time2 = System.currentTimeMillis();
-			vypisTrvani(time2 - time1, "JenaBean loading");
-			is = jenaBean.getOntologyDocument();
-			long time3 = System.currentTimeMillis();
-			vypisTrvani(time3 - time2, "JenaBean creating output");
+			/*jenaBean = new JenaBeanExtensionTool(dataList);
+			is = jenaBean.getOntologyDocument(Syntax.TURTLE);
+			owlApi = new OwlApiTool(is);
+			is = owlApi.convertToSemanticStandard("owl");*/
 			
-			/*owlApi = new OwlApiTool(is);
-			long time4 = System.currentTimeMillis();
-			vypisTrvani(time4 - time3, "OwlApi loading");
-			is = owlApi.convertToSemanticStandard("owl");
-			long time5 = System.currentTimeMillis();
-			vypisTrvani(time5 - time4, "OwlApi creating output");*/
+			jenaBean = new JenaBeanExtensionTool(dataList);
+			FileOutputStream out = new FileOutputStream(new File("ontologyDocument.owl"));
+			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
+			out.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
-    	
-    	
-    	writeSemanticToFile("ontologyDocument.owl");
+    	//writeSemanticToFile("ontologyDocument3.owl");
 
     }
     
     
-    private static void writeSemanticToFile(String fileName) {
+    @SuppressWarnings("unused")
+	private static void writeSemanticToFile(String fileName) {
     	System.out.println("- USER -");
     	System.out.println("Creating file " + fileName + "...");
     	try {
@@ -72,7 +67,8 @@ public class Hlavni {
     }
     
     
-    private static void vypisTrvani(long millis, String usek) {
+    @SuppressWarnings("unused")
+	private static void vypisTrvani(long millis, String usek) {
 		long min = millis / 60000;
 		long sec = (millis - min * 60000) / 1000;
 		System.out.println(usek + ": " + min + " min, " + sec + " sec");

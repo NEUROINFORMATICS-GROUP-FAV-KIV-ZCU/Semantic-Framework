@@ -2,8 +2,8 @@ package tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -23,62 +23,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  */
 public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
-	/**
-	 * RDF/XML language. This is the default.<br>
-	 * This version produces the output efficiently, but it is not
-	 * readable. For readable output use <code>RDF_XML_ABBREV</code>.
-	 * @see http://www.w3.org/TR/rdf-syntax-grammar/
-	 */
-	public static final String RDF_XML = "RDF/XML";
-	
-	/**
-	 * RDF/XML language.<br>
-	 * This version produces a readable output, but not so
-	 * efficiently as <code>RDF_XML</code>.
-	 * @see http://www.w3.org/TR/rdf-syntax-grammar/
-	 */
-	public static final String RDF_XML_ABBREV = "RDF/XML-ABBREV";
-	
-	/** 
-	 * RDF Core's N-Triples language.
-	 * @see http://www.w3.org/TR/rdf-testcases/#ntriples
-	 */
-	public static final String N_TRIPLE = "N-TRIPLE";
-	
-	/**
-	 * Terse RDF Triple language.
-	 * @see http://www.w3.org/TeamSubmission/turtle/
-	 */
-	public static final String TURTLE = "TURTLE";
-	
-	/**
-	 * Tim Berners-Lee's N3 (Notation 3) language.
-	 * @see http://www.w3.org/2000/10/swap/Primer.html
-	 */
-	public static final String N3 = "N3";
-	
-	/**
-	 * Tim Berners-Lee's N3 (Notation 3) language - full version.
-	 * @see http://www.w3.org/2000/10/swap/Primer.html
-	 */
-	public static final String N3_PP = "N3-PP";
-	
-	/**
-	 * Tim Berners-Lee's N3 (Notation 3) language - plain version.<br>
-	 * This version of the N3 language does not nest bNode structures
-	 * but does write record-like groups of all properties for a subject.
-	 * @see http://www.w3.org/2000/10/swap/Primer.html
-	 */
-	public static final String N3_PLAIN = "N3-PLAIN";
-	
-	/**
-	 * Tim Berners-Lee's N3 (Notation 3) language - triple version.<br>
-	 * This version of the N3 language writes one statement per line,
-	 * like N-TRIPLES, but also does qname conversion of URIrefs.
-	 * @see http://www.w3.org/2000/10/swap/Primer.html
-	 */
-	public static final String N3_TRIPLE = "N3-TRIPLE";
-
+	/** default language of the ontology document */
+	public static final String DEFAULT_LANG = Syntax.RDF_XML;
 	
 	/** logger */
 	private Log log = LogFactory.getLog(getClass());
@@ -117,26 +63,31 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 
 	@Override
-	public InputStream getOntologyDocument() throws IOException {
-		if (ontologyDocument == null || !ontDocumentLang.equals(RDF_XML)) {
-			createInputStream(null);
-			ontDocumentLang = RDF_XML;
-		}
-		ByteArrayInputStream out = new ByteArrayInputStream(ontologyDocument.toByteArray());
-		out.close();
-		return out;
+	public InputStream getOntologyDocument() {
+		return getOntologyDocument(DEFAULT_LANG);
 	}
 	
 	
 	@Override
-	public InputStream getOntologyDocument(String lang) throws IOException {
+	public InputStream getOntologyDocument(String lang) {
 		if (ontologyDocument == null || !ontDocumentLang.equals(lang)) {
-			createInputStream(lang);
+			createOntologyDocument(lang);
 			ontDocumentLang = lang;
 		}
-		ByteArrayInputStream out = new ByteArrayInputStream(ontologyDocument.toByteArray());
-		out.close();
-		return out;
+		InputStream is = new ByteArrayInputStream(ontologyDocument.toByteArray());
+		return is;
+	}
+	
+	
+	@Override
+	public void writeOntologyDocument(OutputStream out) {
+		jenaBean.writeModel(out, DEFAULT_LANG);
+	}
+	
+	
+	@Override
+	public void writeOntologyDocument(OutputStream out, String lang) {
+		jenaBean.writeModel(out, lang);
 	}
 
 
@@ -165,13 +116,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * 
 	 * @param lang Required language for the ontology document.
 	 * 			   If null, the default language RDF/XML is set.
-	 * @throws IOException if I/O problems occurred
 	 */
-	private void createInputStream(String lang) throws IOException {
+	private void createOntologyDocument(String lang) {
 		ontologyDocument = new ByteArrayOutputStream();
 		jenaBean.writeModel(ontologyDocument, lang);
-		ontologyDocument.flush();
-		ontologyDocument.close();
 	}
 
 }
