@@ -99,10 +99,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	private void createModel(List<Object> dataList) {
 		log.debug("Started creating ontology model.");
 
-		/* parameter OntModelSpec.OWL_MEM disables reasoner included in
+		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included in
 		 * ModelFactory.createOntologyModel(); as default,
 		 * which led to a very slow computation */
-		jenaBean.bind(ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
+		jenaBean.bind(ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM));
 		
 		for (int i = 0; i < dataList.size(); i++) {
 			jenaBean.writer().save(dataList.get(i));

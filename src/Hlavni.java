@@ -22,23 +22,24 @@ public class Hlavni {
     public static void main(String[] args) {
     	
     	/* vytvoreni objektu - musi provadet uzivatel knihovny sam */
-    	//ExampleHodneDat ex = new ExampleHodneDat(10);
+    	//ExampleHodneDat ex = new ExampleHodneDat(1000);
     	Example ex = new Example();
-    	//ExamplePerson ex = new ExamplePerson();
     	List<Object> dataList = ex.getVstupniPole();
     	
     	JenaBeanExtensionTool jenaBean;
     	//OwlApiTool owlApi;
 		try {
 			/*jenaBean = new JenaBeanExtensionTool(dataList);
-			is = jenaBean.getOntologyDocument(Syntax.TURTLE);
+			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 			owlApi = new OwlApiTool(is);
 			is = owlApi.convertToSemanticStandard("owl");*/
 			
 			jenaBean = new JenaBeanExtensionTool(dataList);
-			FileOutputStream out = new FileOutputStream(new File("Restriction (Cardinality).owl"));
+			System.out.println("JenaBean: data nactena");
+			FileOutputStream out = new FileOutputStream(new File("ontDocument2.owl"));
 			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML);
 			out.close();
+			System.out.println("Zapsano do souboru.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
