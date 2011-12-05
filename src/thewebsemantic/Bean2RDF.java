@@ -251,16 +251,16 @@ public class Bean2RDF extends Base {
 
         
         // Cardinality
-        if (bean.getClass().isAnnotationPresent(Cardinality.class)) {
-        	if (bean.getClass().isAnnotationPresent(OnProperty.class)) {
-        		String onProperty = bean.getClass().getAnnotation(OnProperty.class).value();
-                OntProperty ontProperty = om.createOntProperty(onProperty);
-                int cardinalityValue = bean.getClass().getAnnotation(Cardinality.class).value();
-                if ((ontProperty != null) && (cardinalityValue >= 0)){
-                    om.createCardinalityRestriction(getURI(bean),ontProperty,cardinalityValue);
-                }
-        	}
-        }
+//        if (bean.getClass().isAnnotationPresent(Cardinality.class)) {
+//        	if (bean.getClass().isAnnotationPresent(OnProperty.class)) {
+//        		String onProperty = bean.getClass().getAnnotation(OnProperty.class).value();
+//                OntProperty ontProperty = om.createOntProperty(onProperty);
+//                int cardinalityValue = bean.getClass().getAnnotation(Cardinality.class).value();
+//                if ((ontProperty != null) && (cardinalityValue >= 0)){
+//                    om.createCardinalityRestriction(getURI(bean),ontProperty,cardinalityValue);
+//                }
+//        	}
+//        }
         
 
         // EquivalentClass

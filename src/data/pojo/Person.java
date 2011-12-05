@@ -19,6 +19,7 @@ import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
+import thewebsemantic.annotations.MaxCardinality;
 import thewebsemantic.annotations.OnProperty;
 import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
@@ -54,15 +55,18 @@ public class Person implements java.io.Serializable {
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
 	@EquivalentProperty("http://www.jina.adresa.cz/krestni_jmeno")
+	// @SomeValuesFrom("http://www.nejaka.adresa.cz/ceskaJmena")
+	@MaxCardinality(2)
 	private String givenname;
 
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
-	@Symmetric
+	// @Symmetric
 	// @RdfProperty(transitive=true, symmetric=true)
 	@Inverse("http://www.kiv.zcu.cz/eeg/email")
 	// @DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#vek")
 	// @Transitive
-	@AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
+	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
+	@Cardinality(1)
 	private String surname;
 
 	private Timestamp dateOfBirth;

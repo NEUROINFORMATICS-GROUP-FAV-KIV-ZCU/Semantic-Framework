@@ -36,8 +36,8 @@ public class Hlavni {
 			is = owlApi.convertToSemanticStandard("owl");*/
 			
 			jenaBean = new JenaBeanExtensionTool(dataList);
-			FileOutputStream out = new FileOutputStream(new File("ontologyDocument.owl"));
-			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
+			FileOutputStream out = new FileOutputStream(new File("Restriction (Cardinality).owl"));
+			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML);
 			out.close();
 			
 		} catch (Exception e) {

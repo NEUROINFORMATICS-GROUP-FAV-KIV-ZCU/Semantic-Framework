@@ -7,12 +7,15 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
 
 import thewebsemantic.annotations.AllValuesFrom;
+import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DataRange;
 import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
+import thewebsemantic.annotations.MaxCardinality;
+import thewebsemantic.annotations.MinCardinality;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
 import thewebsemantic.annotations.Symmetric;
@@ -21,10 +24,15 @@ import thewebsemantic.annotations.VersionInfo;
 import thewebsemantic.binder.Binder;
 import thewebsemantic.binder.BinderImp;
 
+import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
+import com.hp.hpl.jena.ontology.CardinalityRestriction;
+import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
+import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.ProfileRegistry;
+import com.hp.hpl.jena.ontology.SomeValuesFromRestriction;
 import com.hp.hpl.jena.ontology.impl.OntModelImpl;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -145,22 +153,45 @@ public class Base {
 			op.addEquivalentProperty(eqProp);
 		}
 		
-		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
-			Resource range = ResourceFactory.createResource(ctx.getAnnotation(AllValuesFrom.class).value());
-			// property patri tride "subject" - pouze v ni plati dana restrikce
-			om.createAllValuesFromRestriction(getURI(ctx.subject), op, range);
-		}
-		
-		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
-			Resource range = ResourceFactory.createResource(ctx.getAnnotation(SomeValuesFrom.class).value());
-			// property patri tride "subject" - pouze v ni plati dana restrikce
-			om.createSomeValuesFromRestriction(getURI(ctx.subject), op, range);
-		}
-
 		if (ctx.isAnnotatedBy(IsDefinedBy.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(IsDefinedBy.class).value());
 			if (res != null)
 				op.setIsDefinedBy(res);
+		}
+		
+		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
+			Resource range = ResourceFactory.createResource(ctx.getAnnotation(AllValuesFrom.class).value());
+			// vytvoreni anonymni restrikce
+			AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, op, range);
+			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
+			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+		}
+		
+		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
+			Resource range = ResourceFactory.createResource(ctx.getAnnotation(SomeValuesFrom.class).value());
+			// vytvoreni anonymni restrikce
+			SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, op, range);
+			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
+			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+		}
+
+		
+		if (ctx.isAnnotatedBy(Cardinality.class)) {
+			int cardinality = ctx.getAnnotation(Cardinality.class).value();
+			CardinalityRestriction restriction = om.createCardinalityRestriction(null, op, cardinality);
+			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+		}
+		
+		if (ctx.isAnnotatedBy(MaxCardinality.class)) {
+			int cardinality = ctx.getAnnotation(MaxCardinality.class).value();
+			MaxCardinalityRestriction restriction = om.createMaxCardinalityRestriction(null, op, cardinality);
+			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+		}
+		
+		if (ctx.isAnnotatedBy(MinCardinality.class)) {
+			int cardinality = ctx.getAnnotation(MinCardinality.class).value();
+			MinCardinalityRestriction restriction = om.createMinCardinalityRestriction(null, op, cardinality);
+			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 
 		return op;
