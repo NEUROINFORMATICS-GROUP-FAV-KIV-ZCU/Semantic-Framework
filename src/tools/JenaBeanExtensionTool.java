@@ -40,25 +40,41 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 
 	/**
-	 * Loads data from a list of objects and creates the semantic model.
+	 * Loads data from the list of objects and creates an ontology model
+	 * in the default specification (OWL-DL without inferencing).
 	 * 
 	 * @param dataList list of objects - object-orinted model
 	 */
 	public JenaBeanExtensionTool(List<Object> dataList) {
-		createModel(dataList);
+		createModel(dataList, OntModelSpec.OWL_DL_MEM);
+	}
+	
+	
+	/**
+	 * Loads data from the list of objects and creates an ontology model
+	 * in the given specification (e.g. OWL Full, OWL-DL, OWL-Lite, without
+	 * reasoning or with an inferencer etc.).
+	 * @see OntModelSpec
+	 * 
+	 * @param dataList - list of objects - object-orinted model
+	 * @param specification - specification of the ontology model
+	 */
+	public JenaBeanExtensionTool(List<Object> dataList, OntModelSpec specification) {
+		createModel(dataList, specification);
 	}
 
 
 	/**
-	 * Loads data from a list of objects and creates the semantic model.
+	 * Loads data from the list of objects and creates an ontology model
+	 * in the default specification (OWL-DL without inferencing).
 	 * Sets the default namespace for the whole model.
 	 * 
-	 * @param dataList list of objects - object-oriented model
-	 * @param namespace namespace for the whole model
+	 * @param dataList - list of objects - object-oriented model
+	 * @param namespace - namespace for the whole model
 	 */
 	public JenaBeanExtensionTool(List<Object> dataList, String namespace) {
 		UserDefNamespace.set(namespace);
-		createModel(dataList);
+		createModel(dataList, OntModelSpec.OWL_DL_MEM);
 	}
 
 
@@ -94,15 +110,16 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	/**
 	 * Creates the semantic model and fills it with the user data
 	 * 
-	 * @param dataList list of user objects
+	 * @param dataList - list of user objects
+	 * @param spec - specification of the ontology model
 	 */
-	private void createModel(List<Object> dataList) {
+	private void createModel(List<Object> dataList, OntModelSpec spec) {
 		log.debug("Started creating ontology model.");
 
 		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included in
 		 * ModelFactory.createOntologyModel(); as default,
 		 * which led to a very slow computation */
-		jenaBean.bind(ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM));
+		jenaBean.bind(ModelFactory.createOntologyModel(spec));
 		
 		for (int i = 0; i < dataList.size(); i++) {
 			jenaBean.writer().save(dataList.get(i));

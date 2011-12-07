@@ -52,7 +52,7 @@ import java.lang.annotation.Target;
  *             not compatible with reasoner processing.
  */
 @Deprecated
-@Target({ ElementType.TYPE })
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AllDifferent {
 	String[] value();

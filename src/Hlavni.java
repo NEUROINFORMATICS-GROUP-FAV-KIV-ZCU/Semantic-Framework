@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import com.hp.hpl.jena.ontology.OntModelSpec;
+
 import tools.JenaBeanExtensionTool;
 import tools.OwlApiTool;
 import tools.Syntax;
