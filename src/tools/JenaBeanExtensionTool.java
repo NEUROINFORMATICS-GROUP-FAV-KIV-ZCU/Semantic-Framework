@@ -32,12 +32,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	/** provides operations over semantic model */
 	private Jenabean jenaBean = Jenabean.instance();
 
-	/** XML document describing semantic model */
-	private ByteArrayOutputStream ontologyDocument;
-	
-	/** language of the ontology document */
-	private String ontDocumentLang;
-
 
 	/**
 	 * Loads data from the list of objects and creates an ontology model
@@ -86,12 +80,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public InputStream getOntologyDocument(String lang) {
-		if (ontologyDocument == null || !ontDocumentLang.equals(lang)) {
-			createOntologyDocument(lang);
-			ontDocumentLang = lang;
-		}
-		InputStream is = new ByteArrayInputStream(ontologyDocument.toByteArray());
-		return is;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		jenaBean.writeModel(out, lang);
+		return new ByteArrayInputStream(out.toByteArray());
 	}
 	
 	
@@ -127,16 +118,5 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		log.debug("Ontology model was created.");
 	}
 	
-	
-	/**
-	 * Creates the ontology document in a specified language.
-	 * 
-	 * @param lang Required language for the ontology document.
-	 * 			   If null, the default language RDF/XML is set.
-	 */
-	private void createOntologyDocument(String lang) {
-		ontologyDocument = new ByteArrayOutputStream();
-		jenaBean.writeModel(ontologyDocument, lang);
-	}
 
 }

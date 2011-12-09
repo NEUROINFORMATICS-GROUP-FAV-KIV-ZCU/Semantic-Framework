@@ -31,23 +31,23 @@ public class Hlavni {
     	JenaBeanExtensionTool jenaBean;
     	//OwlApiTool owlApi;
 		try {
-			/*jenaBean = new JenaBeanExtensionTool(dataList);
+			jenaBean = new JenaBeanExtensionTool(dataList);
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
-			owlApi = new OwlApiTool(is);
+			/*owlApi = new OwlApiTool(is);
 			is = owlApi.convertToSemanticStandard("owl");*/
 			
-			jenaBean = new JenaBeanExtensionTool(dataList);
+			/*jenaBean = new JenaBeanExtensionTool(dataList);
 			System.out.println("JenaBean: data nactena");
 			FileOutputStream out = new FileOutputStream(new File("ontDocument2.owl"));
 			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML);
 			out.close();
-			System.out.println("Zapsano do souboru.");
+			System.out.println("Zapsano do souboru.");*/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
-    	//writeSemanticToFile("ontologyDocument3.owl");
+    	writeSemanticToFile("ontologyDocument3.owl");
 
     }
     
