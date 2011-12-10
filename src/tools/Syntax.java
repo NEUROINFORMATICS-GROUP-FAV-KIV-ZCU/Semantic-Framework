@@ -1,5 +1,7 @@
 package tools;
 
+import java.lang.reflect.Field;
+
 /**
  * Constants for defining syntax of an ontology document
  * produced by the Jena library.
@@ -37,6 +39,13 @@ public class Syntax {
 	public static final String TURTLE = "TURTLE";
 	
 	/**
+	 * Terse RDF Triple language.
+	 * The same as TURTLE.
+	 * @see http://www.w3.org/TeamSubmission/turtle/
+	 */
+	public static final String TTL = "TTL";
+	
+	/**
 	 * Tim Berners-Lee's N3 (Notation 3) language.
 	 * @see http://www.w3.org/2000/10/swap/Primer.html
 	 */
@@ -63,5 +72,23 @@ public class Syntax {
 	 * @see http://www.w3.org/2000/10/swap/Primer.html
 	 */
 	public static final String N3_TRIPLE = "N3-TRIPLE";
+	
+	
+	/**
+	 * Checks if the given string equals one of the predefined syntax
+	 * names.
+	 * @param syntaxName - checked syntax name
+	 * @return true if the string is a valid syntax name, else false
+	 */
+	public static boolean isValidSyntaxName(String syntaxName) {
+		Field[] fields = Syntax.class.getDeclaredFields();
+		for (Field field : fields)
+			try {
+				if (field.get(null).equals(syntaxName))
+					return true;
+			} catch (Exception e) {
+			}
+		return false;
+	}
 
 }
