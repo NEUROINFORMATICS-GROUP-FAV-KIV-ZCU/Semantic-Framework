@@ -84,7 +84,10 @@ public class Person implements java.io.Serializable {
 	private String password;
 	private String authority;
 	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
+	
+	@Cardinality(5)
 	private Set<Scenario> scenarios = new HashSet<Scenario>(0);
+	
 	private Set<PersonAddParamsValues> personAddParamsValueses = new HashSet<PersonAddParamsValues>(
 			0);
 	private Set<ResearchGroupMembership> researchGroupMemberships = new HashSet<ResearchGroupMembership>(
