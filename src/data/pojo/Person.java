@@ -56,7 +56,7 @@ public class Person implements java.io.Serializable {
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
 	@EquivalentProperty("http://www.jina.adresa.cz/krestni_jmeno")
 	// @SomeValuesFrom("http://www.nejaka.adresa.cz/ceskaJmena")
-	@MaxCardinality(2)
+	// @MaxCardinality(2)
 	private String givenname;
 
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
@@ -66,7 +66,7 @@ public class Person implements java.io.Serializable {
 	// @DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#vek")
 	// @Transitive
 	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
-	@Cardinality(1)
+	// @Cardinality(1)
 	private String surname;
 
 	private Timestamp dateOfBirth;
@@ -85,13 +85,14 @@ public class Person implements java.io.Serializable {
 	private String authority;
 	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
 	
-	@Cardinality(5)
 	private Set<Scenario> scenarios = new HashSet<Scenario>(0);
 	
 	private Set<PersonAddParamsValues> personAddParamsValueses = new HashSet<PersonAddParamsValues>(
 			0);
 	private Set<ResearchGroupMembership> researchGroupMemberships = new HashSet<ResearchGroupMembership>(
 			0);
+	
+	@MaxCardinality(3)
 	private Set<EyesDefect> eyesDefects = new HashSet<EyesDefect>(0);
 	private Set<Measuration> measurationsForPersonId = new HashSet<Measuration>(0);
 	private Set<ResearchGroup> researchGroups = new HashSet<ResearchGroup>(0);

@@ -1,4 +1,5 @@
 import data.pojo.Data;
+import data.pojo.EyesDefect;
 import data.pojo.Hardware;
 import data.pojo.MeasAddParamsValues;
 import data.pojo.Measuration;
@@ -56,6 +57,15 @@ public class Example {
         Person p2 = new Person(2, "Bouda", 'M');
         Person p3 = new Person(3, "Kouba", 'M');
         Person p4 = new Person(4, "Novakova", 'Z');
+        
+        // pridani ocnich defektu osobe p4
+        EyesDefect e1 = new EyesDefect(1, "šedý zákal");
+        EyesDefect e2 = new EyesDefect(2, "krátkozrakost");
+        Set<EyesDefect> se = new HashSet<EyesDefect>();
+        se.add(e1);
+        se.add(e2);
+        p4.setEyesDefects(se);
+
 
         vstupniPole.add((Object) p1);
         vstupniPole.add((Object) p2);

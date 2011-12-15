@@ -36,7 +36,8 @@ import java.lang.annotation.Target;
  *   public String brand;
  * }
  * </pre></code>
- * This states that every car is of exactly one brand.
+ * This states that every car is of exactly one brand (and the brand must not
+ * be null).
  * </p>
  *               
  * @author Jakub Krauz
