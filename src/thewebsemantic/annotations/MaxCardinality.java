@@ -34,6 +34,10 @@ import java.lang.annotation.Target;
  * </pre></code>
  * This class describes all trains that are not composed of more than 8 cars.
  * </p>
+ * <p>
+ * NOTE: The <code>@MaxCardinality</code> annotation doesn't force the annotated collection
+ * to meet this constraint. It must be arranged by a programmer.
+ * </p>
  * 
  * @author Jakub Krauz 
  */

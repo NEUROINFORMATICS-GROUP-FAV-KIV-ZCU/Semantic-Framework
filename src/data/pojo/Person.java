@@ -20,7 +20,6 @@ import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
-import thewebsemantic.annotations.OnProperty;
 import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
@@ -44,7 +43,6 @@ import thewebsemantic.annotations.VersionInfo;
 // @Inverse("http://www.kiv.zcu.cz/eeg/Weather")
 // @Cardinality(4)
 @EquivalentClass("http://www.jina.adresa.cz/Human")
-// @OnProperty("http://www.kiv.zcu.cz/#hasMaker-Person23")  !!!!
 public class Person implements java.io.Serializable {
 
 	@Id
@@ -54,7 +52,7 @@ public class Person implements java.io.Serializable {
 	@Label("popisek atributu")
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
-	@EquivalentProperty("http://www.jina.adresa.cz/krestni_jmeno")
+	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
 	// @SomeValuesFrom("http://www.nejaka.adresa.cz/ceskaJmena")
 	// @MaxCardinality(2)
 	private String givenname;
@@ -67,6 +65,7 @@ public class Person implements java.io.Serializable {
 	// @Transitive
 	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
 	// @Cardinality(1)
+	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#prijmeni")
 	private String surname;
 
 	private Timestamp dateOfBirth;

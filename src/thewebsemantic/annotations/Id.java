@@ -6,11 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Id annotation interface is used to atributes their values are used as
+ * Id annotation interface is used to atributes. Their values are used as
  * unicate hash idetification key.
  * 
  */
-
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME) 
 public @interface Id {
