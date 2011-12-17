@@ -45,16 +45,15 @@ import thewebsemantic.annotations.VersionInfo;
 @EquivalentClass("http://www.jina.adresa.cz/Human")
 public class Person implements java.io.Serializable {
 
-	@Id
+	//@Id
 	private int personId;
-
-	@Comment("komentar atributu")
-	@Label("popisek atributu")
+	
+	@Comment("Komentář ke křestnímu jménu.")
+	@Label("Křestní jméno")
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
 	// @SomeValuesFrom("http://www.nejaka.adresa.cz/ceskaJmena")
-	// @MaxCardinality(2)
 	private String givenname;
 
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
@@ -66,15 +65,15 @@ public class Person implements java.io.Serializable {
 	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
 	// @Cardinality(1)
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#prijmeni")
+	@Id
 	private String surname;
-
+	
 	private Timestamp dateOfBirth;
 
 	@DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#gender")
-	@Transitive
-	@Symmetric
 	@VersionInfo("Nova verze")
 	private char gender;
+	
 	private String email;
 	@DataRange("nonNegativeInteger")
 	private String phoneNumber;
@@ -84,6 +83,7 @@ public class Person implements java.io.Serializable {
 	private String authority;
 	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
 	
+	@Symmetric
 	private Set<Scenario> scenarios = new HashSet<Scenario>(0);
 	
 	private Set<PersonAddParamsValues> personAddParamsValueses = new HashSet<PersonAddParamsValues>(

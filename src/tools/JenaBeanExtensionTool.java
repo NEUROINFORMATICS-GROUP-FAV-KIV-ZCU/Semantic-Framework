@@ -14,6 +14,7 @@ import thewebsemantic.binding.Jenabean;
 
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -40,6 +41,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * @param dataList list of objects - object-orinted model
 	 */
 	public JenaBeanExtensionTool(List<Object> dataList) {
+		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included
+		 * in ModelFactory.createOntologyModel() as default,
+		 * which led to a very slow computation */
 		createModel(dataList, OntModelSpec.OWL_DL_MEM);
 	}
 	
@@ -88,7 +92,11 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out) {
-		jenaBean.writeModel(out, DEFAULT_LANG);
+		//jenaBean.writeModel(out, DEFAULT_LANG);
+		RDFWriter writer = jenaBean.model().getWriter(Syntax.RDF_XML_ABBREV);
+		writer.setProperty("showXmlDeclaration", true);
+		writer.setProperty("xmlbase", "http://data.pojo/");
+		writer.write(jenaBean.model(), out, null);
 	}
 	
 	
@@ -106,14 +114,11 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 */
 	private void createModel(List<Object> dataList, OntModelSpec spec) {
 		log.debug("Started creating ontology model.");
-
-		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included in
-		 * ModelFactory.createOntologyModel(); as default,
-		 * which led to a very slow computation */
 		jenaBean.bind(ModelFactory.createOntologyModel(spec));
-		
 		for (int i = 0; i < dataList.size(); i++) {
 			jenaBean.writer().save(dataList.get(i));
+			
+			//System.out.println(thewebsemantic.TypeWrapper.instanceURI(dataList.get(i)));
 		}
 		log.debug("Ontology model was created.");
 	}

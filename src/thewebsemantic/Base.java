@@ -103,66 +103,70 @@ public class Base {
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
-		OntProperty op = om.createOntProperty(ctx.uri());
+		OntProperty property;
+		if (ctx.isPrimitive())
+			property = om.createDatatypeProperty(ctx.uri());
+		else
+			property = om.createObjectProperty(ctx.uri());
 
 		// Structural change enables having symmetric, transitive and
 		// inverse property simultaneously
 
 		if (ctx.isAnnotatedBy(Symmetric.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {
-			op.convertToSymmetricProperty();
+			property.convertToSymmetricProperty();
 		}
 
 		if (ctx.isAnnotatedBy(Transitive.class)) {
-			op.convertToTransitiveProperty();
+			property.convertToTransitiveProperty();
 		}
 
 		if (ctx.isAnnotatedBy(Inverse.class)) {
 			Property qc = ResourceFactory.createProperty(ctx.getAnnotation(Inverse.class).value());
-			op.addInverseOf(qc);
+			property.addInverseOf(qc);
 		}
 
 		if (ctx.isAnnotatedBy(Comment.class)) {
-			op.setComment(ctx.getAnnotation(Comment.class).value(), null);
+			property.setComment(ctx.getAnnotation(Comment.class).value(), null);
 		}
 
 		if (ctx.isAnnotatedBy(VersionInfo.class)) {
-			op.setVersionInfo(ctx.getAnnotation(VersionInfo.class).value());
+			property.setVersionInfo(ctx.getAnnotation(VersionInfo.class).value());
 		}
 
 		if (ctx.isAnnotatedBy(DataRange.class)) {
 			Resource res = ResourceCreator.crDataRangeRest(ctx.getAnnotation(DataRange.class).value());
 			if (res != null) {
-				op.addRange(res);
+				property.addRange(res);
 			}
 		}
 
 		if (ctx.isAnnotatedBy(SeeAlso.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SeeAlso.class).value());
 			if (res != null)
-				op.addSeeAlso(res);
+				property.addSeeAlso(res);
 		}
 
 		if (ctx.isAnnotatedBy(Label.class)) {
-			op.setLabel(ctx.getAnnotation(Label.class).value(), null);
+			property.setLabel(ctx.getAnnotation(Label.class).value(), null);
 		}
 		
 		if (ctx.isAnnotatedBy(EquivalentProperty.class)) {
 			String uri = ctx.getAnnotation(EquivalentProperty.class).value();
 			Property eqProp = ResourceFactory.createProperty(uri);	
-			op.addEquivalentProperty(eqProp);
+			property.addEquivalentProperty(eqProp);
 		}
 		
 		if (ctx.isAnnotatedBy(IsDefinedBy.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(IsDefinedBy.class).value());
 			if (res != null)
-				op.setIsDefinedBy(res);
+				property.setIsDefinedBy(res);
 		}
 		
 		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
 			Resource range = ResourceFactory.createResource(ctx.getAnnotation(AllValuesFrom.class).value());
 			// vytvoreni anonymni restrikce
-			AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, op, range);
+			AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, property, range);
 			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
@@ -170,7 +174,7 @@ public class Base {
 		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
 			Resource range = ResourceFactory.createResource(ctx.getAnnotation(SomeValuesFrom.class).value());
 			// vytvoreni anonymni restrikce
-			SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, op, range);
+			SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, property, range);
 			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
@@ -178,23 +182,23 @@ public class Base {
 		
 		if (ctx.isAnnotatedBy(Cardinality.class)) {
 			int cardinality = ctx.getAnnotation(Cardinality.class).value();
-			CardinalityRestriction restriction = om.createCardinalityRestriction(null, op, cardinality);
+			CardinalityRestriction restriction = om.createCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 		
 		if (ctx.isAnnotatedBy(MaxCardinality.class)) {
 			int cardinality = ctx.getAnnotation(MaxCardinality.class).value();
-			MaxCardinalityRestriction restriction = om.createMaxCardinalityRestriction(null, op, cardinality);
+			MaxCardinalityRestriction restriction = om.createMaxCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 		
 		if (ctx.isAnnotatedBy(MinCardinality.class)) {
 			int cardinality = ctx.getAnnotation(MinCardinality.class).value();
-			MinCardinalityRestriction restriction = om.createMinCardinalityRestriction(null, op, cardinality);
+			MinCardinalityRestriction restriction = om.createMinCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 
-		return op;
+		return property;
 	}
 
 
