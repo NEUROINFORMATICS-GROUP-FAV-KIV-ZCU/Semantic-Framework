@@ -92,10 +92,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out) {
-		//jenaBean.writeModel(out, DEFAULT_LANG);
+		// jenaBean.writeModel(out, DEFAULT_LANG);
 		RDFWriter writer = jenaBean.model().getWriter(Syntax.RDF_XML_ABBREV);
 		writer.setProperty("showXmlDeclaration", true);
-		writer.setProperty("xmlbase", "http://data.pojo/");
+		writer.setProperty("xmlbase", "http://data.pojo");
 		writer.write(jenaBean.model(), out, null);
 	}
 	

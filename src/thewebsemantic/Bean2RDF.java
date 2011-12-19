@@ -24,7 +24,6 @@ import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
-import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.SameAs;
@@ -271,15 +270,15 @@ public class Bean2RDF extends Base {
 	private void saveOrUpdate(Resource subject, ValuesContext pc) {
 		Object o = pc.invokeGetter();
 		Property property = toRdfProperty(pc);
-		if ( Saver.supports(pc.type()))
-			Saver.of(pc.type()).save(this,subject, property, o);
+		if ( Saver.supports(pc.type()) )
+			Saver.of(pc.type()).save(this, subject, property, o);
 		else if (o == null)
 			subject.removeAll(property);
 		else if (pc.isPrimitive())
 			subject.removeAll(property).addProperty(property, toLiteral(m, o));
 		else if (isNormalObject(o))
 			setPropertyValue(subject, property, o);
-		else 
+		else
 			logger.log(Level.WARNING, MessageFormat.format(bundle
 					.getString(UNSUPPORTED_TYPE), pc.type(), pc.subject.getClass()));
 	}

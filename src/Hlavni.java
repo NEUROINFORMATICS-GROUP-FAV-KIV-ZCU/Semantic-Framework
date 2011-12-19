@@ -36,7 +36,7 @@ public class Hlavni {
 			/*owlApi = new OwlApiTool(is);
 			is = owlApi.convertToSemanticStandard("owl");*/
 			
-			jenaBean = new JenaBeanExtensionTool(dataList);
+			jenaBean = new JenaBeanExtensionTool(dataList/*, "www.myNamespace.cz"*/);
 			System.out.println("JenaBean: data nactena");
 			FileOutputStream out = new FileOutputStream(new File("ontDocument.owl"));
 			jenaBean.writeOntologyDocument(out);

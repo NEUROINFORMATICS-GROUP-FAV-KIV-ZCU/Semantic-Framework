@@ -8,6 +8,7 @@ import java.util.Collection;
 import thewebsemantic.NotFoundException;
 
 import com.hp.hpl.jena.rdf.model.Resource;
+
 /**
  * This class provides all basic generic operations over Jenabean using class
  * JenaBean that encapsulates load and save methods to read an write Jena
@@ -15,7 +16,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * 
  * @param <T>
  */
-
 public class RdfBean<T> {
 
 	private transient Jenabean binder;

@@ -68,7 +68,7 @@ public abstract class TypeWrapper {
 	 * @return String representaion of classes namespace
 	 */
 	private String getNamespace(Class<?> c) {
-		return UserDefNamespace.isSet() ? (UserDefNamespace.getNamespace() + '/')
+		return UserDefNamespace.isSet() ? UserDefNamespace.getNamespace()
 				: getNamespaceFromPackage(c);
 	}
 
@@ -81,8 +81,8 @@ public abstract class TypeWrapper {
 	 * @return String representaion of classes namespace
 	 */
 	private String getNamespaceFromPackage(Class<?> c) {
-		return (c.getPackage() == null) ? "http://default.package/" : "http://"
-				+ c.getPackage().getName() + '/';
+		return (c.getPackage() == null) ? "http://default.package" : "http://"
+				+ c.getPackage().getName();
 	}
 
 
@@ -114,7 +114,7 @@ public abstract class TypeWrapper {
 	/**
 	 * Method retrives nonTransient getters of this class and returns it as a
 	 * field of properties wrapped as instances of ValueContext that can
-	 * JenaBean uses
+	 * JenaBean use.
 	 * 
 	 * @param o
 	 * @return Field of ValueContext of classes getters
@@ -161,13 +161,21 @@ public abstract class TypeWrapper {
 
 
 	/**
-	 * Returns URI name of this class.
+	 * <p>
+	 * Returns URI name of this class.<br>
+	 * The URI consists of <code>namespace</code> and <code>className</code> according
+	 * to the following schema: <code>http://namespace#className</code>.
+	 * </p>
+	 * <p>
+	 * There are three ways how the <code>namespace</code> can be set:<br>
+	 * - using the <code>@Namespace</code> annotation for the target class (the highest priority)<br>
+	 * - setting the "global" <code>namespace</code> in the JenaBeanExtensionTool constructor<br>
+	 * - if not set explicitly, the default <code>namespace</code> from the class' package is created
 	 * 
-	 * @return URI
+	 * @return URI of the class
 	 */
 	public String typeUri() {
-
-		return NS + Util.getRdfType(c);
+		return NS + "#" + Util.getRdfType(c);
 	}
 
 
@@ -270,7 +278,7 @@ public abstract class TypeWrapper {
 	 * @return String represented URI identificator
 	 */
 	private String namingPatternUri(String name) {
-		return namespace() + prefix(name);
+		return namespace() + "#" + prefix(name);
 	}
 
 

@@ -70,6 +70,7 @@ public class Base {
 			// OntModel is necesary for extended annotation processing
 			om = new OntModelImpl(OntModelSpec.getDefaultSpec(ProfileRegistry.OWL_LANG), m);
 		}
+		om.createOntology("http://www.pokus.cz/");
 		m.enterCriticalSection(Lock.WRITE);
 		javaclass = m.createProperty(JAVACLASS);
 		sequence = m.createProperty(SEQUENCE);

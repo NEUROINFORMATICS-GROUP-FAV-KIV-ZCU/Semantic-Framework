@@ -51,7 +51,6 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 			result = idfield.get(bean);
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Error retrieving id field value.", e);
-
 		}
 		return result.toString();
 	}
@@ -62,7 +61,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		if (uriid)
 			return id;
 		else
-			return  typeUri() + '/' + urlencode(id);
+			return  typeUri() + '_' + urlencode(id);
 	}
 
 	private String urlencode(String id) {

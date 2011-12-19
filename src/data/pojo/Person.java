@@ -35,13 +35,13 @@ import thewebsemantic.annotations.VersionInfo;
 @SeeAlso("http://www.nejaka.adresa.cz/podobne_tema")
 @Label("Person (osoba)")
 @VersionInfo("Stará verze třídy Person")
-@Namespace("http://www.moje.namespace")
+//@Namespace("http://www.moje.namespace/")
 
 // @RdfType("Osoba")
 @EquivalentClass("http://www.jina.adresa.cz/Human")
 public class Person implements java.io.Serializable {
 
-	//@Id
+	@Id
 	private int personId;
 	
 	@Comment("Komentář ke křestnímu jménu.")
@@ -61,7 +61,7 @@ public class Person implements java.io.Serializable {
 	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")
 	// @Cardinality(1)
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#prijmeni")
-	@Id
+	// @Id
 	private String surname;
 	
 	private Timestamp dateOfBirth;

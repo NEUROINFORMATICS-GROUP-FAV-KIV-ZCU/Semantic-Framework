@@ -21,9 +21,9 @@ public class Measuration implements java.io.Serializable {
     private Person personByPersonId;
     private Timestamp startTime;
     private Timestamp endTime;
-    @RdfProperty("http://semanticbible.org/ns/2006/NTNames#teplotka")
+//    @RdfProperty("http://semanticbible.org/ns/2006/NTNames#teplotka")
     private int temperature;
-   // @RdfProperty("http://semanticbsible.orgsd/NTNames#pocasko")
+//    @RdfProperty("http://semanticbsible.orgsd/NTNames#pocasko")
     private String weathernote;
     private Set<MeasAddParamsValues> measAddParamsValueses = new HashSet<MeasAddParamsValues>(0);
     private Set<Hardware> hardwares = new HashSet<Hardware>(0);
