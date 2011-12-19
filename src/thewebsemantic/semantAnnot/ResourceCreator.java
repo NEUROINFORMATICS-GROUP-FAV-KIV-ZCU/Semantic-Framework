@@ -23,11 +23,9 @@ public class ResourceCreator {
         if (value.equals("")) return null;
 
         try {
-            Class dataTypes = Class.forName("com.hp.hpl.jena.vocabulary.XSD");
-
-            Resource res;
-            res = (Resource) dataTypes.getDeclaredField(value).get(null);
-
+            @SuppressWarnings("rawtypes")
+			Class dataTypes = Class.forName("com.hp.hpl.jena.vocabulary.XSD");
+            Resource res = (Resource) dataTypes.getDeclaredField(value).get(null);
             return res;
 
         } catch (IllegalArgumentException ex) {

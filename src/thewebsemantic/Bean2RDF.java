@@ -1,9 +1,6 @@
 package thewebsemantic;
 
-import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntProperty;
-
 import static thewebsemantic.JenaHelper.toLiteral;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.instanceURI;
@@ -23,20 +20,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.Id;
-import thewebsemantic.annotations.Inverse;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
-import thewebsemantic.annotations.Symmetric;
-import thewebsemantic.annotations.Transitive;
 import thewebsemantic.annotations.VersionInfo;
 
 /**
@@ -179,10 +171,10 @@ public class Bean2RDF extends Base {
 
         
 	/**
-     * Insert a new bean as Resource to Jena Graph if do not exist,
-     * otherwise nothing will be changed
+     * Inserts a new bean as Resource to Jena Graph if it does not exist,
+     * otherwise nothing will be changed.
      *
-     * @param bean
+     * @param bean - bean to save
      * @return
      */
 	private Resource existing(Object bean) {
@@ -190,119 +182,81 @@ public class Bean2RDF extends Base {
 	}
 
 	
-     /**
-     * returns an existing Resource or creates a new one adding an important
-     * annotation indicating the original java class.
+    /**
+     * Returns an existing OntClass or creates a new one adding an important
+     * annotation indicating the original java class. Checks bean's annotations
+     * and applies their rules to the model.
      *
-     * @param bean the bean we are saving or updating to the triple store
-     * @return
+     * @param bean - the bean we are saving or updating to the triple store
+     * @return resource referencing saved bean
      */
     private Resource getRDFSClass(Object bean) {
-    	OntProperty op = om.createOntProperty(getURI(bean));
-
-        // Transitive property to class
-        if (bean.getClass().isAnnotationPresent(Transitive.class)) {
-            op.convertToTransitiveProperty();
-        }
-
-        // Symmetric property to class
-        if (bean.getClass().isAnnotationPresent(Symmetric.class)) {
-            op.convertToSymmetricProperty();
-        }
-
-        // Inverse property to class
-        if (bean.getClass().isAnnotationPresent(Inverse.class)) {
-        	String inverse = bean.getClass().getAnnotation(Inverse.class).value();
-            Property qc = ResourceFactory.createProperty(inverse);
-            op.addInverseOf(qc);
-        }
-
-        // Version info to class
+    	
+    	OntClass owlClass = om.createClass(getURI(bean));
+    	
+        // Version info
         if (bean.getClass().isAnnotationPresent(VersionInfo.class)) {
-            op.setVersionInfo(bean.getClass().getAnnotation(VersionInfo.class).value());
+            owlClass.setVersionInfo(bean.getClass().getAnnotation(VersionInfo.class).value());
         }
 
-        // Comment to class
+        // Comment
         if (bean.getClass().isAnnotationPresent(Comment.class)) {
-            op.setComment(bean.getClass().getAnnotation(Comment.class).value(),null);
+            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(), null);
         }
         
-        // SeeAlso to class
+        // SeeAlso
         if (bean.getClass().isAnnotationPresent(SeeAlso.class)) {
         	String seeAlso = bean.getClass().getAnnotation(SeeAlso.class).value();
             Resource res = ResourceFactory.createResource(seeAlso);
-            op.setSeeAlso(res);
+            owlClass.setSeeAlso(res);
         }
         
-        // Label to class
+        // Label
         if (bean.getClass().isAnnotationPresent(Label.class)) {
-        	op.setLabel(bean.getClass().getAnnotation(Label.class).value(), null);
+        	owlClass.setLabel(bean.getClass().getAnnotation(Label.class).value(), null);
         }
 
-        
-       // IsDefinedBy to class
+        // IsDefinedBy
         if (bean.getClass().isAnnotationPresent(IsDefinedBy.class)) {
         	String value = bean.getClass().getAnnotation(IsDefinedBy.class).value();
             Resource res = ResourceFactory.createResource(value);
-            op.setIsDefinedBy(res);
+            owlClass.setIsDefinedBy(res);
         }
-
         
-        // Cardinality
-//        if (bean.getClass().isAnnotationPresent(Cardinality.class)) {
-//        	if (bean.getClass().isAnnotationPresent(OnProperty.class)) {
-//        		String onProperty = bean.getClass().getAnnotation(OnProperty.class).value();
-//                OntProperty ontProperty = om.createOntProperty(onProperty);
-//                int cardinalityValue = bean.getClass().getAnnotation(Cardinality.class).value();
-//                if ((ontProperty != null) && (cardinalityValue >= 0)){
-//                    om.createCardinalityRestriction(getURI(bean),ontProperty,cardinalityValue);
-//                }
-//        	}
-//        }
-        
-
         // EquivalentClass
         if (bean.getClass().isAnnotationPresent(EquivalentClass.class)) {
-            OntClass oc = om.createClass(getURI(bean));
-            OntClass oc2 = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
-            oc.addEquivalentClass(oc2);
+            OntClass eqClass = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
+            owlClass.setEquivalentClass(eqClass);
         }
         
         // SameAs
-        if (bean.getClass().isAnnotationPresent(SameAs.class)){
-            ObjectProperty opr = om.createObjectProperty(getURI(bean));
+        if (bean.getClass().isAnnotationPresent(SameAs.class)) {
             String same = bean.getClass().getAnnotation(SameAs.class).value();
             Resource res = ResourceFactory.createResource(same);
-            opr.addSameAs(res);
+            owlClass.setSameAs(res);
         }
         
         // DifferentFrom
         if (bean.getClass().isAnnotationPresent(DifferentFrom.class)) {
         	String different = bean.getClass().getAnnotation(DifferentFrom.class).value();
         	Resource res = ResourceFactory.createResource(different);
-        	op.addDifferentFrom(res);
+        	owlClass.setDifferentFrom(res);
         }
         
         // AllDifferent
         if (bean.getClass().isAnnotationPresent(AllDifferent.class)) {
         	com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
+        	Resource res = om.createResource(getURI(bean));
+        	allDif.addDistinctMember(res);  // pridani anotovane tridy
         	String[] values = bean.getClass().getAnnotation(AllDifferent.class).value();
-        	Resource res;
         	for (String value : values) {
         		res = ResourceFactory.createResource(value);
         		allDif.addDistinctMember(res);
         	}
         }
 
-
-        return m.getResource(getURI(bean)).addProperty(RDF.type, RDFS.Class).
-                addProperty(javaclass, bean.getClass().getName());
+        return m.getResource(getURI(bean)).addProperty(javaclass, bean.getClass().getName());
     }
-
-    
-	/*private String getURI(Object bean) {
-            return (isBound(bean)) ? binder.getUri(bean) : type(bean).typeUri();
-	}*/
 
 	
 	private Resource write(Object bean, Resource subject, boolean shallow) {

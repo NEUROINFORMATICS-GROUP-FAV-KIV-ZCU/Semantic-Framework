@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * to set an inverse object via object's URI in String attribute
  * 
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inverse {
 	String value();

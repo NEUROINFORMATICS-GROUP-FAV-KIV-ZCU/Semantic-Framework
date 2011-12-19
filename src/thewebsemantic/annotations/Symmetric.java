@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * property.
  * 
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME) 
 public @interface Symmetric {
 

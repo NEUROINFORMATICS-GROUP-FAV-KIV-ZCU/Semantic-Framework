@@ -67,7 +67,7 @@ public class Base {
 		if (m instanceof OntModel) {
 			om = (OntModel) m;
 		} else {
-			// OntModel is necesary for added annotation processing
+			// OntModel is necesary for extended annotation processing
 			om = new OntModelImpl(OntModelSpec.getDefaultSpec(ProfileRegistry.OWL_LANG), m);
 		}
 		m.enterCriticalSection(Lock.WRITE);
@@ -98,8 +98,8 @@ public class Base {
 	 * Checks attributes's or method's annotations and if they are present
 	 * annotation rules are applied.
 	 * 
-	 * @param ctx Loaded attribut or method
-	 * @return new created OntProperty
+	 * @param ctx - Loaded attribut or method
+	 * @return newly created OntProperty
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
@@ -108,9 +108,6 @@ public class Base {
 			property = om.createDatatypeProperty(ctx.uri());
 		else
 			property = om.createObjectProperty(ctx.uri());
-
-		// Structural change enables having symmetric, transitive and
-		// inverse property simultaneously
 
 		if (ctx.isAnnotatedBy(Symmetric.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {
@@ -136,9 +133,8 @@ public class Base {
 
 		if (ctx.isAnnotatedBy(DataRange.class)) {
 			Resource res = ResourceCreator.crDataRangeRest(ctx.getAnnotation(DataRange.class).value());
-			if (res != null) {
+			if (res != null)
 				property.addRange(res);
-			}
 		}
 
 		if (ctx.isAnnotatedBy(SeeAlso.class)) {
