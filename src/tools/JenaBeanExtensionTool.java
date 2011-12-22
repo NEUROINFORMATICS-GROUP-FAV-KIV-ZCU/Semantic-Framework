@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import thewebsemantic.PrimitiveWrapper;
 import thewebsemantic.UserDefNamespace;
 import thewebsemantic.binding.Jenabean;
 

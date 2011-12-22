@@ -28,6 +28,7 @@ import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
 import com.hp.hpl.jena.ontology.CardinalityRestriction;
 import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
 import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
@@ -105,11 +106,27 @@ public class Base {
 	private Property applyEntailments(ValuesContext ctx) {
 		
 		OntProperty property;
-		if (ctx.isPrimitive())
+		if (ctx.isPrimitive()) {
 			property = om.createDatatypeProperty(ctx.uri());
-		else
+			Resource range;
+			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null && !ctx.isAnnotatedBy(DataRange.class))
+				property.setRange(range);
+		} else
 			property = om.createObjectProperty(ctx.uri());
+		
 
+		
+		//Class<?> c = ctx.type();
+		//System.out.println(ctx.type().getCanonicalName());
+		//System.out.println(TypeWrapper.typeUri(ctx.type()));
+		//System.out.println(com.hp.hpl.jena.vocabulary.XSD.xstring);
+		//Resource rangeRes = om.createResource(getURI(ctx.getAccessibleObject().getClass()));
+		//property.setRange(rangeRes);
+
+		
+		OntClass domain = om.getOntClass(getURI(ctx.subject));
+		property.addDomain(domain);
+		
 		if (ctx.isAnnotatedBy(Symmetric.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {
 			property.convertToSymmetricProperty();

@@ -2,8 +2,13 @@ package data.pojo;
 
 // Generated 16.11.2009 12:22:26 by Hibernate Tools 3.2.1.GA
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import thewebsemantic.*;
@@ -62,11 +67,11 @@ public class Person implements java.io.Serializable {
 	// @Cardinality(1)
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#prijmeni")
 	// @Id
-	private String surname;
+	private String surname;	
 	
 	private Timestamp dateOfBirth;
 
-	@DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#gender")
+	@DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#genderDataRange")
 	@VersionInfo("Nova verze")
 	private char gender;
 	
