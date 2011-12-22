@@ -114,7 +114,6 @@ public class Base {
 		} else
 			property = om.createObjectProperty(ctx.uri());
 		
-
 		
 		//Class<?> c = ctx.type();
 		//System.out.println(ctx.type().getCanonicalName());
@@ -210,6 +209,10 @@ public class Base {
 			int cardinality = ctx.getAnnotation(MinCardinality.class).value();
 			MinCardinalityRestriction restriction = om.createMinCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+		}
+		
+		if (ctx.isAnnotatedBy(Deprecated.class)) {
+			property.addProperty(RDF.type, OWL.DeprecatedProperty);
 		}
 
 		return property;

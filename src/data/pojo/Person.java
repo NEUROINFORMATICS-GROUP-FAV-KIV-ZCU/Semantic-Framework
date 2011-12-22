@@ -44,6 +44,7 @@ import thewebsemantic.annotations.VersionInfo;
 
 // @RdfType("Osoba")
 @EquivalentClass("http://www.jina.adresa.cz/Human")
+// @Deprecated
 public class Person implements java.io.Serializable {
 
 	@Id
@@ -75,6 +76,7 @@ public class Person implements java.io.Serializable {
 	@VersionInfo("Nova verze")
 	private char gender;
 	
+	// @Deprecated
 	private String email;
 	@DataRange("nonNegativeInteger")
 	private String phoneNumber;

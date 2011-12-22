@@ -1,9 +1,9 @@
 package thewebsemantic;
 
-import com.hp.hpl.jena.ontology.OntClass;
 import static thewebsemantic.JenaHelper.toLiteral;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.instanceURI;
+
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -13,6 +13,18 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import thewebsemantic.annotations.AllDifferent;
+import thewebsemantic.annotations.Comment;
+import thewebsemantic.annotations.DifferentFrom;
+import thewebsemantic.annotations.EquivalentClass;
+import thewebsemantic.annotations.Id;
+import thewebsemantic.annotations.IsDefinedBy;
+import thewebsemantic.annotations.Label;
+import thewebsemantic.annotations.SameAs;
+import thewebsemantic.annotations.SeeAlso;
+import thewebsemantic.annotations.VersionInfo;
+
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -20,15 +32,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.shared.Lock;
-import thewebsemantic.annotations.AllDifferent;
-import thewebsemantic.annotations.Comment;
-import thewebsemantic.annotations.DifferentFrom;
-import thewebsemantic.annotations.EquivalentClass;
-import thewebsemantic.annotations.IsDefinedBy;
-import thewebsemantic.annotations.Label;
-import thewebsemantic.annotations.SameAs;
-import thewebsemantic.annotations.SeeAlso;
-import thewebsemantic.annotations.VersionInfo;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * <p>
@@ -226,6 +231,11 @@ public class Bean2RDF extends Base {
         if (bean.getClass().isAnnotationPresent(EquivalentClass.class)) {
             OntClass eqClass = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
             owlClass.setEquivalentClass(eqClass);
+        }
+        
+        // Deprecated
+        if (bean.getClass().isAnnotationPresent(Deprecated.class)) {
+        	owlClass.addProperty(RDF.type, OWL.DeprecatedClass);
         }
         
         // SameAs

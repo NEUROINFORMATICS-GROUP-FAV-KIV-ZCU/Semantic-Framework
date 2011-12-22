@@ -61,5 +61,15 @@ public interface JenaBeanExtension {
 	 */
 	public void writeOntologyDocument(OutputStream out, String lang);
 	
+	
+	/**
+	 * <p>Sets the base package of POJO objects. This value is used in the
+	 * RDF/XML ontology document to abbreviate resources' URIs using
+	 * the <code>xml:base</code> element and relative URIs.</p>
+	 * 
+	 * @param basePackage - POJO package
+	 */
+	public void setBasePackage(String basePackage);
+	
 
 }

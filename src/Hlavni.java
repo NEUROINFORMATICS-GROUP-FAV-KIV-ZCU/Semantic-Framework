@@ -32,14 +32,16 @@ public class Hlavni {
     	//OwlApiTool owlApi;
 		try {
 			jenaBean = new JenaBeanExtensionTool(dataList);
+			jenaBean.setBasePackage("data.pojo");
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("owl");
 			
 			/*jenaBean = new JenaBeanExtensionTool(dataList);
+			jenaBean.setBasePackage("data.pojo");
 			System.out.println("JenaBean: data nactena");
-			FileOutputStream out = new FileOutputStream(new File("ontDocument.owl"));
-			jenaBean.writeOntologyDocument(out);
+			FileOutputStream out = new FileOutputStream(new File("ontologyDocument.owl"));
+			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
 			out.close();
 			System.out.println("Zapsano do souboru.");*/
 			

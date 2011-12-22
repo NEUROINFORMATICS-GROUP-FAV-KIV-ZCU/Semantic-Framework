@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import thewebsemantic.PrimitiveWrapper;
 import thewebsemantic.UserDefNamespace;
 import thewebsemantic.binding.Jenabean;
 
@@ -33,6 +32,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 	/** provides operations over semantic model */
 	private Jenabean jenaBean = Jenabean.instance();
+	
+	/** defines the xml:base value for the ontology document */
+	private String xmlBase;
 
 
 	/**
@@ -86,7 +88,8 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	@Override
 	public InputStream getOntologyDocument(String lang) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		jenaBean.writeModel(out, lang);
+		//jenaBean.writeModel(out, lang);
+		writeOntologyDocument(out, lang);
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 	
@@ -94,16 +97,29 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	@Override
 	public void writeOntologyDocument(OutputStream out) {
 		// jenaBean.writeModel(out, DEFAULT_LANG);
-		RDFWriter writer = jenaBean.model().getWriter(Syntax.RDF_XML_ABBREV);
-		writer.setProperty("showXmlDeclaration", true);
-		writer.setProperty("xmlbase", "http://data.pojo");
-		writer.write(jenaBean.model(), out, null);
+		writeOntologyDocument(out, DEFAULT_LANG);
 	}
 	
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out, String lang) {
-		jenaBean.writeModel(out, lang);
+		//jenaBean.writeModel(out, lang);
+		if (! Syntax.isValidSyntaxName(lang)) {
+			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
+			lang = DEFAULT_LANG;
+		}
+		RDFWriter writer = jenaBean.model().getWriter(lang);
+		if (lang.contains("XML")) {
+			writer.setProperty("showXmlDeclaration", true);
+			writer.setProperty("xmlbase", xmlBase);
+		}
+		writer.write(jenaBean.model(), out, null);
+	}
+	
+	
+	@Override
+	public void setBasePackage(String basePackage) {
+		xmlBase = "http://" + basePackage;
 	}
 
 
