@@ -14,7 +14,7 @@ public class DefaultTypeWrapper extends TypeWrapper {
 	
 	@Override
 	public String uri(String id) {
-		return typeUri() + '/' + id;
+		return typeUri() + '_' + id;
 	}
 
 	public String id(Object bean) {

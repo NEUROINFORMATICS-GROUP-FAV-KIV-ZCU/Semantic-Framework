@@ -40,7 +40,7 @@ import thewebsemantic.annotations.VersionInfo;
 @SeeAlso("http://www.nejaka.adresa.cz/podobne_tema")
 @Label("Person (osoba)")
 @VersionInfo("Stará verze třídy Person")
-//@Namespace("http://www.moje.namespace/")
+@Namespace("http://www.moje.namespace")
 
 // @RdfType("Osoba")
 @EquivalentClass("http://www.jina.adresa.cz/Human")

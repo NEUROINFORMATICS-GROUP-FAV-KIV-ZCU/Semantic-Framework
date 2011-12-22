@@ -5,6 +5,8 @@ import static thewebsemantic.TypeWrapper.type;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
+import java.util.HashSet;
+import java.util.Set;
 
 import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Cardinality;
@@ -109,19 +111,23 @@ public class Base {
 		if (ctx.isPrimitive()) {
 			property = om.createDatatypeProperty(ctx.uri());
 			Resource range;
-			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null && !ctx.isAnnotatedBy(DataRange.class))
+			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null
+					&& !ctx.isAnnotatedBy(DataRange.class))
 				property.setRange(range);
-		} else
+		} else {
 			property = om.createObjectProperty(ctx.uri());
-		
-		
-		//Class<?> c = ctx.type();
-		//System.out.println(ctx.type().getCanonicalName());
-		//System.out.println(TypeWrapper.typeUri(ctx.type()));
-		//System.out.println(com.hp.hpl.jena.vocabulary.XSD.xstring);
-		//Resource rangeRes = om.createResource(getURI(ctx.getAccessibleObject().getClass()));
-		//property.setRange(rangeRes);
-
+			Class<?> rangeClass;
+			if (ctx.isCollectionType())
+				rangeClass = ctx.t();
+			else
+				rangeClass = ctx.type();
+			if (rangeClass.getPackage() == ctx.subject.getClass().getPackage()) {
+				TypeWrapper wrapper = new DefaultTypeWrapper(rangeClass);
+				String uriX = wrapper.typeUri();
+				Resource range = om.getResource(uriX);
+				property.setRange(range);
+			}
+		}
 		
 		OntClass domain = om.getOntClass(getURI(ctx.subject));
 		property.addDomain(domain);
