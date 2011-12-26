@@ -1,6 +1,5 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
 import static thewebsemantic.Util.last;
 
 import java.beans.BeanInfo;
@@ -14,7 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.annotations.Transient;
 import thewebsemantic.binding.Persistable;
@@ -29,6 +29,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public abstract class TypeWrapper {
 
 	public static final String JENABEAN_PREFIX = "jenabean.prefix";
+	private Log logger = LogFactory.getLog(getClass());
 	private String NS;
 	protected Class<?> c;
 	protected BeanInfo info;
@@ -343,7 +344,7 @@ public abstract class TypeWrapper {
 			Object o = me.invoke(bean);
 			return (o == null) ? null : o.toString();
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Failed invoking method " + me.getName() + " on class "
+			logger.warn("Failed invoking method " + me.getName() + " on class "
 					+ bean.getClass(), e);
 		}
 		return null;
@@ -374,8 +375,7 @@ public abstract class TypeWrapper {
 			// last gets the id off the end of the URI
 			return (constructor != null) ? constructor.newInstance(last(uri)) : c.newInstance();
 		} catch (Exception e) {
-			logger.log(Level.WARNING,
-					"Exception caught while invoking default constructor on " + c, e);
+			logger.warn("Exception caught while invoking default constructor on " + c, e);
 		}
 		return null;
 	}

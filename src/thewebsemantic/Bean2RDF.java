@@ -9,9 +9,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
@@ -77,11 +76,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 @SuppressWarnings("deprecation")
 public class Bean2RDF extends Base {
 	
-	private static final String UNSUPPORTED_TYPE = "UNSUPPORTED_TYPE";
 	private ArrayList<Object> cycle;
 	private boolean forceDeep = false;
-    public static Logger logger = Logger.getLogger("com.thewebsemantic");
-    ResourceBundle bundle = ResourceBundle.getBundle("thewebsemantic.messages");
+	private Log logger = LogFactory.getLog(getClass());
     private AnnotationHelper jpa;
 
     
@@ -289,8 +286,8 @@ public class Bean2RDF extends Base {
 		else if (isNormalObject(o))
 			setPropertyValue(subject, property, o);
 		else
-			logger.log(Level.WARNING, MessageFormat.format(bundle
-					.getString(UNSUPPORTED_TYPE), pc.type(), pc.subject.getClass()));
+			logger.warn(MessageFormat.format("Skipped unsupported property type {0} on {1}", pc.type(), pc.subject.getClass()));
+			//logger.log(Level.WARNING, MessageFormat.format(bundle.getString(UNSUPPORTED_TYPE), pc.type(), pc.subject.getClass()));
 	}
 
 	

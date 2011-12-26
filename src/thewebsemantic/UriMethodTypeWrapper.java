@@ -1,9 +1,8 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
-
 import java.lang.reflect.Method;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -12,9 +11,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * instead of non-deprecated id annotation.
  *
  */
-
 public class UriMethodTypeWrapper extends TypeWrapper {
-
+	
+	private Log logger = LogFactory.getLog(getClass());
 	private Method uriMethod;
 	
 	public UriMethodTypeWrapper(Class<?> c, Method m) {
@@ -48,7 +47,7 @@ public class UriMethodTypeWrapper extends TypeWrapper {
 			return (constructor != null) ?
 				constructor.newInstance(uri):c.newInstance();
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception caught while instantiating " + c, e);
+			logger.warn("Exception caught while instantiating " + c, e);
 		}
 		return null;
 	}

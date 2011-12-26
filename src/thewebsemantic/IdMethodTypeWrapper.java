@@ -1,7 +1,5 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
-
 import java.beans.PropertyDescriptor;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
@@ -9,7 +7,8 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.annotations.Transient;
 
@@ -17,12 +16,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class IdMethodTypeWrapper extends TypeWrapper {
 
+	private Log logger = LogFactory.getLog(getClass());
 	private Method idReadMethod;
 	private Method idWriteMethod;
 
-	/*
-	 * if true this type wrapper services a class with id of type java.lang.URI
-	 */
+	// if true this type wrapper services a class with id of type java.lang.URI
 	private boolean uriid = false;
 	private Constructor<?> uriConstructor;
 
@@ -92,7 +90,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 			} else
 				return super.toBean(uri);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error instantiating bean.", e);
+			logger.warn("Error instantiating bean.", e);
 		}
 		return null;
 	}
@@ -105,7 +103,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 				idWriteMethod.invoke(obj,URI.create(source.getURI()));
 			return obj;
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception caught while invoking default constructor on " + c, e);
+			logger.warn("Exception caught while invoking default constructor on " + c, e);
 		}
 		return null;
 	}

@@ -5,9 +5,6 @@ import static thewebsemantic.TypeWrapper.type;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
-import java.util.HashSet;
-import java.util.Set;
-
 import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
@@ -34,7 +31,6 @@ import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.ProfileRegistry;
 import com.hp.hpl.jena.ontology.SomeValuesFromRestriction;
 import com.hp.hpl.jena.ontology.impl.OntModelImpl;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -54,8 +50,6 @@ public class Base {
 
 	public static final String JAVACLASS = "http://thewebsemantic.com/javaclass";
 	public static final String SEQUENCE = "http://thewebsemantic.com/sequence";
-	// ResourceBundle bundle =
-	// ResourceBundle.getBundle("thewebsemantic.messages");
 	protected OntModel om;
 	protected Model m;
 	protected Binder binder;
@@ -66,14 +60,10 @@ public class Base {
 	protected Base(Model m) {
 		this.m = m;
 		binder = BinderImp.instance();
-
-		if (m instanceof OntModel) {
-			om = (OntModel) m;
-		} else {
-			// OntModel is necesary for extended annotation processing
-			om = new OntModelImpl(OntModelSpec.getDefaultSpec(ProfileRegistry.OWL_LANG), m);
-		}
-		om.createOntology("http://www.pokus.cz/");
+		
+		// OntModel is necesary for extended annotation processing
+		om = (m instanceof OntModel) ? (OntModel) m : new OntModelImpl(OntModelSpec.OWL_DL_MEM, m);
+		
 		m.enterCriticalSection(Lock.WRITE);
 		javaclass = m.createProperty(JAVACLASS);
 		sequence = m.createProperty(SEQUENCE);
@@ -110,27 +100,26 @@ public class Base {
 		OntProperty property;
 		if (ctx.isPrimitive()) {
 			property = om.createDatatypeProperty(ctx.uri());
+			// setting rdfs:range of the DatatypeProperty
 			Resource range;
 			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null
 					&& !ctx.isAnnotatedBy(DataRange.class))
 				property.setRange(range);
 		} else {
 			property = om.createObjectProperty(ctx.uri());
-			Class<?> rangeClass;
-			if (ctx.isCollectionType())
-				rangeClass = ctx.t();
-			else
-				rangeClass = ctx.type();
-			if (rangeClass.getPackage() == ctx.subject.getClass().getPackage()) {
-				TypeWrapper wrapper = new DefaultTypeWrapper(rangeClass);
-				String uriX = wrapper.typeUri();
-				Resource range = om.getResource(uriX);
+			// setting rdfs:range of the ObjectProperty
+			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
+			if (rangeClass.getPackage().getName().contains("pojo")) {
+				Resource range = om.getResource(new DefaultTypeWrapper(rangeClass).typeUri());
 				property.setRange(range);
 			}
 		}
 		
+		// setting rdfs:domain of the property
 		OntClass domain = om.getOntClass(getURI(ctx.subject));
 		property.addDomain(domain);
+		
+		// Annotation processing follows
 		
 		if (ctx.isAnnotatedBy(Symmetric.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {

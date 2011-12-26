@@ -1,18 +1,18 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
-
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.ParameterizedType;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 
 class PropertyContext extends ValuesContext {
-
+	
+	private Log logger = LogFactory.getLog(getClass());
 	PropertyDescriptor property;
 	TypeWrapper type;
 	boolean idmethod = false;
@@ -61,7 +61,7 @@ class PropertyContext extends ValuesContext {
 		try {
 			result = property.getReadMethod().invoke(subject);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error calling read method.", e);
+			logger.warn("Error calling read method.", e);
 		}
 		return result;
 	}
@@ -72,7 +72,7 @@ class PropertyContext extends ValuesContext {
 		try {
 			property.getWriteMethod().invoke(subject, v);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error calling write method.", e);
+			logger.warn("Error calling write method.", e);
 		}
 	}
 

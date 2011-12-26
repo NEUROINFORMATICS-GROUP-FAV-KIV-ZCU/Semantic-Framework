@@ -1,13 +1,12 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Date;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -21,6 +20,8 @@ import com.hp.hpl.jena.rdf.model.Model;
  * 
  */
 class FieldContext extends ValuesContext {
+	
+	private Log logger = LogFactory.getLog(getClass());
 
 	// loaded attribute
 	Field field;
@@ -63,7 +64,7 @@ class FieldContext extends ValuesContext {
 			}
 			result = field.get(subject);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error retrieving field value.", e);
+			logger.warn("Error retrieving field value.", e);
 		}
 		return result;
 	}
@@ -75,7 +76,7 @@ class FieldContext extends ValuesContext {
 			field.setAccessible(true);
 			field.set(subject, v);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Could not set bean field " + field.getName(), e);
+			logger.warn("Could not set bean field " + field.getName(), e);
 		}
 	}
 

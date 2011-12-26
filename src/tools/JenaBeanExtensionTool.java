@@ -9,12 +9,16 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
 import thewebsemantic.binding.Jenabean;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.ontology.Ontology;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -31,7 +35,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	private Log log = LogFactory.getLog(getClass());
 
 	/** provides operations over semantic model */
-	private Jenabean jenaBean = Jenabean.instance();
+	//private Jenabean jenaBean = Jenabean.instance();
+	
+	/** loaded ontology model */
+	private OntModel model;
 	
 	/** defines the xml:base value for the ontology document */
 	private String xmlBase;
@@ -88,7 +95,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	@Override
 	public InputStream getOntologyDocument(String lang) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		//jenaBean.writeModel(out, lang);
 		writeOntologyDocument(out, lang);
 		return new ByteArrayInputStream(out.toByteArray());
 	}
@@ -96,30 +102,35 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out) {
-		// jenaBean.writeModel(out, DEFAULT_LANG);
 		writeOntologyDocument(out, DEFAULT_LANG);
 	}
 	
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out, String lang) {
-		//jenaBean.writeModel(out, lang);
 		if (! Syntax.isValidSyntaxName(lang)) {
 			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
 			lang = DEFAULT_LANG;
 		}
-		RDFWriter writer = jenaBean.model().getWriter(lang);
+//		RDFWriter writer = jenaBean.model().getWriter(lang);
+		RDFWriter writer = model.getWriter(lang);
 		if (lang.contains("XML")) {
 			writer.setProperty("showXmlDeclaration", true);
 			writer.setProperty("xmlbase", xmlBase);
 		}
-		writer.write(jenaBean.model(), out, null);
+//		writer.write(jenaBean.model(), out, null);
+		writer.write(model, out, null);
 	}
 	
 	
 	@Override
 	public void setBasePackage(String basePackage) {
 		xmlBase = "http://" + basePackage;
+	}
+	
+	
+	public void setOntology(OntologyProperties ontology) {
+		Ontology o = model.createOntology("http://www.pokus.cz/");
 	}
 
 
@@ -131,11 +142,12 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 */
 	private void createModel(List<Object> dataList, OntModelSpec spec) {
 		log.debug("Started creating ontology model.");
-		jenaBean.bind(ModelFactory.createOntologyModel(spec));
+		//jenaBean.bind(ModelFactory.createOntologyModel(spec));
+		model = ModelFactory.createOntologyModel(spec);
+		Bean2RDF loader = new Bean2RDF(model);
 		for (int i = 0; i < dataList.size(); i++) {
-			jenaBean.writer().save(dataList.get(i));
-			
-			//System.out.println(thewebsemantic.TypeWrapper.instanceURI(dataList.get(i)));
+//			jenaBean.writer().save(dataList.get(i));
+			loader.save(dataList.get(i));
 		}
 		log.debug("Ontology model was created.");
 	}

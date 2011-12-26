@@ -59,10 +59,22 @@ public abstract class ValuesContext {
 
 	public abstract String getName();
 
-
+	
+	/**
+	 * Returns a <code>Class</code> object that identifies the declared
+	 * type for the gathered method or attribute.
+	 * @return a <code>Class</code> object identifying the declared type
+	 */
 	public abstract Class<?> type();
 
-
+	
+	/**
+	 * This method may be used only if the gathered object is declared
+	 * as a <code>Collection</code>. Returns a <code>Class</code> object
+	 * that identifies the declared type of elements of the collection.
+	 * @return a <code>Class</code> object identifying the declared type
+	 * 			of the collection
+	 */
 	public abstract Class<?> t();
 	
 	

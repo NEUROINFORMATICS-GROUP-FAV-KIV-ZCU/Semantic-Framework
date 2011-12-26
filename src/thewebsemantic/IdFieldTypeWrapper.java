@@ -1,6 +1,5 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
 import static thewebsemantic.Util.last;
 
 import java.io.UnsupportedEncodingException;
@@ -11,19 +10,21 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.annotations.Transient;
 
 import com.hp.hpl.jena.rdf.model.Resource;
+
 /**
  * IdFieldTypeWrapper represents a TypeWrapper that wraps bean's attribute
  * that has the Id annotation which represents attribute's values as a key
  * values that are used as unicate keys when storing data to Model.
  */
-
 public class IdFieldTypeWrapper extends TypeWrapper {
 
+	private Log logger = LogFactory.getLog(getClass());
 	private Field idfield;
 	private Field[] fields;
 	private boolean uriid = false;
@@ -50,7 +51,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 				idfield.setAccessible(true);
 			result = idfield.get(bean);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error retrieving id field value.", e);
+			logger.warn("Error retrieving id field value.", e);
 		}
 		return result.toString();
 	}
@@ -113,7 +114,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 			return (constructor != null) ? constructor.newInstance(last(uri))
 					: newinstance(uri);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Could not instantiate bean.", e);
+			logger.warn("Could not instantiate bean.", e);
 
 		}
 		return null;
@@ -129,13 +130,13 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 	
 	public Object toProxyBean(Resource source, AnnotationHelper jpa) {
 		try {
-			Class cls = jpa.getProxy(c);
+			Class<?> cls = jpa.getProxy(c);
 			Object obj = cls.newInstance();
 			if (uriid)
 				idfield.set(obj, URI.create(source.getURI()));
 			return obj;
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception caught while invoking default constructor on " + c, e);
+			logger.warn("Exception caught while invoking default constructor on " + c, e);
 		}
 		return null;
 	}

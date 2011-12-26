@@ -1,6 +1,5 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.wrap;
 
@@ -11,7 +10,8 @@ import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.Base.NullType;
 
@@ -28,9 +28,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
  * This class is not used in actual version of JenaBean.
  *
  */
-
 public class Thing implements InvocationHandler, As {
-
+	
+	private static Log logger = LogFactory.getLog(Thing.class);
     private Model model;
     private Resource r;
     private static Method as;
@@ -43,7 +43,7 @@ public class Thing implements InvocationHandler, As {
             isa = As.class.getMethod("isa", Class.class);
             asResource = As.class.getMethod("asResource");
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Could not access methods on As interface.", e);
+            logger.warn("Could not access methods on As interface.", e);
         }
     }
 

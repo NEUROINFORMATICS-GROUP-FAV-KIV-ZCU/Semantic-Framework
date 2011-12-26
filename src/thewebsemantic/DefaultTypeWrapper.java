@@ -1,12 +1,13 @@
 package thewebsemantic;
 
-import static thewebsemantic.Bean2RDF.logger;
-
-import java.util.logging.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DefaultTypeWrapper extends TypeWrapper {
+	
+	private Log logger = LogFactory.getLog(getClass());
 
 	public DefaultTypeWrapper(Class<?> c) {
 		super(c);
@@ -26,7 +27,7 @@ public class DefaultTypeWrapper extends TypeWrapper {
 		try {
 			return jpa.getProxy(c).newInstance();
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception caught while invoking default constructor on " + c, e);
+			logger.warn("Exception caught while invoking default constructor on " + c, e);
 		}
 		return null;
 	}
