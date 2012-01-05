@@ -97,9 +97,15 @@ class PropertyContext extends ValuesContext {
 	
 	@Override
 	public Class<?> t() {
-		ParameterizedType type = (ParameterizedType) property.getReadMethod()
-				.getGenericReturnType();
-		return getGenericType(type);
+		// na portale byl problem s pretypovavanim u objektu od hibernate
+		// prozatim vyreseno zachycenim vyjimky
+		try {
+			ParameterizedType type = (ParameterizedType) property.getReadMethod().getGenericReturnType();
+			return getGenericType(type);
+		} catch (ClassCastException e) {
+			logger.error("Cannot cast to ParameterizedType.", e);
+			return null;
+		}
 	}
 
 

@@ -109,7 +109,7 @@ public class Base {
 			property = om.createObjectProperty(ctx.uri());
 			// setting rdfs:range of the ObjectProperty
 			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
-			if (rangeClass.getPackage().getName().contains("pojo")) {
+			if (rangeClass != null  &&  rangeClass.getPackage().getName().contains("pojo")) {
 				Resource range = om.getResource(new DefaultTypeWrapper(rangeClass).typeUri());
 				property.setRange(range);
 			}

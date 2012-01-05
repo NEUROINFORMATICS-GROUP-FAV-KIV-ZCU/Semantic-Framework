@@ -51,7 +51,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("ontologyDocument.owl");
+    	writeSemanticToFile("ontologyDocument2.owl");
 
     }
     
