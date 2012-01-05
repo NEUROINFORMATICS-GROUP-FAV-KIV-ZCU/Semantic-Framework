@@ -48,8 +48,8 @@ import thewebsemantic.semantAnnot.ResourceCreator;
  */
 public class Base {
 
-	public static final String JAVACLASS = "http://thewebsemantic.com/javaclass";
-	public static final String SEQUENCE = "http://thewebsemantic.com/sequence";
+	public static final String JAVACLASS = "http://thewebsemantic.com#javaclass";
+	public static final String SEQUENCE = "http://thewebsemantic.com#sequence";
 	protected OntModel om;
 	protected Model m;
 	protected Binder binder;

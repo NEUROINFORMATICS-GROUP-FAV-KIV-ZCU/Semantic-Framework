@@ -71,5 +71,15 @@ public interface JenaBeanExtension {
 	 */
 	public void setBasePackage(String basePackage);
 	
+	
+	/**
+	 * <p>Adds the <code>owl:Ontology</code> element to the ontology document.
+	 * Its properties are set acording to values contained in the method's
+	 * parameter.</p>
+	 * 
+	 * @param ontology - object containing ontology properties
+	 */
+	public void setOntology(OntologyProperties ontology);
+	
 
 }

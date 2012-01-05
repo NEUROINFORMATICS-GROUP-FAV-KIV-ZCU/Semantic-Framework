@@ -11,14 +11,10 @@ import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
-import thewebsemantic.binding.Jenabean;
-
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.ontology.Ontology;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -129,8 +125,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	}
 	
 	
+	@Override
 	public void setOntology(OntologyProperties ontology) {
-		Ontology o = model.createOntology("http://www.pokus.cz/");
+		model.createOntology(ontology.getUri());
 	}
 
 

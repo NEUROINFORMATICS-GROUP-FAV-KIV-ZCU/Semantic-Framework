@@ -7,6 +7,7 @@ import java.util.List;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 
 import tools.JenaBeanExtensionTool;
+import tools.OntologyProperties;
 import tools.OwlApiTool;
 import tools.Syntax;
 
@@ -33,6 +34,7 @@ public class Hlavni {
 		try {
 			jenaBean = new JenaBeanExtensionTool(dataList);
 			jenaBean.setBasePackage("data.pojo");
+			jenaBean.setOntology(new OntologyProperties("http://www.kiv.zcu.cz/eegdatabase"));
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("owl");
