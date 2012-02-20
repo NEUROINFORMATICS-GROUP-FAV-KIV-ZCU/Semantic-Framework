@@ -79,7 +79,7 @@ public interface JenaBeanExtension {
 	 * 
 	 * @param ontology - object containing ontology properties
 	 */
-	public void setOntology(OntologyProperties ontology);
+	public void setOntology(Ontology ontology);
 	
 
 }

@@ -126,8 +126,25 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public void setOntology(OntologyProperties ontology) {
-		model.createOntology(ontology.getUri());
+	public void setOntology(Ontology ontology) {		
+		com.hp.hpl.jena.ontology.Ontology res = model.createOntology(ontology.getUri());
+		String value;
+		if ((value = ontology.getBackwardCompatibleWith()) != null)
+			res.addBackwardCompatibleWith(model.createResource(value));
+		if ((value = ontology.getIncompatibleWith()) != null)
+			res.addIncompatibleWith(model.createResource(value));
+		if ((value = ontology.getPriorVersion()) != null)
+			res.addPriorVersion(model.createResource(value));
+		if ((value = ontology.getVersionInfo()) != null)
+			res.addVersionInfo(value);
+		if ((value = ontology.getComment()) != null)
+			res.addComment(model.createLiteral(value));
+		if ((value = ontology.getImports()) != null)
+			res.addImport(model.createResource(value));
+		if ((value = ontology.getLabel()) != null)
+			res.addLabel(model.createLiteral(value));
+		if ((value = ontology.getSeeAlso()) != null)
+			res.addSeeAlso(model.createResource(value));
 	}
 
 

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Inverse annotation interface used to annotate attributes or whole classes
+ * Inverse annotation interface used to annotate attributes
  * to set an inverse object via object's URI in String attribute
  * 
  */

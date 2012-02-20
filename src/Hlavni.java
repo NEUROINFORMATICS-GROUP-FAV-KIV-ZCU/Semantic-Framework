@@ -7,7 +7,7 @@ import java.util.List;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 
 import tools.JenaBeanExtensionTool;
-import tools.OntologyProperties;
+import tools.Ontology;
 import tools.OwlApiTool;
 import tools.Syntax;
 
@@ -33,8 +33,16 @@ public class Hlavni {
     	//OwlApiTool owlApi;
 		try {
 			jenaBean = new JenaBeanExtensionTool(dataList);
+			
 			jenaBean.setBasePackage("data.pojo");
-			jenaBean.setOntology(new OntologyProperties("http://www.kiv.zcu.cz/eegdatabase"));
+			Ontology ontology = new Ontology("kiv.zcu.cz/eegbase/2.1");
+			ontology.setVersionInfo("v 2.06 2012/02/06");
+			ontology.setBackwardCompatibleWith("kiv.zcu.cz/eegbase/1.6");
+			ontology.setPriorVersion("kiv.zcu.cz/eegdatabase");
+			ontology.setIncompatibleWith("kiv.zcu.cz/ontology");
+			ontology.setComment("EEG/ERP ontology v 2.06");
+			jenaBean.setOntology(ontology);
+			
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("owl");
@@ -51,7 +59,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("ontologyDocument2.owl");
+    	writeSemanticToFile("document.owl");
 
     }
     

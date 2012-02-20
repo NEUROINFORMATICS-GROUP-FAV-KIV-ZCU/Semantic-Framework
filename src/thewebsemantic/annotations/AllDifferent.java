@@ -44,7 +44,7 @@ import java.lang.annotation.Target;
  * </p>
  * 
  * @see AllDifferent
- * @author Jan Hrbek, Jakub Krauz
+ * @author Jakub Krauz
  * 
  * @deprecated This annotation shouldn't be used because of above mentioned NOTE.
  *             If we use it for a class, we treat this class as an instance.
