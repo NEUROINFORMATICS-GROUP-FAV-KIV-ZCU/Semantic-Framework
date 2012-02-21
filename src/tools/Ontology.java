@@ -1,7 +1,10 @@
 package tools;
 
+import java.util.Arrays;
+
 /**
  * This class is used to set the ontology header.<br>
+ * An instance of this class can be used to create ontology axioms.
  * Available properties can be set using appropriate setters.
  * The instance must be passed on to the JenaBeanExtension
  * using the <code>setOntology()</code> method so as the ontology
@@ -30,7 +33,7 @@ public class Ontology {
 	private String comment;
 	
 	/** imported ontologies */
-	private String imports;  //TODO vice importu?
+	private String[] imports;
 	
 	/** human-readable label for the ontology */
 	private String label;
@@ -58,7 +61,7 @@ public class Ontology {
 	
 	
 	/**
-	 * Returns the prior version that is backward compatible.
+	 * Returns URI of the prior version that is backward compatible.
 	 * @return URI of the compatible prior version
 	 */
 	public String getBackwardCompatibleWith() {
@@ -93,61 +96,123 @@ public class Ontology {
 	}
 
 	
+	/**
+	 * Returns URI of the incompatible prior version.
+	 * @return URI of the incompatible prior version
+	 */
 	public String getIncompatibleWith() {
 		return incompatibleWith;
 	}
 
 	
+	/**
+	 * Sets the <code>owl:incompatibleWith</code> element.
+	 * @param uri URI of the incompatible prior version
+	 */
 	public void setIncompatibleWith(String uri) {
 		this.incompatibleWith = uri;
 	}
 
-
+	
+	/**
+	 * Returns URI of the prior version.
+	 * @return URI of the prior version
+	 */
 	public String getPriorVersion() {
 		return priorVersion;
 	}
 
 	
+	/**
+	 * Sets the <code>owl:priorVersion</code> element.
+	 * @param uri URI of the prior version
+	 */
 	public void setPriorVersion(String uri) {
 		this.priorVersion = uri;
 	}
 
-
+	
+	/**
+	 * Returns comment of this ontology.
+	 * @return comment
+	 */
 	public String getComment() {
 		return comment;
 	}
 
 	
+	/**
+	 * Sets the <code>rdfs:comment</code> element.
+	 * @param comment comment to this ontology
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
 	
-	public String getImports() {
+	/**
+	 * Returns URIs of imported ontologies.
+	 * @return array of URIs
+	 */
+	public String[] getImports() {
 		return imports;
 	}
 
 	
-	public void setImports(String imports) {
+	/**
+	 * Sets the <code>owl:imports</code> statement for every
+	 * element of the array.
+	 * @param imports array of URIs of imported ontologies
+	 */
+	public void setImports(String[] imports) {
 		this.imports = imports;
+	}
+	
+	
+	/**
+	 * Sets the <code>owl:imports</code> element.
+	 * @param uri URI of the imported ontology
+	 */
+	public void addImport(String uri) {
+		if (imports == null)
+			imports = new String[1];
+		else
+			imports = Arrays.copyOf(imports, imports.length + 1);
+		imports[imports.length - 1] = uri;
 	}
 
 	
+	/**
+	 * Returns the human-readable label of this ontology.
+	 * @return label
+	 */
 	public String getLabel() {
 		return label;
 	}
 
 	
+	/**
+	 * Sets the human-readable label of this ontology.
+	 * @param label human-readable label
+	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
 	
+	/**
+	 * Returns the defined reference to some relevant resource.
+	 * @return reference to some resource
+	 */
 	public String getSeeAlso() {
 		return seeAlso;
 	}
 
-
+	
+	/**
+	 * Sets the <code>rdfs:seeAlso</code> element.
+	 * @param seeAlso
+	 */
 	public void setSeeAlso(String seeAlso) {
 		this.seeAlso = seeAlso;
 	}

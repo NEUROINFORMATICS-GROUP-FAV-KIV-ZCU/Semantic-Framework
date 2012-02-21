@@ -41,6 +41,7 @@ public class Hlavni {
 			ontology.setPriorVersion("kiv.zcu.cz/eegdatabase");
 			ontology.setIncompatibleWith("kiv.zcu.cz/ontology");
 			ontology.setComment("EEG/ERP ontology v 2.06");
+			ontology.addImport("www.some.address.cz/importedOntology");
 			jenaBean.setOntology(ontology);
 			
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);

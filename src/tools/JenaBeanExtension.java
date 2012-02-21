@@ -73,9 +73,11 @@ public interface JenaBeanExtension {
 	
 	
 	/**
-	 * <p>Adds the <code>owl:Ontology</code> element to the ontology document.
-	 * Its properties are set acording to values contained in the method's
-	 * parameter.</p>
+	 * <p>Adds the ontology header to the ontology document.
+	 * An ontology header consists of the <code>owl:Ontology</code>
+	 * element with axioms about the ontology.</p>
+	 * <p>Ontology axioms are set acording to values contained in the
+	 * <code>Ontology</code> instance passed to this method.</p>
 	 * 
 	 * @param ontology - object containing ontology properties
 	 */

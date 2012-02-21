@@ -129,6 +129,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	public void setOntology(Ontology ontology) {		
 		com.hp.hpl.jena.ontology.Ontology res = model.createOntology(ontology.getUri());
 		String value;
+		String[] valueArray;
 		if ((value = ontology.getBackwardCompatibleWith()) != null)
 			res.addBackwardCompatibleWith(model.createResource(value));
 		if ((value = ontology.getIncompatibleWith()) != null)
@@ -139,8 +140,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			res.addVersionInfo(value);
 		if ((value = ontology.getComment()) != null)
 			res.addComment(model.createLiteral(value));
-		if ((value = ontology.getImports()) != null)
-			res.addImport(model.createResource(value));
+		if ((valueArray = ontology.getImports()) != null)
+			for (String elem : valueArray)
+				res.addImport(model.createResource(elem));
 		if ((value = ontology.getLabel()) != null)
 			res.addLabel(model.createLiteral(value));
 		if ((value = ontology.getSeeAlso()) != null)
