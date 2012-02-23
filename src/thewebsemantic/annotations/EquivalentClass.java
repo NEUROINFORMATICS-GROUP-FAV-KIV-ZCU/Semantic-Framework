@@ -15,16 +15,29 @@ import java.lang.annotation.Target;
  * <code>owl:sameAs</code> element, but OWL-DL cannot express class equality.
  * </p>
  * <p>
+ * Argument of this annotation must be a well-formed URI referencing the
+ * equivalent class.
+ * </p>
+ * <p>
  * Example of use:
  * <code><pre>
- * @EquivalentClass("http://some.ontology.com/Dog")
- * public class MansBestFriend {
+ * @EquivalentClass("http://some.ontology#Man")
+ * public class Person {
  *   ...
  * }
  * </pre></code>
+ * This class will be mapped into:
+ * <code><pre>
+ * &lt;owl:Class rdf:about="#Person"&gt;
+ *   ...
+ *   &lt;owl:equivalentClass&gt;
+ *     &lt;owl:Class rdf:about="http://some.ontology#Man"/&gt;
+ *   &lt;/owl:equivalentClass&gt;
+ * &lt;/owl:Class&gt;
+ * </pre></code>
  * </p>
  * 
- * @author Jan Hrbek, Jakub Krauz
+ * @author Jakub Krauz
  * 
  **/
 @Target(ElementType.TYPE)

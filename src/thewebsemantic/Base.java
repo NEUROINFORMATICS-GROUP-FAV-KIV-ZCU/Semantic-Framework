@@ -10,7 +10,7 @@ import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DataRange;
 import thewebsemantic.annotations.EquivalentProperty;
-import thewebsemantic.annotations.Inverse;
+import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
@@ -130,8 +130,8 @@ public class Base {
 			property.convertToTransitiveProperty();
 		}
 
-		if (ctx.isAnnotatedBy(Inverse.class)) {
-			Property qc = ResourceFactory.createProperty(ctx.getAnnotation(Inverse.class).value());
+		if (ctx.isAnnotatedBy(InverseOf.class)) {
+			Property qc = ResourceFactory.createProperty(ctx.getAnnotation(InverseOf.class).value());
 			property.addInverseOf(qc);
 		}
 

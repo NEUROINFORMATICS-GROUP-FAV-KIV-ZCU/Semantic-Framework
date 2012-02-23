@@ -4,6 +4,10 @@ import static thewebsemantic.JenaHelper.toLiteral;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.instanceURI;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -267,9 +271,14 @@ public class Bean2RDF extends Base {
 	
 	private Resource write(Object bean, Resource subject, boolean shallow) {
 		cycle.add(bean);
-		for (ValuesContext p : TypeWrapper.valueContexts(bean))
+		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
+			
+			//tohle je jen pomocny vypis
+			System.out.println(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
+			
 			if (!(shallow && p.type().isAssignableFrom(Collection.class)) || forceDeep)
 				saveOrUpdate(subject, p);
+		}
 		return subject;
 	}
 

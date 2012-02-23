@@ -21,7 +21,7 @@ import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.Id;
-import thewebsemantic.annotations.Inverse;
+import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
@@ -61,7 +61,7 @@ public class Person implements java.io.Serializable {
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
 	// @Symmetric
 	// @RdfProperty(transitive=true, symmetric=true)
-	@Inverse("http://www.kiv.zcu.cz/eeg/email")
+	@InverseOf("http://www.kiv.zcu.cz/eeg/email")
 	// @DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#vek")
 	// @Transitive
 	// @AllValuesFrom("http://www.jina.adresa.cz/#vsechna_prijmeni")

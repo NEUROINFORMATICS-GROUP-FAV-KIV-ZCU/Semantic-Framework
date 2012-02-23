@@ -4,19 +4,25 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 /**
- * This annotation interface enables user to add a isDefinedBy element
- * to selected field
+ * <p>
+ * Implements the <code>rdfs:isDefinedBy</code> element.<br>
+ * This property is used to set reference to a resource that defines
+ * the resource concerned. It is a subproperty of
+ * <code>rdfs:seeAlso</code>.
+ * </p>
+ * <p>
+ * Argument of this annotation must be a well-formed URI referencing
+ * a resource that defines the annotated field or class.
+ * </p>
  *
- *
- * @author Miroslav Masek
- *
+ * @author Jakub Krauz
  *
  */
-
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsDefinedBy {
+	
     String value();
-
 }

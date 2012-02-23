@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation sets Bean getter method as transient, so JenaBean will ignore them
- * while iterating trough getters of the bean
+ * while iterating trough getters of the bean.
  */
-
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transient {
+	
 }
