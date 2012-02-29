@@ -84,6 +84,8 @@ public class Bean2RDF extends Base {
 	private boolean forceDeep = false;
 	private Log logger = LogFactory.getLog(getClass());
     private AnnotationHelper jpa;
+    
+    private boolean structureOnly = false;
 
     
 	/**
@@ -93,6 +95,22 @@ public class Bean2RDF extends Base {
 	 */
 	public Bean2RDF(Model m) {
 		super(m);
+		jpa = new NullJPAHelper();
+	}
+	
+	
+	/**
+	 * Constructs a new instance bound to OntModel <code>m</code>.
+	 * If the <code>structureOnly</code> parameter is true, then
+	 * the ontology model contains only the static structure of
+	 * data, otherwise contains also the data.
+	 * 
+	 * @param m Jena OntModel instance
+	 * @param structureOnly if true the model does not load data
+	 */
+	public Bean2RDF(Model m, boolean structureOnly) {
+		super(m);
+		this.structureOnly = structureOnly;
 		jpa = new NullJPAHelper();
 	}
 
@@ -155,8 +173,7 @@ public class Bean2RDF extends Base {
 
 	
 	private Resource _write(Object bean, boolean shallow) {
-		return (cycle.contains(bean)) ? existing(bean) : write(bean,
-				toResource(bean), shallow);
+		return (cycle.contains(bean)) ? existing(bean) : write(bean, toResource(bean), shallow);
 	}
 	
 
@@ -168,8 +185,8 @@ public class Bean2RDF extends Base {
 	private Resource toResource(Object bean) {
 		String uri = instanceURI(bean);
 		Resource type = getRDFSClass(bean);
-		if (jpa.isEmbedded(bean) || uri==null)
-			return m.createResource(type); 
+		if (jpa.isEmbedded(bean) || uri == null)
+			return m.createResource(type);
 		else
 			return m.createResource(uri, type);
 	}
@@ -274,7 +291,8 @@ public class Bean2RDF extends Base {
 		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
 			
 			//tohle je jen pomocny vypis
-			System.out.println(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
+			//System.out.println(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
+			//logger.error(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
 			
 			if (!(shallow && p.type().isAssignableFrom(Collection.class)) || forceDeep)
 				saveOrUpdate(subject, p);
@@ -286,6 +304,7 @@ public class Bean2RDF extends Base {
 	private void saveOrUpdate(Resource subject, ValuesContext pc) {
 		Object o = pc.invokeGetter();
 		Property property = toRdfProperty(pc);
+		
 		if ( Saver.supports(pc.type()) )
 			Saver.of(pc.type()).save(this, subject, property, o);
 		else if (o == null)
@@ -297,6 +316,11 @@ public class Bean2RDF extends Base {
 		else
 			logger.warn(MessageFormat.format("Skipped unsupported property type {0} on {1}", pc.type(), pc.subject.getClass()));
 			//logger.log(Level.WARNING, MessageFormat.format(bundle.getString(UNSUPPORTED_TYPE), pc.type(), pc.subject.getClass()));
+
+		// removing data if we need only their structure
+		if (structureOnly) {
+			subject.removeProperties();
+		}
 	}
 
 	
@@ -336,9 +360,9 @@ public class Bean2RDF extends Base {
 	}
 	
 	
-	public void n3() {
+	/*public void n3() {
 		m.write(System.out,"N3");
-	}
+	}*/
 	
     
     

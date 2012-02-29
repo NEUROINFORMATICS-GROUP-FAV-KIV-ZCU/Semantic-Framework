@@ -32,7 +32,7 @@ public class Hlavni {
     	JenaBeanExtensionTool jenaBean;
     	//OwlApiTool owlApi;
 		try {
-			jenaBean = new JenaBeanExtensionTool(dataList);
+			jenaBean = new JenaBeanExtensionTool(dataList, false);
 			
 			jenaBean.setBasePackage("data.pojo");
 			Ontology ontology = new Ontology("kiv.zcu.cz/eegbase/2.1");
@@ -60,7 +60,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("document.owl");
+    	writeSemanticToFile("structure.owl");
 
     }
     

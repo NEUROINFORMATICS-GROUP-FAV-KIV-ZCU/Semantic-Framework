@@ -29,9 +29,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	/** logger */
 	private Log log = LogFactory.getLog(getClass());
-
-	/** provides operations over semantic model */
-	//private Jenabean jenaBean = Jenabean.instance();
 	
 	/** loaded ontology model */
 	private OntModel model;
@@ -50,7 +47,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included
 		 * in ModelFactory.createOntologyModel() as default,
 		 * which led to a very slow computation */
-		createModel(dataList, OntModelSpec.OWL_DL_MEM);
+		createModel(dataList, OntModelSpec.OWL_DL_MEM, false);
 	}
 	
 	
@@ -64,7 +61,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * @param specification - specification of the ontology model
 	 */
 	public JenaBeanExtensionTool(List<Object> dataList, OntModelSpec specification) {
-		createModel(dataList, specification);
+		createModel(dataList, specification, false);
 	}
 
 
@@ -78,7 +75,21 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 */
 	public JenaBeanExtensionTool(List<Object> dataList, String namespace) {
 		UserDefNamespace.set(namespace);
-		createModel(dataList, OntModelSpec.OWL_DL_MEM);
+		createModel(dataList, OntModelSpec.OWL_DL_MEM, false);
+	}
+	
+	
+	/**
+	 * Loads data from the list of objects and creates an intology model
+	 * in the default specification (OWL-DL without inferencing).
+	 * If the <code>structureOnly</code> parameter is set true, then
+	 * the ontology model does not contain any data, only their structure
+	 * (i.e. classes, properties and their relations).
+	 * @param dataList - list of objects (object-oriented model)
+	 * @param structureOnly - true if we do not need data (only structure)
+	 */
+	public JenaBeanExtensionTool(List<Object> dataList, boolean structureOnly) {
+		createModel(dataList, OntModelSpec.OWL_DL_MEM, structureOnly);
 	}
 
 
@@ -108,13 +119,11 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
 			lang = DEFAULT_LANG;
 		}
-//		RDFWriter writer = jenaBean.model().getWriter(lang);
 		RDFWriter writer = model.getWriter(lang);
 		if (lang.contains("XML")) {
 			writer.setProperty("showXmlDeclaration", true);
 			writer.setProperty("xmlbase", xmlBase);
 		}
-//		writer.write(jenaBean.model(), out, null);
 		writer.write(model, out, null);
 	}
 	
@@ -156,13 +165,14 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * @param dataList - list of user objects
 	 * @param spec - specification of the ontology model
 	 */
-	private void createModel(List<Object> dataList, OntModelSpec spec) {
+	private void createModel(List<Object> dataList, OntModelSpec spec, boolean structureOnly) {
 		log.debug("Started creating ontology model.");
-		//jenaBean.bind(ModelFactory.createOntologyModel(spec));
 		model = ModelFactory.createOntologyModel(spec);
-		Bean2RDF loader = new Bean2RDF(model);
+		
+		// true urcuje, ze nacitam pouze staticky model dat
+		Bean2RDF loader = new Bean2RDF(model, structureOnly);
+		
 		for (int i = 0; i < dataList.size(); i++) {
-//			jenaBean.writer().save(dataList.get(i));
 			loader.save(dataList.get(i));
 		}
 		log.debug("Ontology model was created.");
