@@ -3,6 +3,7 @@ package tools;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Defines user interface for working with the JenaBeanExtension library.
@@ -10,6 +11,17 @@ import java.io.OutputStream;
  * @author Jakub Krauz
  */
 public interface JenaBeanExtension {
+	
+	
+	/**
+	 * Loads the object-oriented model and transforms it into the
+	 * ontology model.
+	 * 
+	 * @param dataList - object-oriented model (list of data objects)
+	 * @param structureOnly - if true the ontology model contains no data
+	 * 						  itself, only their structure
+	 */
+	public void loadOOM(List<Object> dataList, boolean structureOnly);
 
 	/**
 	 * <p>Creates a serialization of the ontology model as a RDF/XML document.</p>
@@ -63,13 +75,34 @@ public interface JenaBeanExtension {
 	
 	
 	/**
+	 * <p>Loads statements from a specified document and adds them to
+	 * the ontology model. This can be used especially for adding
+	 * elements that cannot be gathered from the object-oriented model,
+	 * such as an ontology header. Another way to set the ontology
+	 * header is to use the <code>setOntology()</code> method.</p>
+	 * 
+	 * @param filePath - filename of the ontology document to be loaded
+	 */
+	public void loadStatements(String filePath);
+	
+	
+	/**
+	 * Sets the default namespace for the whole ontology model. That means that
+	 * every entity will have this namespace except for those that have
+	 * explicitly defined namespace using <code>@Namespace</code>.
+	 * @param namespace - default namespace for the whole model
+	 */
+	public void setNamespace(String namespace);
+	
+	
+	/**
 	 * <p>Sets the base package of POJO objects. This value is used in the
 	 * RDF/XML ontology document to abbreviate resources' URIs using
 	 * the <code>xml:base</code> element and relative URIs.</p>
 	 * 
 	 * @param basePackage - POJO package
 	 */
-	public void setBasePackage(String basePackage);
+	public void setBase(String base);
 	
 	
 	/**

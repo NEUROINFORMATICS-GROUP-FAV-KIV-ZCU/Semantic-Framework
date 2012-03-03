@@ -2,7 +2,12 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import com.hp.hpl.jena.ontology.OntModelSpec;
 
@@ -30,23 +35,23 @@ public class Hlavni {
     	List<Object> dataList = ex.getVstupniPole();
     	
     	JenaBeanExtensionTool jenaBean;
-    	//OwlApiTool owlApi;
+    	OwlApiTool owlApi;
 		try {
-			jenaBean = new JenaBeanExtensionTool(dataList, false);
-			
-			jenaBean.setBasePackage("data.pojo");
-			Ontology ontology = new Ontology("kiv.zcu.cz/eegbase/2.1");
-			ontology.setVersionInfo("v 2.06 2012/02/06");
-			ontology.setBackwardCompatibleWith("kiv.zcu.cz/eegbase/1.6");
-			ontology.setPriorVersion("kiv.zcu.cz/eegdatabase");
-			ontology.setIncompatibleWith("kiv.zcu.cz/ontology");
-			ontology.setComment("EEG/ERP ontology v 2.06");
-			ontology.addImport("www.some.address.cz/importedOntology");
-			jenaBean.setOntology(ontology);
+			jenaBean = new JenaBeanExtensionTool();
+			jenaBean.loadStatements("ontology.owl");
+			jenaBean.loadOOM(dataList, false);
+//			Ontology ontology = new Ontology("http://kiv.zcu.cz/eegbase/2.1");
+//			ontology.setVersionInfo(df.format(new Date()));
+//			ontology.setBackwardCompatibleWith("http://kiv.zcu.cz/eegbase/1.6");
+//			ontology.setPriorVersion("http://kiv.zcu.cz/eegdatabase");
+//			ontology.setIncompatibleWith("http://kiv.zcu.cz/ontology");
+//			ontology.setComment("EEG/ERP ontology v 2.06");
+//			//ontology.addImport("www.some.address.cz/importedOntology");
+//			jenaBean.setOntology(ontology);
 			
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 //			owlApi = new OwlApiTool(is);
-//			is = owlApi.convertToSemanticStandard("owl");
+//			is = owlApi.convertToSemanticStandard("rdf");
 			
 			/*jenaBean = new JenaBeanExtensionTool(dataList);
 			jenaBean.setBasePackage("data.pojo");
@@ -60,7 +65,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("structure.owl");
+    	writeSemanticToFile("document.owl");
 
     }
     

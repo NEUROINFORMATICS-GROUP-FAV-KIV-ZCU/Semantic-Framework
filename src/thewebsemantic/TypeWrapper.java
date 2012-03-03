@@ -40,7 +40,7 @@ public abstract class TypeWrapper {
 
 
 	/**
-	 * Constructor retrives all neccasary inoformations of the bean that is
+	 * Constructor retrives all neccasary informations of the bean that is
 	 * wrapped.
 	 * 
 	 * @param <T> parent class of the bean

@@ -4,10 +4,6 @@ import static thewebsemantic.JenaHelper.toLiteral;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.instanceURI;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;

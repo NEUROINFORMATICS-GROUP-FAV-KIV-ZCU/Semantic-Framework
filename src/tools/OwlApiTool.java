@@ -60,13 +60,13 @@ public class OwlApiTool implements OwlApi {
     public InputStream convertToSemanticStandard(String standard)
         					throws IOException, OWLOntologyStorageException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (standard.equals(RDF)) {
+        if (standard.equalsIgnoreCase(RDF)) {
             log.debug("Converting to RDF/XML standard.");
             manager.saveOntology(ontology, new RDFXMLOntologyFormat(), out);
-        } else if (standard.equals(OWL)) {
+        } else if (standard.equalsIgnoreCase(OWL)) {
             log.debug("Converting to OWL/XML standard.");
             manager.saveOntology(ontology, new OWLXMLOntologyFormat(), out);
-        } else if (standard.equals(TTL)) {
+        } else if (standard.equalsIgnoreCase(TTL)) {
             log.debug("Converting to TTL/XML standard.");
             manager.saveOntology(ontology, new TurtleOntologyFormat(), out);
         } else {

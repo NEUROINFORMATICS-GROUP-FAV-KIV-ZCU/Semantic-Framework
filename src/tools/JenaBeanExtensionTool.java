@@ -2,9 +2,16 @@ package tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,53 +50,68 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * 
 	 * @param dataList list of objects - object-orinted model
 	 */
-	public JenaBeanExtensionTool(List<Object> dataList) {
+	public JenaBeanExtensionTool() {
 		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included
 		 * in ModelFactory.createOntologyModel() as default,
 		 * which led to a very slow computation */
-		createModel(dataList, OntModelSpec.OWL_DL_MEM, false);
+		//specification = OntModelSpec.OWL_DL_MEM;
+		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 	}
 	
 	
 	/**
-	 * Loads data from the list of objects and creates an ontology model
-	 * in the given specification (e.g. OWL Full, OWL-DL, OWL-Lite, without
-	 * reasoning or with an inferencer etc.).
+	 * Creates an empty ontology model in the given specification
+	 * (e.g. OWL Full, OWL-DL, OWL-Lite, without reasoning or with an inferencer etc.).
+	 * If the <code>specification</code> argument is null, the default specification
+	 * <code>OntModelSpec.OWL_DL_MEM</code> is used.<br>
+	 *
 	 * @see OntModelSpec
 	 * 
-	 * @param dataList - list of objects - object-orinted model
+	 * @param namespace - default namespace for the whole model
 	 * @param specification - specification of the ontology model
 	 */
-	public JenaBeanExtensionTool(List<Object> dataList, OntModelSpec specification) {
-		createModel(dataList, specification, false);
+	public JenaBeanExtensionTool(OntModelSpec specification) {
+		OntModelSpec spec = (specification == null) ? OntModelSpec.OWL_DL_MEM : specification;
+		model = ModelFactory.createOntologyModel(spec);
 	}
-
-
+	
+	
 	/**
-	 * Loads data from the list of objects and creates an ontology model
-	 * in the default specification (OWL-DL without inferencing).
-	 * Sets the default namespace for the whole model.
+	 * Creates an ontology model in the given specification and loads statements from
+	 * a specified ontology document. This document can contain additional statements
+	 * that cannot be gathered from the object-oriented model, such as an ontology
+	 * header etc. The <code>basePackage</code> argument determines the base package
+	 * of object-oriented model. Classes and properties from this package will be
+	 * defined in the generated ontology.
 	 * 
-	 * @param dataList - list of objects - object-oriented model
-	 * @param namespace - namespace for the whole model
+	 * @param fileName - name of a file with some statements to be loaded
+	 * @param specification - required specification for Jena's model.
+	 * 						  If null, the default specification <code>OntModelSpec.OWL_DL_MEM</code>
+	 * 						  is used.
 	 */
-	public JenaBeanExtensionTool(List<Object> dataList, String namespace) {
-		UserDefNamespace.set(namespace);
-		createModel(dataList, OntModelSpec.OWL_DL_MEM, false);
+	public JenaBeanExtensionTool(String fileName, OntModelSpec specification) {
+		OntModelSpec spec = (specification == null) ? OntModelSpec.OWL_DL_MEM : specification;
+		model = ModelFactory.createOntologyModel(spec);
+		loadStatements(fileName);
 	}
 	
 	
 	/**
-	 * Loads data from the list of objects and creates an intology model
-	 * in the default specification (OWL-DL without inferencing).
+	 * Loads data from the list of objects and creates an ontology model.
 	 * If the <code>structureOnly</code> parameter is set true, then
 	 * the ontology model does not contain any data, only their structure
 	 * (i.e. classes, properties and their relations).
 	 * @param dataList - list of objects (object-oriented model)
 	 * @param structureOnly - true if we do not need data (only structure)
 	 */
-	public JenaBeanExtensionTool(List<Object> dataList, boolean structureOnly) {
-		createModel(dataList, OntModelSpec.OWL_DL_MEM, structureOnly);
+	@Override
+	public void loadOOM(List<Object> dataList, boolean structureOnly) {
+		log.debug("Started loading object-oriented model.");		
+		Bean2RDF loader = new Bean2RDF(model, structureOnly);
+		for (int i = 0; i < dataList.size(); i++) {
+			loader.save(dataList.get(i));
+		}
+		log.debug("Ontology model was created.");
 	}
 
 
@@ -122,15 +144,50 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		RDFWriter writer = model.getWriter(lang);
 		if (lang.contains("XML")) {
 			writer.setProperty("showXmlDeclaration", true);
-			writer.setProperty("xmlbase", xmlBase);
+			writer.setProperty("xmlbase", xmlBase + "#");
+			//writer.setProperty("allowBadURIs", true);
+			//writer.setProperty("showDoctypeDeclaration", true);
+			writer.setProperty("relativeURIs", "");
+			//writer.setProperty("blockRules", "idAttr");
 		}
-		writer.write(model, out, null);
+		writer.write(model, out, xmlBase);
 	}
 	
 	
 	@Override
-	public void setBasePackage(String basePackage) {
-		xmlBase = "http://" + basePackage;
+	public void loadStatements(String filePath) {
+		InputStream in = null;
+		try {
+			in = new FileInputStream(filePath);
+			model.getReader(Syntax.RDF_XML_ABBREV).read(model, in, null);
+			com.hp.hpl.jena.ontology.Ontology ont = model.listOntologies().next();
+			UserDefNamespace.set(ont.getURI());
+			setBase(ont.getURI());
+			if (ont.getVersionInfo() == null)
+				ont.setVersionInfo(DateFormat.getDateInstance(DateFormat.LONG, Locale.UK).format(new Date()));
+		} catch (FileNotFoundException e) {
+			log.error("File " + filePath + " not found!", e);
+		} catch (NoSuchElementException e) {
+			log.error("No ontology header found in the given document: " + filePath, e);
+		} finally {
+			try {
+				if (in != null) in.close();
+			} catch (IOException e) {
+				log.error("Cannot close file " + filePath, e);
+			}
+		}
+	}
+	
+	
+	@Override
+	public void setBase(String base) {
+		xmlBase = base.startsWith("http://") ? base : "http://" + base;
+	}
+	
+	
+	@Override
+	public void setNamespace(String namespace) {
+		UserDefNamespace.set(namespace);
 	}
 	
 	
@@ -156,26 +213,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			res.addLabel(model.createLiteral(value));
 		if ((value = ontology.getSeeAlso()) != null)
 			res.addSeeAlso(model.createResource(value));
-	}
-
-
-	/**
-	 * Creates the semantic model and fills it with the user data
-	 * 
-	 * @param dataList - list of user objects
-	 * @param spec - specification of the ontology model
-	 */
-	private void createModel(List<Object> dataList, OntModelSpec spec, boolean structureOnly) {
-		log.debug("Started creating ontology model.");
-		model = ModelFactory.createOntologyModel(spec);
-		
-		// true urcuje, ze nacitam pouze staticky model dat
-		Bean2RDF loader = new Bean2RDF(model, structureOnly);
-		
-		for (int i = 0; i < dataList.size(); i++) {
-			loader.save(dataList.get(i));
-		}
-		log.debug("Ontology model was created.");
 	}
 	
 
