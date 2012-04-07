@@ -220,7 +220,8 @@ public class Bean2RDF extends Base {
 
         // Comment
         if (bean.getClass().isAnnotationPresent(Comment.class)) {
-            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(), null);
+        	String language = bean.getClass().getAnnotation(Comment.class).lang();
+            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(), language.equals("") ? null : language);
         }
         
         // SeeAlso

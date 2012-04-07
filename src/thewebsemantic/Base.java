@@ -13,6 +13,9 @@ import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DataRange;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentProperty;
+import thewebsemantic.annotations.FunctionalProperty;
+import thewebsemantic.annotations.HasValue;
+import thewebsemantic.annotations.InverseFunctionalProperty;
 import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
@@ -29,6 +32,7 @@ import thewebsemantic.binder.BinderImp;
 
 import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
 import com.hp.hpl.jena.ontology.CardinalityRestriction;
+import com.hp.hpl.jena.ontology.HasValueRestriction;
 import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
 import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -39,6 +43,8 @@ import com.hp.hpl.jena.ontology.SomeValuesFromRestriction;
 import com.hp.hpl.jena.ontology.impl.OntModelImpl;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFList;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.vocabulary.OWL;
@@ -139,8 +145,15 @@ public class Base {
 		}
 
 		if (ctx.isAnnotatedBy(Transitive.class)) {
-			System.out.println(ctx.getName());
 			property.convertToTransitiveProperty();
+		}
+		
+		if (ctx.isAnnotatedBy(FunctionalProperty.class)) {
+			property.convertToFunctionalProperty();
+		}
+		
+		if (ctx.isAnnotatedBy(InverseFunctionalProperty.class)) {
+			property.convertToInverseFunctionalProperty();
 		}
 
 		if (ctx.isAnnotatedBy(InverseOf.class)) {
@@ -149,7 +162,8 @@ public class Base {
 		}
 
 		if (ctx.isAnnotatedBy(Comment.class)) {
-			property.setComment(ctx.getAnnotation(Comment.class).value(), null);
+			String language = ctx.getAnnotation(Comment.class).lang();
+			property.setComment(ctx.getAnnotation(Comment.class).value(), language.equals("") ? null : language);
 		}
 
 		if (ctx.isAnnotatedBy(VersionInfo.class)) {
@@ -185,19 +199,76 @@ public class Base {
 		}
 		
 		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
-			Resource range = ResourceFactory.createResource(ctx.getAnnotation(AllValuesFrom.class).value());
-			// vytvoreni anonymni restrikce
-			AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, property, range);
-			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
-			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+			Resource range;
+			String uriref = ctx.getAnnotation(AllValuesFrom.class).uri();
+			if (!uriref.equals("")) {
+				range = ResourceFactory.createResource(uriref);
+			} else {
+				RDFList list = om.createList();
+				String[] stringValues;
+				int[] intValues;
+				char[] charValues;
+				if ((stringValues = ctx.getAnnotation(AllValuesFrom.class).stringValues()).length > 0) {
+					for (String value : stringValues)
+						list = list.with(om.createTypedLiteral(value));
+				} else if ((intValues = ctx.getAnnotation(AllValuesFrom.class).intValues()).length > 0) {
+					for (int value : intValues)
+						list = list.with(om.createTypedLiteral(value));
+				} else if ((charValues = ctx.getAnnotation(AllValuesFrom.class).charValues()).length > 0) {
+					for (char value : charValues)
+						list = list.with(om.createTypedLiteral(value));
+				}
+				range = om.createDataRange(list);
+			}
+			if (range != null) {
+				AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, property, range);
+				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+			}
 		}
 		
 		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
-			Resource range = ResourceFactory.createResource(ctx.getAnnotation(SomeValuesFrom.class).value());
-			// vytvoreni anonymni restrikce
-			SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, property, range);
-			// restrikce ma platit ve tride, kde je definovana - trida bude dedit od teto anonymni restrikce
-			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+			Resource range;
+			String uriref = ctx.getAnnotation(SomeValuesFrom.class).uri();
+			if (!uriref.equals("")) {
+				range = ResourceFactory.createResource(uriref);
+			} else {
+				RDFList list = om.createList();
+				String[] stringValues;
+				int[] intValues;
+				char[] charValues;
+				if ((stringValues = ctx.getAnnotation(SomeValuesFrom.class).stringValues()).length > 0) {
+					for (String value : stringValues)
+						list = list.with(om.createTypedLiteral(value));
+				} else if ((intValues = ctx.getAnnotation(SomeValuesFrom.class).intValues()).length > 0) {
+					for (int value : intValues)
+						list = list.with(om.createTypedLiteral(value));
+				} else if ((charValues = ctx.getAnnotation(SomeValuesFrom.class).charValues()).length > 0) {
+					for (char value : charValues)
+						list = list.with(om.createTypedLiteral(value));
+				}
+				range = om.createDataRange(list);
+			}
+			if (range != null) {
+				SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, property, range);
+				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+			}
+		}
+		
+		if (ctx.isAnnotatedBy(HasValue.class)) {
+			HasValue annotation = ctx.getAnnotation(HasValue.class);
+			RDFNode value = null;
+			if (! annotation.uri().equals(""))
+				value = ResourceFactory.createResource(annotation.uri());
+			else if (! annotation.stringValue().equals(""))
+				value = om.createTypedLiteral(annotation.stringValue());
+			else if (annotation.charValue() != HasValue.DEFAULT_CHAR)
+				value = om.createTypedLiteral(annotation.charValue());
+			else if (annotation.intValue() != HasValue.DEFAULT_INT)
+				value = om.createTypedLiteral(annotation.intValue());
+			if (value != null) {
+				HasValueRestriction restriction = om.createHasValueRestriction(null, property, value);
+				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
+			}
 		}
 
 		

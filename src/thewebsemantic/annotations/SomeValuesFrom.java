@@ -15,10 +15,21 @@ import java.lang.annotation.Target;
  * a class or a data range.
  * </p>
  * <p>
- * Argument of this annotation must be a well-formed URI referencing the range class.
- * Defining simple data range values is not supported in this implementation.
- * In the generated ontology the Java class containing the annotated field will
- * inherit from an anonymous restriction class with this constraint.
+ * Class<br>
+ * The <code>uri</code> parameter of this annotation must be a well-formed URI
+ * referencing the range class. In the generated ontology the Java class containing
+ * the annotated field will inherit from an anonymous restriction class with this constraint.
+ * </p>
+ * <p>
+ * Data range<br>
+ * There are three possible parameters that set the data range:
+ * <ul>
+ * 		<li><code>stringValues</code> is used to set an enumeration of string values
+ * 		<li><code>intValues</code> to set enumeration of integer values
+ * 		<li><code>charValues</code> to set enumeration of character values
+ * </ul>
+ * In the generated ontology the Java class containing the annotated field will inherit
+ * from an anonymous restriction class with this constraint.
  * </p>
  * <p>
  * NOTE: The <code>@SomeValuesFrom</code> annotation doesn't force the annotated
@@ -29,7 +40,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   @SomeValuesFrom("http://some.ontology#Dog")
+ *   @SomeValuesFrom(uri="http://some.ontology#Dog")
  *   public Set&lt;Animal&gt; pets;
  * }
  * </pre> </code>
@@ -55,5 +66,17 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SomeValuesFrom {
-	String value();
+	
+	/** URIref of the class that some values of the annotated property belong to */
+	String uri() default "";
+	
+	/** enumeration of string values */
+	String[] stringValues() default {};
+	
+	/** enumeration of integer values */
+	int[] intValues() default {};
+	
+	/** enumeration of character values */
+	char[] charValues() default {};
+	
 }
