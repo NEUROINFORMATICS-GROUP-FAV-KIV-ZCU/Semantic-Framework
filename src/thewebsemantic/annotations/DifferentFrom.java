@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
  * An example:
  * <code>
  * <pre>
- * <Car rdf:ID="Ford"/>
- * <Car rdf:ID="Mercedes">
- *   <owl:differentFrom rdf:resource="#Ford"/>
- * </Car>
+ * &lt;Car rdf:ID="Ford"/&gt;
+ * &lt;Car rdf:ID="Mercedes"&gt;
+ *   &lt;owl:differentFrom rdf:resource="#Ford"/&gt;
+ * &lt;/Car&gt;
  * </pre>
  * </code>
  * This states that there are two different cars.
@@ -41,7 +41,7 @@ import java.lang.annotation.Target;
  *             not compatible with reasoner processing.
  */
 @Deprecated
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DifferentFrom {
     String value();

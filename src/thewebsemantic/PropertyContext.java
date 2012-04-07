@@ -103,7 +103,7 @@ class PropertyContext extends ValuesContext {
 			ParameterizedType type = (ParameterizedType) property.getReadMethod().getGenericReturnType();
 			return getGenericType(type);
 		} catch (ClassCastException e) {
-			logger.error("Cannot cast to ParameterizedType.", e);
+			logger.error("Cannot cast to ParameterizedType: " + property.getReadMethod().getGenericReturnType());
 			return null;
 		}
 	}

@@ -2,8 +2,6 @@ package tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,13 +13,21 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
+
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFList;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.Selector;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.vocabulary.OWL2;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -89,21 +95,13 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * 						  If null, the default specification <code>OntModelSpec.OWL_DL_MEM</code>
 	 * 						  is used.
 	 */
-	public JenaBeanExtensionTool(String fileName, OntModelSpec specification) {
+	public JenaBeanExtensionTool(InputStream ontologyDocument, OntModelSpec specification) {
 		OntModelSpec spec = (specification == null) ? OntModelSpec.OWL_DL_MEM : specification;
 		model = ModelFactory.createOntologyModel(spec);
-		loadStatements(fileName);
+		loadStatements(ontologyDocument);
 	}
 	
 	
-	/**
-	 * Loads data from the list of objects and creates an ontology model.
-	 * If the <code>structureOnly</code> parameter is set true, then
-	 * the ontology model does not contain any data, only their structure
-	 * (i.e. classes, properties and their relations).
-	 * @param dataList - list of objects (object-oriented model)
-	 * @param structureOnly - true if we do not need data (only structure)
-	 */
 	@Override
 	public void loadOOM(List<Object> dataList, boolean structureOnly) {
 		log.debug("Started loading object-oriented model.");		
@@ -146,7 +144,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			writer.setProperty("showXmlDeclaration", true);
 			writer.setProperty("xmlbase", xmlBase + "#");
 			//writer.setProperty("allowBadURIs", true);
-			//writer.setProperty("showDoctypeDeclaration", true);
+			writer.setProperty("showDoctypeDeclaration", true);
 			writer.setProperty("relativeURIs", "");
 			//writer.setProperty("blockRules", "idAttr");
 		}
@@ -155,27 +153,85 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public void loadStatements(String filePath) {
-		InputStream in = null;
+	public InputStream getOntologySchema(String lang) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		writeOntologySchema(out, lang);
+		return new ByteArrayInputStream(out.toByteArray());
+	}
+	
+	
+	@Override
+	public void writeOntologySchema(OutputStream out, String lang) {
+		if (! Syntax.isValidSyntaxName(lang)) {
+			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
+			lang = DEFAULT_LANG;
+		}
+		
+		/*OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
+		ExtendedIterator<OntClass> classes = model.listClasses();
+		Selector selector;
+		while (classes.hasNext()) {
+			selector = new SimpleSelector(classes.next(), null, (RDFNode) null);
+			schema.add(model.listStatements(selector));
+		}
+		ExtendedIterator<OntProperty> properties = model.listAllOntProperties();
+		while (properties.hasNext()) {
+			selector = new SimpleSelector(properties.next(), null, (RDFNode) null);
+			schema.add(model.listStatements(selector));
+		}
+		if (model.listOntologies().hasNext()) {
+			selector = new SimpleSelector(model.listOntologies().next(), null, (RDFNode) null);
+			schema.add(model.listStatements(selector));
+		}*/
+		
+		OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
+		schema.add(model);
+		
+		// remove all individuals from the schema
+		ExtendedIterator<Individual> individuals = schema.listIndividuals();
+		Selector selector;
+		while (individuals.hasNext()) {
+			selector = new SimpleSelector(individuals.next(), null, (RDFNode) null);
+			schema.remove(schema.listStatements(selector));
+		}
+
+		RDFWriter writer = schema.getWriter(lang);
+		if (lang.contains("XML")) {
+			writer.setProperty("showXmlDeclaration", true);
+			writer.setProperty("xmlbase", xmlBase + "#");
+			writer.setProperty("relativeURIs", "");
+		}
+		writer.write(schema, out, xmlBase);
+	}
+	
+	
+	@Override
+	public void loadStatements(InputStream ontologyDocument) {
+		model.getReader(Syntax.RDF_XML_ABBREV).read(model, ontologyDocument, null);
 		try {
-			in = new FileInputStream(filePath);
-			model.getReader(Syntax.RDF_XML_ABBREV).read(model, in, null);
+			ontologyDocument.close();
+		} catch (IOException e) {
+			log.error("I/O error occured when closing the input stream associated with the ontology configuration document.");
+		}
+		try {
 			com.hp.hpl.jena.ontology.Ontology ont = model.listOntologies().next();
 			UserDefNamespace.set(ont.getURI());
 			setBase(ont.getURI());
 			if (ont.getVersionInfo() == null)
 				ont.setVersionInfo(DateFormat.getDateInstance(DateFormat.LONG, Locale.UK).format(new Date()));
-		} catch (FileNotFoundException e) {
-			log.error("File " + filePath + " not found!", e);
 		} catch (NoSuchElementException e) {
-			log.error("No ontology header found in the given document: " + filePath, e);
-		} finally {
-			try {
-				if (in != null) in.close();
-			} catch (IOException e) {
-				log.error("Cannot close file " + filePath, e);
-			}
+			log.error("No ontology header found in the ontology configuration document!");
 		}
+	}
+	
+	
+	@Override
+	public void declareAllClassesDisjoint() {
+		ExtendedIterator<OntClass> iterator = model.listClasses();
+		RDFList list = model.createList();
+		while(iterator.hasNext())
+			list = list.with(iterator.next());
+		model.add(OWL2.AllDisjointClasses, OWL2.members, list);
 	}
 	
 	

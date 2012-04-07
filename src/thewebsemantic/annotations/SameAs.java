@@ -16,9 +16,9 @@ import java.lang.annotation.Target;
  * For example:
  * <code>
  * <pre>
- * <rdf:Description rdf:about="#Andula">
- *   <owl:sameAs rdf:resource="#Antonov_AN2"/>
- * </rdf:Description>
+ * &lt;rdf:Description rdf:about="#Andula"&gt;
+ *   &lt;owl:sameAs rdf:resource="#Antonov_AN2"/&gt;
+ * &lt;/rdf:Description&gt;
  * </pre>
  * </code>
  * This states that the two URIs refer to the same thing (it's a type of aeroplane).
@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  *             not compatible with reasoner processing.
  */
 @Deprecated
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SameAs {
 	String value();

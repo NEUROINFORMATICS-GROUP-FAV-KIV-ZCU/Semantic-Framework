@@ -29,6 +29,7 @@ import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
 import thewebsemantic.annotations.Symmetric;
+import thewebsemantic.annotations.Ignore;
 import thewebsemantic.annotations.Transitive;
 import thewebsemantic.annotations.VersionInfo;
 
@@ -82,7 +83,10 @@ public class Person implements java.io.Serializable {
 	private String phoneNumber;
 	private String note;
 	private String username;
-	private String password;
+	
+	@Ignore
+	private String password = "sdvffhbcbgfjhgnvbgn";
+	
 	private String authority;
 	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
 	
@@ -231,7 +235,6 @@ public class Person implements java.io.Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 
 	public String getPassword() {
 		return this.password;

@@ -1,5 +1,6 @@
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -38,18 +39,21 @@ public class Hlavni {
     	OwlApiTool owlApi;
 		try {
 			jenaBean = new JenaBeanExtensionTool();
-			jenaBean.loadStatements("ontology.owl");
+			jenaBean.loadStatements(new FileInputStream("ontology.owl"));
 			jenaBean.loadOOM(dataList, false);
 //			Ontology ontology = new Ontology("http://kiv.zcu.cz/eegbase/2.1");
-//			ontology.setVersionInfo(df.format(new Date()));
+//			//ontology.setVersionInfo(df.format(new Date()));
 //			ontology.setBackwardCompatibleWith("http://kiv.zcu.cz/eegbase/1.6");
 //			ontology.setPriorVersion("http://kiv.zcu.cz/eegdatabase");
 //			ontology.setIncompatibleWith("http://kiv.zcu.cz/ontology");
 //			ontology.setComment("EEG/ERP ontology v 2.06");
+//			ontology.setSeeAlso("http://eegdatabase.kiv.zcu.cz");
 //			//ontology.addImport("www.some.address.cz/importedOntology");
 //			jenaBean.setOntology(ontology);
 			
+			jenaBean.declareAllClassesDisjoint();
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
+			//is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("rdf");
 			
@@ -65,7 +69,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("document.owl");
+    	writeSemanticToFile("ontDocument.owl");
 
     }
     

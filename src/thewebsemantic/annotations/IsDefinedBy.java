@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  * @author Jakub Krauz
  *
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsDefinedBy {
 	

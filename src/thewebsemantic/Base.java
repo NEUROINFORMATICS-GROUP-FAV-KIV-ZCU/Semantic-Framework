@@ -5,16 +5,20 @@ import static thewebsemantic.TypeWrapper.type;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
+
+import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DataRange;
+import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
 import thewebsemantic.annotations.MinCardinality;
+import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
 import thewebsemantic.annotations.Symmetric;
@@ -39,6 +43,8 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+
 import thewebsemantic.semantAnnot.ResourceCreator;
 
 /**
@@ -46,6 +52,7 @@ import thewebsemantic.semantAnnot.ResourceCreator;
  * Contains the instance of Jena Model, OntModel and Binder instance.
  * 
  */
+@SuppressWarnings("deprecation")
 public class Base {
 
 	public static final String JAVACLASS = "http://thewebsemantic.com#javaclass";
@@ -66,8 +73,10 @@ public class Base {
 		
 		m.enterCriticalSection(Lock.WRITE);
 		javaclass = m.createProperty(JAVACLASS);
-		sequence = m.createProperty(SEQUENCE);
 		javaclass.addProperty(RDF.type, OWL.AnnotationProperty);
+		javaclass.addProperty(RDFS.label, "Java class");
+		javaclass.addProperty(RDFS.comment, "This property determines the Java class that was mapped into declaring resource.");
+		sequence = m.createProperty(SEQUENCE);
 		m.leaveCriticalSection();
 	}
 
@@ -109,9 +118,12 @@ public class Base {
 			property = om.createObjectProperty(ctx.uri());
 			// setting rdfs:range of the ObjectProperty
 			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
-			if (rangeClass != null  &&  rangeClass.getPackage().getName().contains("pojo")) {
-				Resource range = om.getResource(new DefaultTypeWrapper(rangeClass).typeUri());
-				property.setRange(range);
+			if (rangeClass != null && rangeClass.getPackage() != null) {
+				// only classes from pojo package - provisional solution
+				if (rangeClass.getPackage().getName().contains("pojo")) {
+					Resource range = om.getResource(new DefaultTypeWrapper(rangeClass).typeUri());
+					property.setRange(range);
+				}
 			}
 		}
 		
@@ -127,6 +139,7 @@ public class Base {
 		}
 
 		if (ctx.isAnnotatedBy(Transitive.class)) {
+			System.out.println(ctx.getName());
 			property.convertToTransitiveProperty();
 		}
 
@@ -208,6 +221,27 @@ public class Base {
 		
 		if (ctx.isAnnotatedBy(Deprecated.class)) {
 			property.addProperty(RDF.type, OWL.DeprecatedProperty);
+		}
+		
+		if (ctx.isAnnotatedBy(AllDifferent.class)) {
+			com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
+        	allDif.addDistinctMember(property);  // add the annotated property
+        	String[] values = ctx.getAnnotation(AllDifferent.class).value();
+        	Resource res;
+        	for (String value : values) {
+        		res = ResourceFactory.createResource(value);
+        		allDif.addDistinctMember(res);
+        	}
+		}
+		
+		if (ctx.isAnnotatedBy(DifferentFrom.class)) {
+			Resource res = ResourceFactory.createResource(ctx.getAnnotation(DifferentFrom.class).value());
+			property.addDifferentFrom(res);
+		}
+		
+		if (ctx.isAnnotatedBy(SameAs.class)) {
+			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SameAs.class).value());
+			property.addSameAs(res);
 		}
 
 		return property;

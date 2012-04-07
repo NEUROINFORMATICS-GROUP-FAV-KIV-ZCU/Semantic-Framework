@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import thewebsemantic.annotations.Transient;
+import thewebsemantic.annotations.Ignore;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -99,7 +99,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		for (Field field : fields) {
 			if (field.equals(idfield) && uriid)
 				continue;
-			if (field.isAnnotationPresent(Transient.class))
+			if (field.isAnnotationPresent(Ignore.class))
 				 continue;
 			if (!Modifier.isTransient(field.getModifiers()))
 				values.add(new FieldContext(o, field, field.equals(idfield)));

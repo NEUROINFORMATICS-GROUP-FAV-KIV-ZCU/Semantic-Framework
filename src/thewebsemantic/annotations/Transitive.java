@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * @author Jakub Krauz
  * 
  */
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transitive {
 

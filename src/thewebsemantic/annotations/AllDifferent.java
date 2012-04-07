@@ -21,18 +21,16 @@ import java.lang.annotation.Target;
  * </p>
  * <p>
  * For example:
- * <code>
- * <pre>
- * <owl:AllDifferent>
- *   <owl:distinctMembers rdf:parseType="Collection">
- *     <Car rdf:about="#Mercedes"/>
- *     <Car rdf:about="#Ford"/>
- *     <Car rdf:about="#Renault"/>
- *     <Car rdf:about="#Volvo"/>
- *   </owl:distinctMembers>
- * </owl:AllDifferent>
- * </pre>
- * </code>
+ * <code> <pre>
+ * &lt;owl:AllDifferent&gt;
+ *   &lt;owl:distinctMembers rdf:parseType="Collection"&gt;
+ *     &lt;Car rdf:about="#Mercedes"/&gt;
+ *     &lt;Car rdf:about="#Ford"/&gt;
+ *     &lt;Car rdf:about="#Renault"/&gt;
+ *     &lt;Car rdf:about="#Volvo"/&gt;
+ *   &lt;/owl:distinctMembers&gt;
+ * &lt;/owl:AllDifferent&gt;
+ * </pre> </code>
  * This states that there are four different cars.
  * </p>
  * <p>
@@ -52,7 +50,7 @@ import java.lang.annotation.Target;
  *             not compatible with reasoner processing.
  */
 @Deprecated
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AllDifferent {
 	String[] value();

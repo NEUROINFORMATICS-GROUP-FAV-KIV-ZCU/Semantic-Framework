@@ -17,6 +17,7 @@ import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.Id;
+import thewebsemantic.annotations.Ignore;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.SameAs;
@@ -180,7 +181,7 @@ public class Bean2RDF extends Base {
 	 */
 	private Resource toResource(Object bean) {
 		String uri = instanceURI(bean);
-		Resource type = getRDFSClass(bean);
+		Resource type = getOWLClass(bean);
 		if (jpa.isEmbedded(bean) || uri == null)
 			return m.createResource(type);
 		else
@@ -208,7 +209,7 @@ public class Bean2RDF extends Base {
      * @param bean - the bean we are saving or updating to the triple store
      * @return resource referencing saved bean
      */
-    private Resource getRDFSClass(Object bean) {
+    private Resource getOWLClass(Object bean) {
     	
     	OntClass owlClass = om.createClass(getURI(bean));
     	
@@ -311,7 +312,6 @@ public class Bean2RDF extends Base {
 			setPropertyValue(subject, property, o);
 		else
 			logger.warn(MessageFormat.format("Skipped unsupported property type {0} on {1}", pc.type(), pc.subject.getClass()));
-			//logger.log(Level.WARNING, MessageFormat.format(bundle.getString(UNSUPPORTED_TYPE), pc.type(), pc.subject.getClass()));
 
 		// removing data if we need only their structure
 		if (structureOnly) {

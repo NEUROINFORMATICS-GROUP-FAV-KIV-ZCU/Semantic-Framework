@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import thewebsemantic.annotations.Transient;
+import thewebsemantic.annotations.Ignore;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -70,7 +70,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 		for (PropertyDescriptor property : descriptors()) {
 			if (uriid && idReadMethod.equals(property.getReadMethod()))
 				continue;
-			if ( property.getReadMethod().isAnnotationPresent(Transient.class))
+			if ( property.getReadMethod().isAnnotationPresent(Ignore.class))
 				continue;
 			boolean idmethod = idReadMethod.equals(property.getReadMethod());
 			values.add( new PropertyContext(o, property, idmethod) );			

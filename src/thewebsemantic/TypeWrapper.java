@@ -16,7 +16,8 @@ import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import thewebsemantic.annotations.Transient;
+import thewebsemantic.annotations.Ignore;
+import thewebsemantic.annotations.Transitive;
 import thewebsemantic.binding.Persistable;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -124,8 +125,10 @@ public abstract class TypeWrapper {
 
 		ArrayList<ValuesContext> values = new ArrayList<ValuesContext>();
 		for (PropertyDescriptor property : descriptors()) {
-			if (property.getReadMethod().isAnnotationPresent(Transient.class))
+			if (property.getReadMethod().isAnnotationPresent(Transitive.class)) {
+				System.out.println(property.getName());
 				continue;
+			}
 			values.add(new PropertyContext(o, property));
 		}
 		return values.toArray(new ValuesContext[0]);
