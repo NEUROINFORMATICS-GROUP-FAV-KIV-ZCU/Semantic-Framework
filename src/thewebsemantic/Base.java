@@ -183,7 +183,8 @@ public class Base {
 		}
 
 		if (ctx.isAnnotatedBy(Label.class)) {
-			property.setLabel(ctx.getAnnotation(Label.class).value(), null);
+			String language = ctx.getAnnotation(Label.class).lang();
+			property.setLabel(ctx.getAnnotation(Label.class).value(), language.equals("") ? null : language);
 		}
 		
 		if (ctx.isAnnotatedBy(EquivalentProperty.class)) {

@@ -55,7 +55,7 @@ public class Person implements java.io.Serializable {
 	private int personId;
 	
 	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
-	@Label("Křestní jméno")
+	@Label(value="Křestní jméno", lang="cs")
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")

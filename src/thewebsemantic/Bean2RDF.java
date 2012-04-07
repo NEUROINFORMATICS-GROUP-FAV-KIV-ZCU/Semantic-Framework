@@ -17,7 +17,6 @@ import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.Id;
-import thewebsemantic.annotations.Ignore;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.SameAs;
@@ -221,7 +220,8 @@ public class Bean2RDF extends Base {
         // Comment
         if (bean.getClass().isAnnotationPresent(Comment.class)) {
         	String language = bean.getClass().getAnnotation(Comment.class).lang();
-            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(), language.equals("") ? null : language);
+            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(),
+            		language.equals("") ? null : language);
         }
         
         // SeeAlso
@@ -233,7 +233,9 @@ public class Bean2RDF extends Base {
         
         // Label
         if (bean.getClass().isAnnotationPresent(Label.class)) {
-        	owlClass.setLabel(bean.getClass().getAnnotation(Label.class).value(), null);
+        	String language = bean.getClass().getAnnotation(Label.class).lang();
+        	owlClass.setLabel(bean.getClass().getAnnotation(Label.class).value(),
+        			language.equals("") ? null : language);
         }
 
         // IsDefinedBy
