@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import thewebsemantic.annotations.Ignore;
 import thewebsemantic.annotations.Transitive;
 import thewebsemantic.binding.Persistable;
 
@@ -89,13 +87,20 @@ public abstract class TypeWrapper {
 
 
 	/**
-	 * Method returns a TypeWrapper instatnce based on object's bean class and
-	 * its info
+	 * Method returns a TypeWrapper instance based on object's bean class and
+	 * its info.
 	 * 
 	 * @param o instance of bean
 	 * @return instance of TypeWrapper
 	 */
 	public static synchronized TypeWrapper type(Object o) {
+		
+		// wrap original class instead of proxy
+		/*if (o instanceof HibernateProxy) {
+		    // ProxyHelper vrati puvodni tridu - bohuzel v soucasny verzi Portalu pada
+			return wrap(HibernateProxyHelper.getClassWithoutInitializingProxy(o));
+		}*/
+		
 		if (o instanceof Persistable)
 			return wrap(o.getClass().getSuperclass());
 		else
@@ -114,9 +119,9 @@ public abstract class TypeWrapper {
 
 
 	/**
-	 * Method retrives nonTransient getters of this class and returns it as a
-	 * field of properties wrapped as instances of ValueContext that can
-	 * JenaBean use.
+	 * Method retrives nonTransient (not annotated by @Ignore) getters
+	 * of this class and returns it as a field of properties wrapped
+	 * as instances of ValueContext that can JenaBean use.
 	 * 
 	 * @param o
 	 * @return Field of ValueContext of classes getters

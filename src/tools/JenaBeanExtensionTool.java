@@ -86,19 +86,15 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 * Creates an ontology model in the given specification and loads statements from
 	 * a specified ontology document. This document can contain additional statements
 	 * that cannot be gathered from the object-oriented model, such as an ontology
-	 * header etc. The <code>basePackage</code> argument determines the base package
-	 * of object-oriented model. Classes and properties from this package will be
-	 * defined in the generated ontology.
+	 * header etc. Syntax of the ontology document (or serialization of a RDF-based graph)
+	 * is specified by the <code>syntax</code> argument.
 	 * 
-	 * @param fileName - name of a file with some statements to be loaded
-	 * @param specification - required specification for Jena's model.
-	 * 						  If null, the default specification <code>OntModelSpec.OWL_DL_MEM</code>
-	 * 						  is used.
+	 * @param ontologyDocument - stream containing statements to be loaded
+	 * @param syntax - syntax of the serialization of statements
 	 */
-	public JenaBeanExtensionTool(InputStream ontologyDocument, OntModelSpec specification) {
-		OntModelSpec spec = (specification == null) ? OntModelSpec.OWL_DL_MEM : specification;
-		model = ModelFactory.createOntologyModel(spec);
-		loadStatements(ontologyDocument);
+	public JenaBeanExtensionTool(InputStream ontologyDocument, String syntax) {
+		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		loadStatements(ontologyDocument, syntax);
 	}
 	
 	
@@ -206,8 +202,8 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public void loadStatements(InputStream ontologyDocument) {
-		model.getReader(Syntax.RDF_XML_ABBREV).read(model, ontologyDocument, null);
+	public void loadStatements(InputStream ontologyDocument, String syntax) {
+		model.getReader(syntax).read(model, ontologyDocument, null);
 		try {
 			ontologyDocument.close();
 		} catch (IOException e) {

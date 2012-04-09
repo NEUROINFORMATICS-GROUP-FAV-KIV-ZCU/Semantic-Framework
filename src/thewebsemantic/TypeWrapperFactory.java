@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import thewebsemantic.annotations.Uri;
 
+@SuppressWarnings("deprecation")
 public class TypeWrapperFactory {
 	
 	public static Logger logger = Logger.getLogger("com.thewebsemantic");

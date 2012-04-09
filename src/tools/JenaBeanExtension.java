@@ -115,14 +115,18 @@ public interface JenaBeanExtension {
 	 * such as an ontology header. Another way to set the ontology
 	 * header is to use the <code>setOntology()</code> method.</p>
 	 * 
-	 * <p>NOTE: If the file contains the ontology header (which is
+	 * <p>This method can be used also to load a whole ontology from
+	 * a previous serialization.</p>
+	 * 
+	 * <p>NOTE: If the stream contains the ontology header (which is
 	 * the main intent to use it) this method must be invoked
 	 * before loading the object-oriented model so as the ontology
 	 * properties (such as ontology namespace) take effect.</p>
 	 * 
-	 * @param filePath - filename of the ontology document to be loaded
+	 * @param ontologyDocument - stream containing serialization of RDF-based graph
+	 * @param syntax - syntax of the serialization
 	 */
-	public void loadStatements(InputStream ontologyDocument);
+	public void loadStatements(InputStream ontologyDocument, String syntax);
 	
 	
 	/**

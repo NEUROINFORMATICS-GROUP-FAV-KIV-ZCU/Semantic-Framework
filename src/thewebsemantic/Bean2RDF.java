@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.DifferentFrom;
@@ -169,6 +168,13 @@ public class Bean2RDF extends Base {
 
 	
 	private Resource _write(Object bean, boolean shallow) {
+		
+		// retrieve original class if proxy received
+		/*if (bean instanceof HibernateProxy) {
+		    // since Portal uses Hibernate only proxies are received, but this causes exceptions unfortunatelly
+			bean = ((HibernateProxy) bean).getHibernateLazyInitializer().getImplementation();
+		}*/
+		
 		return (cycle.contains(bean)) ? existing(bean) : write(bean, toResource(bean), shallow);
 	}
 	
@@ -201,9 +207,8 @@ public class Bean2RDF extends Base {
 
 	
     /**
-     * Returns an existing OntClass or creates a new one adding an important
-     * annotation indicating the original java class. Checks bean's annotations
-     * and applies their rules to the model.
+     * Returns an existing OntClass or creates a new one.
+     * All axioms indicated by present annotations are added as well.
      *
      * @param bean - the bean we are saving or updating to the triple store
      * @return resource referencing saved bean
@@ -281,15 +286,23 @@ public class Bean2RDF extends Base {
         		allDif.addDistinctMember(res);
         	}
         }
-
-        return m.getResource(getURI(bean)).addProperty(javaclass, bean.getClass().getName());
+        
+        
+        // TODO this is a makeshift solution of the problem with proxies
+		// check if the name was retrieved from javassist proxy instead of original class
+        String className = bean.getClass().getName();
+		if (className.contains("_$$_javassist"))
+			className = className.substring(0, className.indexOf("_$$_javassist"));
+		
+        return m.getResource(getURI(bean)).addProperty(javaclass, className);
     }
 
 	
-	private Resource write(Object bean, Resource subject, boolean shallow) {
+	private Resource write(Object bean, Resource subject, boolean shallow) {		
 		cycle.add(bean);
 		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
 			
+			// TODO remove
 			//tohle je jen pomocny vypis
 			//System.out.println(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
 			//logger.error(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
@@ -302,7 +315,7 @@ public class Bean2RDF extends Base {
 
 	
 	private void saveOrUpdate(Resource subject, ValuesContext pc) {
-		Object o = pc.invokeGetter();
+		Object o = pc.invokeGetter();		
 		Property property = toRdfProperty(pc);
 		
 		if ( Saver.supports(pc.type()) )
@@ -328,7 +341,7 @@ public class Bean2RDF extends Base {
 	}
 
 	
-	protected RDFNode toRDFNode(Object o) {
+	protected RDFNode toRDFNode(Object o) {		
 		if (isPrimitive(o)) 
 			return toLiteral(m, o);
 		else if (o instanceof URI || o instanceof thewebsemantic.Resource)
@@ -347,7 +360,7 @@ public class Bean2RDF extends Base {
 	 * @param property
 	 * @param o
 	 */
-	private void setPropertyValue(Resource subject, Property property, Object o) {
+	private void setPropertyValue(Resource subject, Property property, Object o) {		
 		Statement s = subject.getProperty(property);
 		Resource existing=null;
 		if (s!=null ) {

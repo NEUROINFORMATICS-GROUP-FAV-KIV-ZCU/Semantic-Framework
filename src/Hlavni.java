@@ -1,7 +1,10 @@
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -28,10 +31,9 @@ public class Hlavni {
 	
 	private static InputStream is;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {    	
     	
     	/* vytvoreni objektu - musi provadet uzivatel knihovny sam */
-    	//ExampleHodneDat ex = new ExampleHodneDat(1000);
     	Example ex = new Example();
     	List<Object> dataList = ex.getVstupniPole();
     	
@@ -39,31 +41,18 @@ public class Hlavni {
     	OwlApiTool owlApi;
 		try {
 			jenaBean = new JenaBeanExtensionTool();
-			jenaBean.loadStatements(new FileInputStream("ontology.owl"));
+			jenaBean.loadStatements(new FileInputStream("ontology.owl"), Syntax.RDF_XML_ABBREV);
 			jenaBean.loadOOM(dataList, false);
-//			Ontology ontology = new Ontology("http://kiv.zcu.cz/eegbase/2.1");
-//			//ontology.setVersionInfo(df.format(new Date()));
-//			ontology.setBackwardCompatibleWith("http://kiv.zcu.cz/eegbase/1.6");
-//			ontology.setPriorVersion("http://kiv.zcu.cz/eegdatabase");
-//			ontology.setIncompatibleWith("http://kiv.zcu.cz/ontology");
-//			ontology.setComment("EEG/ERP ontology v 2.06");
-//			ontology.setSeeAlso("http://eegdatabase.kiv.zcu.cz");
-//			//ontology.addImport("www.some.address.cz/importedOntology");
-//			jenaBean.setOntology(ontology);
-			
 			jenaBean.declareAllClassesDisjoint();
+			/*is = jenaBean.getOntologyDocument(Syntax.TURTLE);
+			is = checkChars(is);
+			jenaBean = new JenaBeanExtensionTool();
+			jenaBean.loadStatements(is, Syntax.TURTLE);*/
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 			//is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
+			
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("rdf");
-			
-			/*jenaBean = new JenaBeanExtensionTool(dataList);
-			jenaBean.setBasePackage("data.pojo");
-			System.out.println("JenaBean: data nactena");
-			FileOutputStream out = new FileOutputStream(new File("ontologyDocument.owl"));
-			jenaBean.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
-			out.close();
-			System.out.println("Zapsano do souboru.");*/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,6 +86,24 @@ public class Hlavni {
 		long min = millis / 60000;
 		long sec = (millis - min * 60000) / 1000;
 		System.out.println(usek + ": " + min + " min, " + sec + " sec");
+    }
+    
+    
+    private static InputStream checkChars(InputStream is) {
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	int pom;
+    	try {
+			while ((pom = is.read()) != -1) {
+				if (pom == 0x0)
+					continue;
+				else
+					out.write(pom);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	return new ByteArrayInputStream(out.toByteArray());
     }
     
 }

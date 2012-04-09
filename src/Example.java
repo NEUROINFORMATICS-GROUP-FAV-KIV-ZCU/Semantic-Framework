@@ -52,7 +52,6 @@ public class Example {
 //        vstupniPole.add((Object) w2);
 //        vstupniPole.add((Object) w3);
 //        vstupniPole.add((Object) w4);
-
         Person p1 = new Person(1, "Smid", 'M');
         p1.setGivenname("Dominik");
         Person p2 = new Person(2, "Bouda", 'M');

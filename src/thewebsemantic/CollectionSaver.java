@@ -22,7 +22,8 @@ public class CollectionSaver extends Saver {
      */
 	@Override
 	public void save(Bean2RDF writer, Resource subject, Property property, Object o) {
-		Collection c = (Collection)o;
+		
+		Collection<?> c = (Collection<?>)o;
 		if (c == null)
 			return;
 		
@@ -34,6 +35,7 @@ public class CollectionSaver extends Saver {
 
 		removeAnonymousNodes(subject, property);
 		subject.removeAll(property);
+		
 		for (Object obj : c)
 			subject.addProperty(property, writer.toRDFNode(obj));
 	}

@@ -8,14 +8,15 @@
 			Commands:
 				compile   - compiles the project
 				javadoc	  - creates the javadoc documentation
-				distjar   - creates JAR without sources
-				srcjar    - creates JAR containing source files (default)
+				distjar   - creates JAR without sources (default)
+				srcjar    - creates JAR containing source files
 				clean	  - deletes everything except sources
 	</description>
+	
+	<property name="version" value="3.2.0" />
 
-	<property name="jar.file" value="jenabeanextension-3.0.x.jar" />
-	<property name="srcjar.file" value="jenabeanextension-src-3.0.x.jar" />
-		
+	<property name="jar.file" value="tags/jenabeanextension-${version}.jar" />
+	<property name="srcjar.file" value="tags/jenabeanextension-src-${version}.jar" />
 	<property name="src.dir" value="./src" />
 	<property name="bin.dir" value="./bin" />
 	<property name="doc.dir" value="./doc" />
