@@ -56,13 +56,20 @@ class PropertyContext extends ValuesContext {
 
 
 	@Override
-	public Object invokeGetter() {
+	public Object invokeGetter() {		
 		Object result = null;
 		try {
 			result = property.getReadMethod().invoke(subject);
 		} catch (Exception e) {
 			logger.warn("Error calling read method.", e);
 		}
+		
+		// check if the property is char type and has null value
+		if (property.getPropertyType() == char.class || property.getPropertyType() == Character.class) {
+			if (((Character) result).charValue() == (char) 0x00)
+				return null;
+		}
+		
 		return result;
 	}
 

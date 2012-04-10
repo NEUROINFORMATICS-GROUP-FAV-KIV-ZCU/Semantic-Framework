@@ -154,7 +154,7 @@ public class Person implements java.io.Serializable {
 		this.hearingDefects = hearingDefects;
 	}
 
-
+	
 	public int getPersonId() {
 		return this.personId;
 	}

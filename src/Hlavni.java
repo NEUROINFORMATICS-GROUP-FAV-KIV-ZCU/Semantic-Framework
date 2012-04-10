@@ -13,6 +13,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
+
 import com.hp.hpl.jena.ontology.OntModelSpec;
 
 import tools.JenaBeanExtensionTool;
@@ -31,7 +33,7 @@ public class Hlavni {
 	
 	private static InputStream is;
 
-    public static void main(String[] args) {    	
+    public static void main(String[] args) {
     	
     	/* vytvoreni objektu - musi provadet uzivatel knihovny sam */
     	Example ex = new Example();
@@ -49,7 +51,7 @@ public class Hlavni {
 			jenaBean = new JenaBeanExtensionTool();
 			jenaBean.loadStatements(is, Syntax.TURTLE);*/
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
-			//is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
+			is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
 			
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("rdf");

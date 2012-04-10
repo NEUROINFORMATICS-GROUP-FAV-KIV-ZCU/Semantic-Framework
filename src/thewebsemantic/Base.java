@@ -112,30 +112,7 @@ public class Base {
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
-		OntProperty property;
-		if (ctx.isPrimitive()) {
-			property = om.createDatatypeProperty(ctx.uri());
-			// setting rdfs:range of the DatatypeProperty
-			Resource range;
-			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null
-					&& !ctx.isAnnotatedBy(DataRange.class))
-				property.setRange(range);
-		} else {
-			property = om.createObjectProperty(ctx.uri());
-			// setting rdfs:range of the ObjectProperty
-			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
-			if (rangeClass != null && rangeClass.getPackage() != null) {
-				// only classes from pojo package - provisional solution
-				if (rangeClass.getPackage().getName().contains("pojo")) {
-					Resource range = om.getResource(new DefaultTypeWrapper(rangeClass).typeUri());
-					property.setRange(range);
-				}
-			}
-		}
-		
-		// setting rdfs:domain of the property
-		OntClass domain = om.getOntClass(getURI(ctx.subject));
-		property.addDomain(domain);
+		OntProperty property = createProperty(ctx);
 		
 		// Annotation processing follows
 		
@@ -317,6 +294,64 @@ public class Base {
 		}
 
 		return property;
+	}
+	
+	
+	/**
+	 * Creates new property representing given attribute.
+	 * Also sets rdfs:domain and rdfs:range of the property created.
+	 * 
+	 * @param ctx - atribute to be mapped to property
+	 * @return property representing given attribute
+	 */
+	private OntProperty createProperty(ValuesContext ctx) {
+		OntProperty property;
+		
+		if (ctx.isPrimitive()) {
+			property = om.createDatatypeProperty(ctx.uri());
+			// setting rdfs:range of the DatatypeProperty
+			Resource range;
+			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null
+					&& !ctx.isAnnotatedBy(DataRange.class))
+				property.setRange(range);
+		} else {
+			property = om.createObjectProperty(ctx.uri());
+			// setting rdfs:range of the ObjectProperty
+			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
+			if (rangeClass != null && rangeClass.getPackage() != null) {
+				// only classes from pojo package - provisional solution
+				if (rangeClass.getPackage().getName().contains("pojo")) {
+					/*Resource range = om.createClass(new DefaultTypeWrapper(rangeClass).typeUri());
+					property.setRange(range);*/
+					property.setRange(getOWLClass(rangeClass));
+				}
+			}
+		}
+		
+		// setting rdfs:domain of the property
+		OntClass domain = om.getOntClass(getURI(ctx.subject));
+		property.addDomain(domain);
+		
+		return property;
+	}
+	
+	
+	/**
+	 * Returns an existing resource representing given class or creates a new one.
+	 * 
+	 * @param cls - referenced class
+	 * @return resource representing given class
+	 */
+	protected Resource getOWLClass(Class<?> cls) {
+		OntClass resource = om.createClass(new DefaultTypeWrapper(cls).typeUri());
+		
+		// TODO this is a makeshift solution of the problem with proxies
+		// check if the name was retrieved from javassist proxy instead of original class
+        String className = cls.getName();
+		if (className.contains("_$$_javassist"))
+			className = className.substring(0, className.indexOf("_$$_javassist"));
+		
+		return resource.addProperty(javaclass, className);
 	}
 
 

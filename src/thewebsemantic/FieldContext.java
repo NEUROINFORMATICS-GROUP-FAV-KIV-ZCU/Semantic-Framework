@@ -66,6 +66,13 @@ class FieldContext extends ValuesContext {
 		} catch (Exception e) {
 			logger.warn("Error retrieving field value.", e);
 		}
+		
+		// check if the field is char type and has null value
+		if (field.getType() == char.class || field.getType() == Character.class) {
+			if (((Character) result).charValue() == (char) 0x00)
+				return null;
+		}
+		
 		return result;
 	}
 

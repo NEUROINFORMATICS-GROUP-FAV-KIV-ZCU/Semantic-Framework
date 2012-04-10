@@ -314,16 +314,22 @@ public class Bean2RDF extends Base {
 	}
 
 	
+	/**
+	 * Saves values of attributes do the model.
+	 * 
+	 * @param subject - resource which owns the property and value
+	 * @param pc - saved attribute
+	 */
 	private void saveOrUpdate(Resource subject, ValuesContext pc) {
 		Object o = pc.invokeGetter();		
-		Property property = toRdfProperty(pc);
+		Property property = toRdfProperty(pc);  // map the attribute to rdf:Property instance
 		
 		if ( Saver.supports(pc.type()) )
 			Saver.of(pc.type()).save(this, subject, property, o);
 		else if (o == null)
 			subject.removeAll(property);
 		else if (pc.isPrimitive())
-			subject.removeAll(property).addProperty(property, toLiteral(m, o));
+			subject.removeAll(property).addProperty(property, PrimitiveWrapper.toLiteral(o));
 		else if (isNormalObject(o))
 			setPropertyValue(subject, property, o);
 		else
@@ -343,7 +349,7 @@ public class Bean2RDF extends Base {
 	
 	protected RDFNode toRDFNode(Object o) {		
 		if (isPrimitive(o)) 
-			return toLiteral(m, o);
+			return PrimitiveWrapper.toLiteral(o);
 		else if (o instanceof URI || o instanceof thewebsemantic.Resource)
 			return m.createResource(o.toString());
 		else

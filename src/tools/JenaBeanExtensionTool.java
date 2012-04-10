@@ -13,21 +13,25 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
 
-import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFList;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.OWL2;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -48,6 +52,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	/** defines the xml:base value for the ontology document */
 	private String xmlBase;
+	
+	/** determines whether user want to declare all classes disjoint */
+	private boolean isDisjointClasses = false;
 
 
 	/**
@@ -163,12 +170,25 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			lang = DEFAULT_LANG;
 		}
 		
-		/*OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
+		// lenghty creation of the schema in order to get rid of ballast generated due to proxy classes in the Portal
+		// can be replaced by commented block below when resolved
+		
+		OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
 		ExtendedIterator<OntClass> classes = model.listClasses();
 		Selector selector;
 		while (classes.hasNext()) {
 			selector = new SimpleSelector(classes.next(), null, (RDFNode) null);
 			schema.add(model.listStatements(selector));
+		}
+		// not very clear solution to declare all disjoint classes in the schema if defined in model
+		if (model.listStatements(null, RDF.type, OWL2.AllDisjointClasses).hasNext()) {
+			ExtendedIterator<OntClass> iterator = schema.listClasses();
+			RDFList list = schema.createList();
+			while(iterator.hasNext())
+				list = list.with(iterator.next());
+			Resource res = ResourceFactory.createResource();
+			schema.add(res, RDF.type, OWL2.AllDisjointClasses);
+			schema.add(res, OWL2.members, list);
 		}
 		ExtendedIterator<OntProperty> properties = model.listAllOntProperties();
 		while (properties.hasNext()) {
@@ -178,9 +198,10 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		if (model.listOntologies().hasNext()) {
 			selector = new SimpleSelector(model.listOntologies().next(), null, (RDFNode) null);
 			schema.add(model.listStatements(selector));
-		}*/
+		}
 		
-		OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
+		
+		/*OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
 		schema.add(model);
 		
 		// remove all individuals from the schema
@@ -189,7 +210,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		while (individuals.hasNext()) {
 			selector = new SimpleSelector(individuals.next(), null, (RDFNode) null);
 			schema.remove(schema.listStatements(selector));
-		}
+		}*/
 
 		RDFWriter writer = schema.getWriter(lang);
 		if (lang.contains("XML")) {
@@ -222,12 +243,16 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public void declareAllClassesDisjoint() {
+	public void declareAllClassesDisjoint() {		
+		isDisjointClasses = true;
 		ExtendedIterator<OntClass> iterator = model.listClasses();
 		RDFList list = model.createList();
 		while(iterator.hasNext())
 			list = list.with(iterator.next());
-		model.add(OWL2.AllDisjointClasses, OWL2.members, list);
+
+		Resource res = ResourceFactory.createResource();
+		model.add(res, RDF.type, OWL2.AllDisjointClasses);
+		model.add(res, OWL2.members, list);
 	}
 	
 	
