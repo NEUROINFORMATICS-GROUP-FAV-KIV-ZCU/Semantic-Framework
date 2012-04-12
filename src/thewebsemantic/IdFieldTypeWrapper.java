@@ -28,8 +28,10 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 	private Field idfield;
 	private Field[] fields;
 	private boolean uriid = false;
-	//private Constructor uriConstructor;
-	
+
+
+	// private Constructor uriConstructor;
+
 	public IdFieldTypeWrapper(Class<?> c, Field f, Field[] fields) {
 		super(c);
 		idfield = f;
@@ -38,32 +40,40 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		this.fields = fields;
 	}
 
-        /**
-         * Returns the value of this field specified by bean in param
-         * @param bean
-         * @return
-         */
+
+	/**
+	 * Returns the value of this field specified by bean in param
+	 * 
+	 * @param bean
+	 * @return
+	 */
 	@Override
 	public String id(Object bean) {
-		Object result=null;
+		Object result = null;
 		try {
-			if (! idfield.isAccessible() )
+			if (!idfield.isAccessible())
 				idfield.setAccessible(true);
 			result = idfield.get(bean);
 		} catch (Exception e) {
 			logger.warn("Error retrieving id field value.", e);
 		}
+		
+		// check if the id is not null
+		if (result == null)
+			result = bean.hashCode();
+			
 		return result.toString();
 	}
 
-	
+
 	@Override
 	public String uri(String id) {
 		if (uriid)
 			return id;
 		else
-			return  typeUri() + '_' + urlencode(id);
+			return typeUri() + '_' + urlencode(id);
 	}
+
 
 	private String urlencode(String id) {
 		try {
@@ -73,8 +83,9 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		}
 	}
 
-        @Override
- 	public String[] collections() {
+
+	@Override
+	public String[] collections() {
 		Collection<String> results = new LinkedList<String>();
 		for (Field field : fields)
 			if (field.getType().equals(Collection.class))
@@ -82,7 +93,8 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		return results.toArray(new String[0]);
 	}
 
-        @Override
+
+	@Override
 	public ValuesContext getProperty(String name) {
 		try {
 			Field f = c.getDeclaredField(name);
@@ -93,41 +105,44 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 		return null;
 	}
 
-        @Override
-  	public ValuesContext[] getValueContexts(Object o) {
+
+	@Override
+	public ValuesContext[] getValueContexts(Object o) {
 		ArrayList<FieldContext> values = new ArrayList<FieldContext>();
 		for (Field field : fields) {
 			if (field.equals(idfield) && uriid)
 				continue;
 			if (field.isAnnotationPresent(Ignore.class))
-				 continue;
+				continue;
 			if (!Modifier.isTransient(field.getModifiers()))
 				values.add(new FieldContext(o, field, field.equals(idfield)));
 		}
 		return values.toArray(new ValuesContext[0]);
 	}
 
-        @Override
+
+	@Override
 	public Object toBean(String uri) {
 		try {
 			// last gets the id off the end of the URI
-			return (constructor != null) ? constructor.newInstance(last(uri))
-					: newinstance(uri);
+			return (constructor != null) ? constructor.newInstance(last(uri)) : newinstance(uri);
 		} catch (Exception e) {
 			logger.warn("Could not instantiate bean.", e);
 
 		}
 		return null;
 	}
-	
+
+
 	private Object newinstance(String uri) throws Exception {
 		Object o = c.newInstance();
-		
-		if (uriid && uri!=null)
+
+		if (uriid && uri != null)
 			idfield.set(o, URI.create(uri));
 		return o;
 	}
-	
+
+
 	public Object toProxyBean(Resource source, AnnotationHelper jpa) {
 		try {
 			Class<?> cls = jpa.getProxy(c);

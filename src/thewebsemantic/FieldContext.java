@@ -12,18 +12,15 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
- * FieldContext represents a descendent of ValuesContext class which
- * encapsulates beans attributes and its annotations. It overides abstract
- * methods to gather annotation informations from encapsulated attributes in
- * direct way or calling parent class methods if they are enough common to
- * retrieve data.
- * 
+ * Encapsulates bean's fields (attributes).
+ * Enables retrieving present annotations and data.
  */
 class FieldContext extends ValuesContext {
 	
+	/** logger */
 	private Log logger = LogFactory.getLog(getClass());
 
-	// loaded attribute
+	/** encapsulated field */
 	Field field;
 	
 	TypeWrapper type;

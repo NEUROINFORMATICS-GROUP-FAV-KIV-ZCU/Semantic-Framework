@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import org.coode.owlapi.turtle.TurtleOntologyFormat;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.*;
@@ -61,6 +62,7 @@ public class OwlApiTool implements OwlApi {
             manager.saveOntology(ontology, new OWLXMLOntologyFormat(), out);
         } else if (syntax.equalsIgnoreCase(Syntax.OWL_FUNCTIONAL)) {
         	log.debug("Serializing in OWL Functional-Style syntax.");
+        	manager.saveOntology(ontology, new OWLFunctionalSyntaxOntologyFormat());
         } else if (syntax.equalsIgnoreCase(Syntax.TURTLE)) {
             log.debug("Serializing in TURTLE syntax.");
             manager.saveOntology(ontology, new TurtleOntologyFormat(), out);

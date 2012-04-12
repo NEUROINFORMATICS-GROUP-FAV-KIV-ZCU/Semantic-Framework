@@ -12,14 +12,13 @@ import com.hp.hpl.jena.rdf.model.Property;
 import thewebsemantic.Base.NullType;
 
 /**
- * ValuesContext class represents the base for descendant classes that
- * encapsulates Bean reflection gatehered attributes or methods and it provides
- * all neccesaty methods to gather data in propriate format and mostly all
- * bounded Annoatations in their values.
- * 
+ * Encapsulates bean's attributes or methods.
+ * Provides all neccesaty methods to gather data in propriate format
+ * and mostly all bounded annotations and their values.
  */
 public abstract class ValuesContext {
-
+	
+	/** bean */
 	protected Object subject;
 
 	

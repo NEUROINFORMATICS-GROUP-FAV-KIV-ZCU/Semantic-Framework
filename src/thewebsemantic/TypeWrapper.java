@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import thewebsemantic.annotations.Transitive;
+
+import thewebsemantic.annotations.Ignore;
 import thewebsemantic.binding.Persistable;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -107,12 +108,25 @@ public abstract class TypeWrapper {
 			return wrap(o.getClass());
 	}
 
-
+	
+	/**
+	 * Returns the ID of the bean.
+	 * @param o - bean
+	 * @return ID of the bean
+	 */
 	public static String getId(Object o) {
 		return type(o).id(o);
 	}
 
-
+	
+	/**
+	 * Method retrives nonTransient (not annotated by @Ignore) getters
+	 * of this class and returns it as a field of properties wrapped
+	 * as instances of ValueContext that can JenaBean use.
+	 * 
+	 * @param o - bean
+	 * @return Field of ValueContext of classes getters
+	 */
 	public static ValuesContext[] valueContexts(Object o) {
 		return type(o).getValueContexts(o);
 	}
@@ -130,10 +144,8 @@ public abstract class TypeWrapper {
 
 		ArrayList<ValuesContext> values = new ArrayList<ValuesContext>();
 		for (PropertyDescriptor property : descriptors()) {
-			if (property.getReadMethod().isAnnotationPresent(Transitive.class)) {
-				System.out.println(property.getName());
+			if (property.getReadMethod().isAnnotationPresent(Ignore.class))
 				continue;
-			}
 			values.add(new PropertyContext(o, property));
 		}
 		return values.toArray(new ValuesContext[0]);

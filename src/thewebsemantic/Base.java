@@ -112,6 +112,16 @@ public class Base {
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
+		// TODO pryc
+		/*if (ctx.subject.getClass() == Person.class) {
+			if (ctx instanceof FieldContext)
+				System.out.println("field context");
+			else if (ctx instanceof PropertyContext)
+				System.out.println("property context");
+			else
+				System.out.println("nevim");
+		}*/
+		
 		OntProperty property = createProperty(ctx);
 		
 		// Annotation processing follows
@@ -343,7 +353,8 @@ public class Base {
 	 * @return resource representing given class
 	 */
 	protected Resource getOWLClass(Class<?> cls) {
-		OntClass resource = om.createClass(new DefaultTypeWrapper(cls).typeUri());
+		
+		OntClass resource = om.createClass(TypeWrapper.typeUri(cls));
 		
 		// TODO this is a makeshift solution of the problem with proxies
 		// check if the name was retrieved from javassist proxy instead of original class

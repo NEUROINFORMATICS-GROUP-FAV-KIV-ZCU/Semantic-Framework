@@ -1,6 +1,5 @@
 package thewebsemantic;
 
-import static thewebsemantic.JenaHelper.toLiteral;
 import static thewebsemantic.PrimitiveWrapper.isPrimitive;
 import static thewebsemantic.TypeWrapper.instanceURI;
 
@@ -13,7 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
+import thewebsemantic.annotations.ComplementOf;
 import thewebsemantic.annotations.DifferentFrom;
+import thewebsemantic.annotations.DisjointWith;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.IsDefinedBy;
@@ -254,6 +255,18 @@ public class Bean2RDF extends Base {
         if (bean.getClass().isAnnotationPresent(EquivalentClass.class)) {
             OntClass eqClass = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
             owlClass.setEquivalentClass(eqClass);
+        }
+        
+        // DisjointWith
+        if (bean.getClass().isAnnotationPresent(DisjointWith.class)) {
+        	OntClass disClass = om.createClass(bean.getClass().getAnnotation(DisjointWith.class).value());
+        	owlClass.setDisjointWith(disClass);
+        }
+        
+        // ComplementOf
+        if (bean.getClass().isAnnotationPresent(ComplementOf.class)) {
+        	OntClass comClass = om.createClass(bean.getClass().getAnnotation(ComplementOf.class).value());
+        	owlClass.convertToComplementClass(comClass);
         }
         
         // Deprecated

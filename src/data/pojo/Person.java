@@ -2,38 +2,27 @@ package data.pojo;
 
 // Generated 16.11.2009 12:22:26 by Hibernate Tools 3.2.1.GA
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import thewebsemantic.*;
-import thewebsemantic.annotations.AllDifferent;
-import thewebsemantic.annotations.AllValuesFrom;
-import thewebsemantic.annotations.Cardinality;
 import thewebsemantic.annotations.Comment;
+import thewebsemantic.annotations.ComplementOf;
 import thewebsemantic.annotations.DataRange;
-import thewebsemantic.annotations.DifferentFrom;
+import thewebsemantic.annotations.DisjointWith;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.FunctionalProperty;
-import thewebsemantic.annotations.HasValue;
 import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.InverseFunctionalProperty;
 import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
-import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
 import thewebsemantic.annotations.Symmetric;
 import thewebsemantic.annotations.Ignore;
-import thewebsemantic.annotations.Transitive;
 import thewebsemantic.annotations.VersionInfo;
 
 
@@ -49,18 +38,20 @@ import thewebsemantic.annotations.VersionInfo;
 // @RdfType("Osoba")
 @EquivalentClass("http://www.jina.adresa.cz/Human")
 // @Deprecated
+@DisjointWith("http://kiv.zcu.cz/pojo#Animal")
+@ComplementOf("http://kiv.zcu.cz#nonPerson")
 public class Person implements java.io.Serializable {
 
 	@Id
 	private int personId;
 	
-	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
-	@Label(value="Křestní jméno", lang="cs")
-	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
-	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
-	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
-	@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
-	//@AllValuesFrom(uri="http://ontology#names")
+//	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
+//	@Label(value="Křestní jméno", lang="cs")
+//	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
+//	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
+//	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
+//	@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
+//	//@AllValuesFrom(uri="http://ontology#names")
 	private String givenname;
 
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
@@ -154,7 +145,7 @@ public class Person implements java.io.Serializable {
 		this.hearingDefects = hearingDefects;
 	}
 
-	
+
 	public int getPersonId() {
 		return this.personId;
 	}

@@ -6,19 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-
-import org.semanticweb.owlapi.vocab.OWL2Datatype;
-
-import com.hp.hpl.jena.ontology.OntModelSpec;
-
 import tools.JenaBeanExtensionTool;
-import tools.Ontology;
 import tools.OwlApiTool;
 import tools.Syntax;
 
@@ -51,7 +40,7 @@ public class Hlavni {
 			jenaBean = new JenaBeanExtensionTool();
 			jenaBean.loadStatements(is, Syntax.TURTLE);*/
 			is = jenaBean.getOntologyDocument(Syntax.RDF_XML_ABBREV);
-			is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
+			//is = jenaBean.getOntologySchema(Syntax.RDF_XML_ABBREV);
 			
 //			owlApi = new OwlApiTool(is);
 //			is = owlApi.convertToSemanticStandard("rdf");
@@ -60,7 +49,7 @@ public class Hlavni {
 			e.printStackTrace();
 		}
     	
-    	writeSemanticToFile("ontDocument.owl");
+    	writeSemanticToFile("document.owl");
 
     }
     

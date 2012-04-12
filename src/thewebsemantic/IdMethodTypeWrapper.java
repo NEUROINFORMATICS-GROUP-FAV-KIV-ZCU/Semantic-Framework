@@ -24,6 +24,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 	private boolean uriid = false;
 	private Constructor<?> uriConstructor;
 
+
 	public IdMethodTypeWrapper(Class<?> c, Method m) {
 		super(c);
 		idReadMethod = m;
@@ -33,9 +34,10 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 			// get the URI constructor if it exists
 			try {
 				uriConstructor = c.getConstructor(URI.class);
-			} catch (NoSuchMethodException e) {}
+			} catch (NoSuchMethodException e) {
+			}
 		}
-		
+
 		// now get the id write method property
 		PropertyDescriptor[] props = descriptors();
 		for (PropertyDescriptor propertyDescriptor : props)
@@ -43,7 +45,8 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 				idWriteMethod = propertyDescriptor.getWriteMethod();
 
 	}
-	
+
+
 	@Override
 	public String uri(String id) {
 		if (uriid)
@@ -52,6 +55,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 			return typeUri() + '/' + urlencode(id);
 	}
 
+
 	private String urlencode(String id) {
 		try {
 			return URLEncoder.encode(id, "UTF-8");
@@ -59,33 +63,36 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+
 	public String id(Object bean) {
 		return invokeMethod(bean, idReadMethod);
 	}
 
-        @Override
+
+	@Override
 	public ValuesContext[] getValueContexts(Object o) {
-		ArrayList<ValuesContext> values = new ArrayList<ValuesContext>();		
+		ArrayList<ValuesContext> values = new ArrayList<ValuesContext>();
 		for (PropertyDescriptor property : descriptors()) {
 			if (uriid && idReadMethod.equals(property.getReadMethod()))
 				continue;
-			if ( property.getReadMethod().isAnnotationPresent(Ignore.class))
+			if (property.getReadMethod().isAnnotationPresent(Ignore.class))
 				continue;
 			boolean idmethod = idReadMethod.equals(property.getReadMethod());
-			values.add( new PropertyContext(o, property, idmethod) );			
+			values.add(new PropertyContext(o, property, idmethod));
 		}
 		return values.toArray(new ValuesContext[0]);
 	}
 
-        @Override
+
+	@Override
 	public Object toBean(String uri) {
 		try {
 			if (uriid && uriConstructor != null)
 				return uriConstructor.newInstance(URI.create(uri));
 			else if (uriid && idWriteMethod != null) {
 				Object obj = c.newInstance();
-				idWriteMethod.invoke(obj,URI.create(uri));
+				idWriteMethod.invoke(obj, URI.create(uri));
 				return obj;
 			} else
 				return super.toBean(uri);
@@ -94,13 +101,14 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 		}
 		return null;
 	}
-	
+
+
 	public Object toProxyBean(Resource source, AnnotationHelper jpa) {
 		try {
 			Class cls = jpa.getProxy(c);
 			Object obj = cls.newInstance();
 			if (uriid && idWriteMethod != null)
-				idWriteMethod.invoke(obj,URI.create(source.getURI()));
+				idWriteMethod.invoke(obj, URI.create(source.getURI()));
 			return obj;
 		} catch (Exception e) {
 			logger.warn("Exception caught while invoking default constructor on " + c, e);

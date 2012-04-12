@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  *             not compatible with reasoner processing.
  */
 @Deprecated
-@Target({ElementType.TYPE, ElementType.FIELD})
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SameAs {
 	String value();

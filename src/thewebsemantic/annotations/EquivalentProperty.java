@@ -39,7 +39,7 @@ import java.lang.annotation.Target;
  * @author Jakub Krauz
  * 
  **/
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EquivalentProperty {
 	

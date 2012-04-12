@@ -10,11 +10,21 @@ import org.apache.commons.logging.LogFactory;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 
+/**
+ * Encapsulates bean's properties (accessor methods).
+ * Enables retrieving present annotations and data.
+ */
 class PropertyContext extends ValuesContext {
 	
+	/** logger */
 	private Log logger = LogFactory.getLog(getClass());
+	
+	/** encapsulated property */
 	PropertyDescriptor property;
+	
 	TypeWrapper type;
+	
+	// encapsulated property is set as ID
 	boolean idmethod = false;
 
 

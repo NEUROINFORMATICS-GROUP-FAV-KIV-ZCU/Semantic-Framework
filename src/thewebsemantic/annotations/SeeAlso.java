@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  * @author Jakub Krauz
  * 
  */
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SeeAlso {
 	
