@@ -13,6 +13,7 @@ import thewebsemantic.annotations.DisjointWith;
 import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.EquivalentProperty;
 import thewebsemantic.annotations.FunctionalProperty;
+import thewebsemantic.annotations.HasValue;
 import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.InverseFunctionalProperty;
 import thewebsemantic.annotations.InverseOf;
@@ -21,8 +22,9 @@ import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
-import thewebsemantic.annotations.Symmetric;
+import thewebsemantic.annotations.SymmetricProperty;
 import thewebsemantic.annotations.Ignore;
+import thewebsemantic.annotations.TransitiveProperty;
 import thewebsemantic.annotations.VersionInfo;
 
 
@@ -45,14 +47,16 @@ public class Person implements java.io.Serializable {
 	@Id
 	private int personId;
 	
-//	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
-//	@Label(value="Křestní jméno", lang="cs")
-//	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
-//	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
-//	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
-//	@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
-//	//@AllValuesFrom(uri="http://ontology#names")
+	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
+	@Label(value="Křestní jméno", lang="cs")
+	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
+	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
+	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
+	@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
+	//@AllValuesFrom(uri="http://ontology#names")
+	@HasValue(stringValue="Jakub")
 	private String givenname;
+
 
 	// @RdfProperty(symmetric=true,inverseOf="http://www.kiv.zcu.cz/eeg/Person/4")
 	// @Symmetric
@@ -89,7 +93,7 @@ public class Person implements java.io.Serializable {
 	private String authority;
 	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
 	
-	@Symmetric
+	@SymmetricProperty
 	private Set<Scenario> scenarios = new HashSet<Scenario>(0);
 	
 	private Set<PersonAddParamsValues> personAddParamsValueses = new HashSet<PersonAddParamsValues>(

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME) 
-public @interface Functional {
+public @interface AttrFunctional {
 }
 /*
 	Copyright (c) 2007 

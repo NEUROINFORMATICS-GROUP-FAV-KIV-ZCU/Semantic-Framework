@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   &#64;Transitive
+ *   &#64;TransitiveProperty
  *   private Person classmate;
  * }
  * </pre> </code>
@@ -42,6 +42,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Transitive {
+public @interface TransitiveProperty {
 
 }

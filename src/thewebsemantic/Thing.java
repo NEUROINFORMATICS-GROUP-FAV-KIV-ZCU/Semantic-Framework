@@ -99,7 +99,7 @@ public class Thing implements InvocationHandler, As {
             return asResource();
         } else if (method.getParameterTypes().length == 0) {
             return get(method);
-        } else if (method.isAnnotationPresent(Functional.class)) {
+        } else if (method.isAnnotationPresent(AttrFunctional.class)) {
             set(method, args);
             return proxy;
         }

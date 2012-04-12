@@ -6,7 +6,7 @@ import java.util.Date;
 import com.hp.hpl.jena.rdf.model.Literal;
 
 import thewebsemantic.As;
-import thewebsemantic.Functional;
+import thewebsemantic.AttrFunctional;
 import thewebsemantic.Namespace;
 import thewebsemantic.Thing;
 /**
@@ -22,7 +22,7 @@ public interface DublinCore extends As {
 	public DublinCore coverage(String s);
 	public DublinCore creator(String s);
 
-	@Functional
+	@AttrFunctional
 	public DublinCore date(Date d);
 	public DublinCore description(String s);
 	public DublinCore format(String s);
@@ -33,9 +33,9 @@ public interface DublinCore extends As {
 	public DublinCore rights(String s);
 	public DublinCore source(String s);
 
-	@Functional
+	@AttrFunctional
 	public DublinCore title(String s);
-	@Functional
+	@AttrFunctional
 	public DublinCore title(String s, String lang);
 	public Collection<Literal> contributor();
 	public String coverage();

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   &#64;Symmetric  
+ *   &#64;SymmetricProperty 
  *   private Person friend;
  * }
  * </pre> </code>
@@ -44,6 +44,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Symmetric {
+public @interface SymmetricProperty {
 
 }

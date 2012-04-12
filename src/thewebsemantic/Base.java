@@ -24,8 +24,8 @@ import thewebsemantic.annotations.MinCardinality;
 import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
-import thewebsemantic.annotations.Symmetric;
-import thewebsemantic.annotations.Transitive;
+import thewebsemantic.annotations.SymmetricProperty;
+import thewebsemantic.annotations.TransitiveProperty;
 import thewebsemantic.annotations.VersionInfo;
 import thewebsemantic.binder.Binder;
 import thewebsemantic.binder.BinderImp;
@@ -35,6 +35,7 @@ import com.hp.hpl.jena.ontology.CardinalityRestriction;
 import com.hp.hpl.jena.ontology.HasValueRestriction;
 import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
 import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
+import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -112,27 +113,21 @@ public class Base {
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
-		// TODO pryc
-		/*if (ctx.subject.getClass() == Person.class) {
-			if (ctx instanceof FieldContext)
-				System.out.println("field context");
-			else if (ctx instanceof PropertyContext)
-				System.out.println("property context");
-			else
-				System.out.println("nevim");
-		}*/
-		
 		OntProperty property = createProperty(ctx);
 		
 		// Annotation processing follows
 		
-		if (ctx.isAnnotatedBy(Symmetric.class) ||
+		if (ctx.isAnnotatedBy(SymmetricProperty.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {
-			property.convertToSymmetricProperty();
+			// check if the property is object property - else cannot be converted
+			if (property instanceof ObjectProperty)
+				property.convertToSymmetricProperty();
 		}
 
-		if (ctx.isAnnotatedBy(Transitive.class)) {
-			property.convertToTransitiveProperty();
+		if (ctx.isAnnotatedBy(TransitiveProperty.class)) {
+			// check if the property is object property - else cannot be converted
+			if (property instanceof ObjectProperty)
+				property.convertToTransitiveProperty();
 		}
 		
 		if (ctx.isAnnotatedBy(FunctionalProperty.class)) {
@@ -140,7 +135,9 @@ public class Base {
 		}
 		
 		if (ctx.isAnnotatedBy(InverseFunctionalProperty.class)) {
-			property.convertToInverseFunctionalProperty();
+			// check if the property is object property - else cannot be converted
+			if (property instanceof ObjectProperty)
+				property.convertToInverseFunctionalProperty();
 		}
 
 		if (ctx.isAnnotatedBy(InverseOf.class)) {

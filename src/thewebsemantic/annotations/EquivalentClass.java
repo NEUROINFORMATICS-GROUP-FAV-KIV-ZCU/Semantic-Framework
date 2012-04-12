@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Implements the <code>owl:EquivalentClass</code> property.<br>
+ * Implements the <code>owl:equivalentClass</code> property.<br>
  * This property expresses that two classes have the same class extension (the
  * same set of individuals), but not necessarily the same concepts. That means
  * although two equivalent classes have the same instances, they does not have

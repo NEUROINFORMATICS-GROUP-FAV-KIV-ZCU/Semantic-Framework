@@ -6,9 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used to ignore bean's field (or getter method).
- * Fields (or methods) annotated by
- * <code>@Ignore</code> will not appear in the OWL ontology.
+ * <p>
+ * This annotation is used to ignore some property.<br>
+ * Bean's attribute (field or method) annotated by
+ * <code>@Ignore</code> will not be mapped to the OWL ontology.
+ * </p>
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -3,7 +3,7 @@ package thewebsemantic.vocabulary;
 import java.util.Collection;
 
 import thewebsemantic.As;
-import thewebsemantic.Functional;
+import thewebsemantic.AttrFunctional;
 import thewebsemantic.Namespace;
 import thewebsemantic.Thing;
 
@@ -69,12 +69,12 @@ public interface Foaf extends As {
 
 	Collection<Thing> mbox();
 
-	@Functional
+	@AttrFunctional
 	Foaf gender(String s);
 
 	String gender();
 
-	@Functional
+	@AttrFunctional
 	Foaf sha1(Object o);
 	String sha1();
 
@@ -102,7 +102,7 @@ public interface Foaf extends As {
 
 	Collection<String> aimChatID();
 
-	@Functional
+	@AttrFunctional
 	Foaf primaryTopic(Object t);
 
 	Thing primaryTopic();
@@ -207,7 +207,7 @@ public interface Foaf extends As {
 
 	Collection<Thing> img();
 
-	@Functional
+	@AttrFunctional
 	Foaf birthday(String s);
 
 	String birthday();

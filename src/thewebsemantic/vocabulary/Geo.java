@@ -1,7 +1,7 @@
 package thewebsemantic.vocabulary;
 
 import thewebsemantic.As;
-import thewebsemantic.Functional;
+import thewebsemantic.AttrFunctional;
 import thewebsemantic.Namespace;
 
 /**
@@ -13,11 +13,11 @@ public interface Geo extends As {
 	
 	interface Point extends Geo{}
 
-	@Functional
+	@AttrFunctional
 	Geo lat(float l);
 	Float lat();
 
-	@Functional
+	@AttrFunctional
 	Geo long_(float l);
 	Float long_();
 

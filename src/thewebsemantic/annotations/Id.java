@@ -6,9 +6,42 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Id annotation interface is used to atributes. Their values are used as
- * unicate hash idetification key.
+ * <p>
+ * Annotated attribute will be used as a unique key to idetify bean.<br>
+ * Naming pattern for created individuals in OWL is
+ * <code>"className_id"</code>. If no attribute is set as ID, bean's
+ * hash code will be used instead.
+ * </p>
  * 
+ * <p>
+ * <code>@Id</code> also determines, whether JenaBeanExtension searches for property
+ * annotations over fields or methods. If ID is field, JenaBeanExtension
+ * searches for field annotations, otherwise for method annotations.
+ * </p>
+ * 
+ * <p>
+ * Example of use<br>
+ * If we consider this class definition (other fields and accessor
+ * methods are omitted):
+ * <code> <pre>
+ * public class Person {
+ *   &#64;Id
+ *   private String name;
+ *   ...
+ * }
+ * </pre> </code>
+ * Then if we have some bean:
+ * <code> <pre>
+ * Person p = new Person();
+ * p.setName("Novak");
+ * </pre> </code>
+ * Then the bean will be mapped to something like:
+ * <code> <pre>
+ * &lt;ex:Person rdf:about="#Person_Novak"&gt;
+ *   ...
+ * &lt;/ex:Person&gt;
+ * </pre> </code>
+ * </p>
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME) 
