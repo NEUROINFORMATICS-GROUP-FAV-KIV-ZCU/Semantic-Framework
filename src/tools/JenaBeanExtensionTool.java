@@ -35,7 +35,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * This tool controls the transformation library. User can transform an
- * object-oriented data model into a semantic resource.
+ * object-oriented data model into an OWL ontology.
  * 
  * @author Jakub Krauz
  */
@@ -52,9 +52,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	/** defines the xml:base value for the ontology document */
 	private String xmlBase;
-	
-	/** determines whether user want to declare all classes disjoint */
-	private boolean isDisjointClasses = false;
 
 
 	/**
@@ -106,6 +103,12 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
+	public void loadOOM(List<Object> dataList) {
+		loadOOM(dataList, false);
+	}
+	
+	
+	@Override
 	public void loadOOM(List<Object> dataList, boolean structureOnly) {
 		log.debug("Started loading object-oriented model.");		
 		Bean2RDF loader = new Bean2RDF(model, structureOnly);
@@ -123,9 +126,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public InputStream getOntologyDocument(String lang) {
+	public InputStream getOntologyDocument(String syntax) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		writeOntologyDocument(out, lang);
+		writeOntologyDocument(out, syntax);
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 	
@@ -243,8 +246,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public void declareAllClassesDisjoint() {		
-		isDisjointClasses = true;
+	public void declareAllClassesDisjoint() {
 		ExtendedIterator<OntClass> iterator = model.listClasses();
 		RDFList list = model.createList();
 		while(iterator.hasNext())

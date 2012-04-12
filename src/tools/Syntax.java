@@ -11,23 +11,37 @@ import java.lang.reflect.Field;
 public class Syntax {
 	
 	/**
-	 * RDF/XML language. This is the default.<br>
-	 * This version produces the output efficiently, but it is not
-	 * readable. For readable output use <code>RDF_XML_ABBREV</code>.
+	 * RDF/XML syntax. This is the default one.<br>
+	 * This version produces the output from Jena efficiently, but it is not
+	 * so readable. For a readable output use <code>RDF_XML_ABBREV</code>.
 	 * @see http://www.w3.org/TR/rdf-syntax-grammar/
 	 */
 	public static final String RDF_XML = "RDF/XML";
 	
 	/**
-	 * RDF/XML language.<br>
+	 * RDF/XML syntax.<br>
 	 * This version produces a readable output, but not so
 	 * efficiently as <code>RDF_XML</code>.
 	 * @see http://www.w3.org/TR/rdf-syntax-grammar/
 	 */
 	public static final String RDF_XML_ABBREV = "RDF/XML-ABBREV";
 	
+	/**
+	 * OWL/XML syntax.<br>
+	 * This syntax is not supported by Jena, only by the OWL API.
+	 * @see http://www.w3.org/TR/2009/REC-owl2-xml-serialization-20091027
+	 */
+	public static final String OWL_XML = "OWL/XML";
+	
+	/**
+	 * OWL Functional-Style syntax.<br>
+	 * This syntax is not supported by Jena, only by the OWL API.
+	 * @see http://www.w3.org/TR/2009/REC-owl2-syntax-20091027
+	 */
+	public static final String OWL_FUNCTIONAL = "OWL_FUNCTIONAL";
+	
 	/** 
-	 * RDF Core's N-Triples language.
+	 * RDF Core's Triple Notation.
 	 * @see http://www.w3.org/TR/rdf-testcases/#ntriples
 	 */
 	public static final String N_TRIPLE = "N-TRIPLE";
@@ -37,13 +51,6 @@ public class Syntax {
 	 * @see http://www.w3.org/TeamSubmission/turtle/
 	 */
 	public static final String TURTLE = "TURTLE";
-	
-	/**
-	 * Terse RDF Triple language.
-	 * The same as TURTLE.
-	 * @see http://www.w3.org/TeamSubmission/turtle/
-	 */
-	public static final String TTL = "TTL";
 	
 	/**
 	 * Tim Berners-Lee's N3 (Notation 3) language.

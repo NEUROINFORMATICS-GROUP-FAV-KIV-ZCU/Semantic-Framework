@@ -6,12 +6,20 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
- * Defines user interface for working with the JenaBeanExtension library.
+ * Defines user interface that controlls the OOP to OWL
+ * transformation process.
  * 
  * @author Jakub Krauz
  */
 public interface JenaBeanExtension {
 	
+	/**
+	 * Loads data and their structure from the object-oriented model
+	 * into the ontology model.
+	 * 
+	 * @param dataList List of objects (object-oriented model).
+	 */
+	public void loadOOM(List<Object> dataList);
 	
 	/**
 	 * Loads data from the object-oriented model into the ontology model.
@@ -19,8 +27,8 @@ public interface JenaBeanExtension {
 	 * the ontology model does not contain any data, only their structure
 	 * (i.e. classes, properties and their relations).
 	 * 
-	 * @param dataList - list of objects (object-oriented model)
-	 * @param structureOnly - true if we do not need data (only structure)
+	 * @param dataList List of objects (object-oriented model).
+	 * @param structureOnly True if we do not need data (only structure).
 	 */
 	public void loadOOM(List<Object> dataList, boolean structureOnly);
 
@@ -41,12 +49,12 @@ public interface JenaBeanExtension {
 	 * <p>This method doesn't run the transformation process itself, it only
 	 * creates the XML description of the ontology model.</p>
 	 * 
-	 * @param lang Language of the ontology document.
+	 * @param syntax Syntax of the ontology document.
 	 * @return ontology document
-	 * @throws IOException if there occurred problems creating the stream
+	 * @throws IOException if there occurred problems creating the stream.
 	 * @see Syntax
 	 */
-	public InputStream getOntologyDocument(String lang) throws IOException;
+	public InputStream getOntologyDocument(String syntax) throws IOException;
 	
 	
 	/**
@@ -55,7 +63,7 @@ public interface JenaBeanExtension {
 	 * <p>This method doesn't run the transformation process itself, it only
 	 * creates the XML description of the ontology model.</p>
 	 * 
-	 * @param out The output stream to which the RDF is written.
+	 * @param out The output stream to which the ontology is written.
 	 */
 	public void writeOntologyDocument(OutputStream out);
 	
@@ -68,11 +76,11 @@ public interface JenaBeanExtension {
 	 * <p>This method doesn't run the transformation process itself, it only
 	 * creates the XML description of the ontology model.</p>
 	 * 
-	 * @param out The output stream to which the RDF is written.
-	 * @param lang Language of the ontology document.
+	 * @param out The output stream to which the ontology is written.
+	 * @param syntax Syntax of the ontology document.
 	 * @see Syntax
 	 */
-	public void writeOntologyDocument(OutputStream out, String lang);
+	public void writeOntologyDocument(OutputStream out, String syntax);
 	
 	
 	/**
@@ -83,12 +91,12 @@ public interface JenaBeanExtension {
 	 * <p>This method doesn't run the transformation process itself, it only
 	 * creates the XML description of the ontology model.</p>
 	 * 
-	 * @param lang Language of the ontology schema document.
+	 * @param syntax Syntax of the ontology schema document.
 	 * @return ontology schema document
 	 * @throws IOException if there occurred problems creating the stream
 	 * @see Syntax
 	 */
-	public InputStream getOntologySchema(String lang);
+	public InputStream getOntologySchema(String syntax);
 	
 	
 	/**
@@ -100,12 +108,12 @@ public interface JenaBeanExtension {
 	 * <p>This method doesn't run the transformation process itself, it only
 	 * creates the XML description of the ontology model.</p>
 	 * 
-	 * @param lang Language of the ontology schema document.
+	 * @param syntax Syntax of the ontology schema document.
 	 * @return ontology schema document
 	 * @throws IOException if there occurred problems creating the stream
 	 * @see Syntax
 	 */
-	public void writeOntologySchema(OutputStream out, String lang);
+	public void writeOntologySchema(OutputStream out, String syntax);
 	
 	
 	/**
@@ -123,15 +131,15 @@ public interface JenaBeanExtension {
 	 * before loading the object-oriented model so as the ontology
 	 * properties (such as ontology namespace) take effect.</p>
 	 * 
-	 * @param ontologyDocument - stream containing serialization of RDF-based graph
-	 * @param syntax - syntax of the serialization
+	 * @param ontologyDocument Stream containing serialization of RDF-based graph.
+	 * @param syntax Syntax of the serialization.
 	 */
 	public void loadStatements(InputStream ontologyDocument, String syntax);
 	
 	
 	/**
 	 * <p>Adds the <code>owl:AllDisjointClasses</code> statement declaring
-	 * all classes contained in the model to be different. This is
+	 * all classes contained in the ontology schema to be different. This is
 	 * an OWL2 language construct.</p>
 	 */
 	public void declareAllClassesDisjoint();
@@ -145,17 +153,17 @@ public interface JenaBeanExtension {
 	 * <p>NOTE: This method must be invoked before loading the object-oriented
 	 * model so as the namespace value take effect for the ontology.</p>
 	 * 
-	 * @param namespace - default namespace for the whole model
+	 * @param namespace Default namespace for the ontology.
 	 */
 	public void setNamespace(String namespace);
 	
 	
 	/**
-	 * <p>Sets the base package of POJO objects. This value is used in the
+	 * <p>Sets the base URI of the generated ontology. This value is used in the
 	 * RDF/XML ontology document to abbreviate resources' URIs using
 	 * the <code>xml:base</code> element and relative URIs.</p>
 	 * 
-	 * @param basePackage - POJO package
+	 * @param base Base URI of the ontology document.
 	 */
 	public void setBase(String base);
 	
@@ -167,7 +175,7 @@ public interface JenaBeanExtension {
 	 * <p>Ontology axioms are set acording to values contained in the
 	 * <code>Ontology</code> instance passed to this method.</p>
 	 * 
-	 * @param ontology - object containing ontology properties
+	 * @param ontology Object containing ontology properties.
 	 */
 	public void setOntology(Ontology ontology);
 	

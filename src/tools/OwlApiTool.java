@@ -16,20 +16,12 @@ import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.*;
 
 /**
- * This tool controls the OwlApi library.
- * User can convert among standard semantic formats.
+ * This tool controls the OWL API library.
+ * User can convert among serialization syntaxes.
+ * 
  * @author Jakub Krauz
  */
 public class OwlApiTool implements OwlApi {
-	
-	/** RDF/XML format */
-	public static final String RDF = "rdf";
-	
-	/** OWL/XML format */
-	public static final String OWL = "owl";
-	
-	/** Turtle format */
-	public static final String TTL = "ttl";
 	
 	/** logger */
 	private Log log = LogFactory.getLog(getClass());
@@ -53,24 +45,27 @@ public class OwlApiTool implements OwlApi {
     }
 
 	
-	@Override
 	/**
-	 * Possible standards are RDF/XML, OWL/XML, Turtle/XML.
+	 * Gets the ontology document in a required syntax.
+	 * Possible syntaxes are RDF/XML, OWL/XML, Turtle.
 	 */
-    public InputStream convertToSemanticStandard(String standard)
+	@Override
+    public InputStream getOntologyDocument(String syntax)
         					throws IOException, OWLOntologyStorageException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (standard.equalsIgnoreCase(RDF)) {
-            log.debug("Converting to RDF/XML standard.");
+        if (syntax.equalsIgnoreCase(Syntax.RDF_XML)) {
+            log.debug("Serializing in RDF/XML syntax.");
             manager.saveOntology(ontology, new RDFXMLOntologyFormat(), out);
-        } else if (standard.equalsIgnoreCase(OWL)) {
-            log.debug("Converting to OWL/XML standard.");
+        } else if (syntax.equalsIgnoreCase(Syntax.OWL_XML)) {
+            log.debug("Serializing in OWL/XML syntax.");
             manager.saveOntology(ontology, new OWLXMLOntologyFormat(), out);
-        } else if (standard.equalsIgnoreCase(TTL)) {
-            log.debug("Converting to TTL/XML standard.");
+        } else if (syntax.equalsIgnoreCase(Syntax.OWL_FUNCTIONAL)) {
+        	log.debug("Serializing in OWL Functional-Style syntax.");
+        } else if (syntax.equalsIgnoreCase(Syntax.TURTLE)) {
+            log.debug("Serializing in TURTLE syntax.");
             manager.saveOntology(ontology, new TurtleOntologyFormat(), out);
         } else {
-            log.error("Unknown semantic standard requested.");
+            log.error("Unknown syntax requested.");
         }
         out.flush();
         InputStream output = new ByteArrayInputStream(out.toByteArray());
