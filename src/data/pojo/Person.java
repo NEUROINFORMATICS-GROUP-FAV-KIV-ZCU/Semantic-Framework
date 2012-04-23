@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import thewebsemantic.*;
+import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.ComplementOf;
 import thewebsemantic.annotations.DataRange;
@@ -46,7 +47,8 @@ public class Person implements java.io.Serializable {
 
 	@Id
 	private int personId;
-	
+
+
 	@Comment(value="Komentář ke křestnímu jménu.", lang="cs")
 	@Label(value="Křestní jméno", lang="cs")
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
@@ -73,8 +75,7 @@ public class Person implements java.io.Serializable {
 	
 	private Timestamp dateOfBirth;
 
-	@DataRange("http://www.kiv.zcu.cz/datatypes/eegDef#genderDataRange")
-	@VersionInfo("Nova verze")
+	@AllValuesFrom(charValues={'M', 'F'})
 	private char gender;
 	
 	@InverseFunctionalProperty

@@ -2,8 +2,9 @@ package tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -46,15 +47,19 @@ public class OwlApiTool implements OwlApi {
     }
 
 	
-	/**
-	 * Gets the ontology document in a required syntax.
-	 * Possible syntaxes are RDF/XML, OWL/XML, Turtle.
-	 */
 	@Override
-    public InputStream getOntologyDocument(String syntax)
-        					throws IOException, OWLOntologyStorageException {
+    public InputStream getOntologyDocument(String syntax) throws OWLOntologyStorageException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (syntax.equalsIgnoreCase(Syntax.RDF_XML)) {
+        writeOntologyDocument(out, syntax);
+        InputStream is = new ByteArrayInputStream(out.toByteArray());
+        return is;
+    }
+	
+	
+	@Override
+	public void writeOntologyDocument(OutputStream out, String syntax)
+										throws OWLOntologyStorageException {
+		if (syntax.equalsIgnoreCase(Syntax.RDF_XML)) {
             log.debug("Serializing in RDF/XML syntax.");
             manager.saveOntology(ontology, new RDFXMLOntologyFormat(), out);
         } else if (syntax.equalsIgnoreCase(Syntax.OWL_XML)) {
@@ -69,11 +74,7 @@ public class OwlApiTool implements OwlApi {
         } else {
             log.error("Unknown syntax requested.");
         }
-        out.flush();
-        InputStream output = new ByteArrayInputStream(out.toByteArray());
-        out.close();
-        return output;
-    }
+	}
 
 
 }
