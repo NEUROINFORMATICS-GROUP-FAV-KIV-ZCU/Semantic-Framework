@@ -1,12 +1,13 @@
-import data.pojo.Data;
-import data.pojo.EyesDefect;
-import data.pojo.Hardware;
-import data.pojo.MeasAddParamsValues;
-import data.pojo.Measuration;
-import data.pojo.Person;
-import data.pojo.ResearchGroup;
-import data.pojo.Scenario;
-import data.pojo.Weather;
+package example;
+import example.pojo.Data;
+import example.pojo.EyesDefect;
+import example.pojo.Hardware;
+import example.pojo.MeasAddParamsValues;
+import example.pojo.Measuration;
+import example.pojo.Person;
+import example.pojo.ResearchGroup;
+import example.pojo.Scenario;
+import example.pojo.Weather;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Set;
 /**
  * This class creates testing data.
  */
-public class Example {
+public class TestingData {
 
     private ArrayList<Object> dataList = new ArrayList<Object>();
     
@@ -27,7 +28,7 @@ public class Example {
     private Set<Data> datas = new HashSet<Data>(0);
 
     
-    public Example() {
+    public TestingData() {
 
         Timestamp startMereni1 = Timestamp.valueOf("2008-11-20 10:20:00");
         Timestamp startMereni2 = Timestamp.valueOf("2009-04-15 09:35:00");
@@ -78,7 +79,7 @@ public class Example {
 
     }
 
-    public ArrayList<Object> getData() {
+    public ArrayList<Object> getDataList() {
         return dataList;
     }
 }

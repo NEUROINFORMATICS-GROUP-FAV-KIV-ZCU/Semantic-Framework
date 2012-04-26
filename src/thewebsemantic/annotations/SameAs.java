@@ -34,10 +34,7 @@ import java.lang.annotation.Target;
  * @see EquivalentClass, EquivalentProperty
  * @author Jan Hrbek, Jakub Krauz
  * 
- * @deprecated This annotation shouldn't be used because of above mentioned NOTE.
- *             If we use it for a class, we treat this class as an instance.
- *             That means the ontology document will be in OWL Full, which is
- *             not compatible with reasoner processing.
+ * @deprecated Use of this annotation is permitted for OWL Full output only.
  */
 @Deprecated
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})

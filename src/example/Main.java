@@ -1,3 +1,4 @@
+package example;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,8 +24,8 @@ public class Main {
     public static void main(String[] args) {
     	
     	/* create testing data */
-    	Example ex = new Example();
-    	List<Object> dataList = ex.getData();
+    	TestingData data = new TestingData();
+    	List<Object> dataList = data.getDataList();
     	
     	JenaBeanExtension jbe;  // transformation tool
     	OwlApi owlApi;			// OWL API tool

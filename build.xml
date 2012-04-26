@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Cp1250" ?>
 
-<project name="JenaBeanAnnotationExtension" default="distjar">
+<project name="JenaBeanExtension" default="distjar">
 
 	<description>
 			Author: Jakub Krauz
@@ -13,12 +13,13 @@
 				clean	  - deletes everything except sources
 	</description>
 	
-	<property name="version" value="3.2.5" />
+	<property name="version" value="3.3.0" />
 
 	<property name="jar.file" value="tags/jenabeanextension-${version}.jar" />
 	<property name="srcjar.file" value="tags/jenabeanextension-src-${version}.jar" />
 	<property name="src.dir" value="./src" />
 	<property name="bin.dir" value="./bin" />
+	<property name="lib.dir" value="./lib" />
 	<property name="doc.dir" value="./doc" />
 		
 		
@@ -39,7 +40,12 @@
 		<target name="javadoc">
 			<mkdir dir="${doc.dir}" />
 			<javadoc destdir="${doc.dir}">
-				<fileset dir="${src.dir}" includes="**/*.java" />
+				<fileset dir="${src.dir}" includes="**/*.java">
+					<exclude name="example/" />
+				</fileset>
+				<classpath>
+					<fileset dir="${lib.dir}" />
+				</classpath>
 			</javadoc>
 		</target>
 		
@@ -53,8 +59,7 @@
 			<mkdir dir="${temp.dir}" />
 			<copy todir="${temp.dir}">
 				<fileset dir="${bin.dir}">
-					<exclude name="data/" />
-					<exclude name="*.*" />
+					<exclude name="example/" />
 				</fileset>
 			</copy>
 			<jar destfile="${jar.file}" basedir="${temp.dir}" />
@@ -71,8 +76,7 @@
 			<mkdir dir="${temp.dir}" />
 			<copy todir="${temp.dir}">
 				<fileset dir="${src.dir}">
-					<exclude name="data/" />
-					<exclude name="*.*" />
+					<exclude name="example/" />
 				</fileset>
 			</copy>
 			<jar destfile="${srcjar.file}" basedir="${temp.dir}" />

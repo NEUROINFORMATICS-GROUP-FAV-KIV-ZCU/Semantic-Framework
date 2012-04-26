@@ -109,7 +109,6 @@ public interface JenaBeanExtension {
 	 * creates the XML description of the ontology model.</p>
 	 * 
 	 * @param syntax Syntax of the ontology schema document.
-	 * @return ontology schema document
 	 * @throws IOException if there occurred problems creating the stream
 	 * @see Syntax
 	 */

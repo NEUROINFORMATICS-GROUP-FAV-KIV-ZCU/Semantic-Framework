@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * This annotation implements the <code>owl:someValuesFrom</code> element.<br>
+ * Implements the <code>owl:someValuesFrom</code> element.<br>
  * This property is a value constraint, its meaning is similar to the
  * <code>owl:allValuesFrom</code> element, but this one is less restrictive
  * – it describes all individuals for which at least one value of the property

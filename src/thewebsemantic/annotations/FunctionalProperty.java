@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
  * public class Person {
  *   ...
  *   &#64;FunctionalProperty  
- *   private Person friend;
+ *   private String surname;
  * }
  * </pre> </code>
  * The <code>friend</code> field will be mapped to:
  * <code> <pre>
- * &lt;owl:FunctionalProperty rdf:about="#friend"&gt;
+ * &lt;owl:FunctionalProperty rdf:about="#surname"&gt;
  *   ...
  * &lt;/owl:FunctionalProperty&gt;
  * </pre> </code>

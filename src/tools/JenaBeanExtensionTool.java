@@ -35,7 +35,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * This tool controls the transformation library. User can transform an
- * object-oriented data model into an OWL ontology.
+ * object-oriented data model into OWL ontology.
  * 
  * @author Jakub Krauz
  */
@@ -57,14 +57,11 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	/**
 	 * Loads data from the list of objects and creates an ontology model
 	 * in the default specification (OWL-DL without inferencing).
-	 * 
-	 * @param dataList list of objects - object-orinted model
 	 */
 	public JenaBeanExtensionTool() {
 		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included
 		 * in ModelFactory.createOntologyModel() as default,
 		 * which led to a very slow computation */
-		//specification = OntModelSpec.OWL_DL_MEM;
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 	}
 	
@@ -77,7 +74,6 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 *
 	 * @see OntModelSpec
 	 * 
-	 * @param namespace - default namespace for the whole model
 	 * @param specification - specification of the ontology model
 	 */
 	public JenaBeanExtensionTool(OntModelSpec specification) {

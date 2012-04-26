@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
- * @author Filip Markvart
- *
+ * Implements the <code>rdfs:range</code> element.
  * This annotation interface enables user to add a XSD data range
  * restriction to selected attribute.
+ * 
+ * @author Filip Markvart
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

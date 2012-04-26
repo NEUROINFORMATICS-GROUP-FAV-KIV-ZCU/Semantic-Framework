@@ -1,4 +1,4 @@
-package data.pojo;
+package example.pojo;
 // Generated 16.11.2009 12:22:26 by Hibernate Tools 3.2.1.GA
 
 import java.sql.Blob;

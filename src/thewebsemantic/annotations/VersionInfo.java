@@ -6,10 +6,11 @@ import java.lang.annotation.Target;
 
 /**
  *
- * @author Filip Markvart
- *
+ * Implements the <code>owl:versionInfo</code> element.
  * This annotation interface enables user to add a version info element
  * to selected attribute or class.
+ * 
+ * @author Filip Markvart
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
