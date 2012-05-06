@@ -72,7 +72,8 @@ public class OwlApiTool implements OwlApi {
             log.debug("Serializing in TURTLE syntax.");
             manager.saveOntology(ontology, new TurtleOntologyFormat(), out);
         } else {
-            log.error("Unknown syntax requested.");
+            log.error("Unknown syntax requested! Serializing in OWL/XML syntax.");
+            manager.saveOntology(ontology, new OWLXMLOntologyFormat(), out);
         }
 	}
 

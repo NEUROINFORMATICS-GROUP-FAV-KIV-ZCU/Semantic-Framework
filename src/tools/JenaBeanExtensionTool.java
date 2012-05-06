@@ -17,10 +17,10 @@ import org.apache.commons.logging.LogFactory;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
 
+import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFList;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -29,9 +29,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.OWL2;
 import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * This tool controls the transformation library. User can transform an
@@ -167,41 +169,13 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		if (! Syntax.isValidSyntaxName(lang)) {
 			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
 			lang = DEFAULT_LANG;
-		}
-		
-		// lenghty creation of the schema in order to get rid of ballast generated due to proxy classes in the Portal
-		// can be replaced by commented block below when resolved
+		}		
 		
 		OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
-		ExtendedIterator<OntClass> classes = model.listClasses();
-		Selector selector;
-		while (classes.hasNext()) {
-			selector = new SimpleSelector(classes.next(), null, (RDFNode) null);
-			schema.add(model.listStatements(selector));
-		}
-		// not very clear solution to declare all disjoint classes in the schema if defined in model
-		if (model.listStatements(null, RDF.type, OWL2.AllDisjointClasses).hasNext()) {
-			ExtendedIterator<OntClass> iterator = schema.listClasses();
-			RDFList list = schema.createList();
-			while(iterator.hasNext())
-				list = list.with(iterator.next());
-			Resource res = ResourceFactory.createResource();
-			schema.add(res, RDF.type, OWL2.AllDisjointClasses);
-			schema.add(res, OWL2.members, list);
-		}
-		ExtendedIterator<OntProperty> properties = model.listAllOntProperties();
-		while (properties.hasNext()) {
-			selector = new SimpleSelector(properties.next(), null, (RDFNode) null);
-			schema.add(model.listStatements(selector));
-		}
-		if (model.listOntologies().hasNext()) {
-			selector = new SimpleSelector(model.listOntologies().next(), null, (RDFNode) null);
-			schema.add(model.listStatements(selector));
-		}
-		
-		
-		/*OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
 		schema.add(model);
+		for (String prefix : model.getNsPrefixMap().keySet())
+			if (!prefix.startsWith("j."))
+				schema.setNsPrefix(prefix, model.getNsPrefixMap().get(prefix));
 		
 		// remove all individuals from the schema
 		ExtendedIterator<Individual> individuals = schema.listIndividuals();
@@ -209,7 +183,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		while (individuals.hasNext()) {
 			selector = new SimpleSelector(individuals.next(), null, (RDFNode) null);
 			schema.remove(schema.listStatements(selector));
-		}*/
+		}
 
 		RDFWriter writer = schema.getWriter(lang);
 		if (lang.contains("XML")) {
@@ -243,14 +217,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void declareAllClassesDisjoint() {
-		ExtendedIterator<OntClass> iterator = model.listClasses();
-		RDFList list = model.createList();
-		while(iterator.hasNext())
-			list = list.with(iterator.next());
-
-		Resource res = ResourceFactory.createResource();
-		model.add(res, RDF.type, OWL2.AllDisjointClasses);
-		model.add(res, OWL2.members, list);
+		declareAllClassesDisjoint(model);
 	}
 	
 	
@@ -288,6 +255,42 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			res.addLabel(model.createLiteral(value));
 		if ((value = ontology.getSeeAlso()) != null)
 			res.addSeeAlso(model.createResource(value));
+	}
+	
+	
+	
+	/**
+	 * Declares all classes in model <code>m</code> disjoint.
+	 * 
+	 * @param m - model in which to declare disjoint classes
+	 */
+	private void declareAllClassesDisjoint(OntModel m) {
+		
+		/* create list with root classes */
+		ExtendedIterator<OntClass> iterator = m.listHierarchyRootClasses();
+		RDFList list = m.createList();
+		while (iterator.hasNext())
+			list = list.with(iterator.next());
+		
+		/* declare root classes disjoint */
+		Resource res = ResourceFactory.createResource();
+		m.add(res, RDF.type, OWL2.AllDisjointClasses);
+		m.add(res, OWL2.members, list);
+		
+		/* declare subclasses of one class disjoint */
+		List<Statement> stmtList;
+		for (OntClass ontCls : m.listNamedClasses().toList()) {
+			stmtList = m.listStatements(new SimpleSelector(null, RDFS.subClassOf, ontCls)).toList();
+			if (stmtList.size() >= 2) {
+				list = m.createList();
+				for (Statement stmt : stmtList)
+					list = list.with(stmt.getSubject());
+				res = ResourceFactory.createResource();
+				m.add(res, RDF.type, OWL2.AllDisjointClasses);
+				m.add(res, OWL2.members, list);
+			}
+		}
+		
 	}
 	
 

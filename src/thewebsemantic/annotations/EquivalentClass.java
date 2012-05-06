@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * <p>
  * Example of use:
  * <code><pre>
- * @EquivalentClass("http://some.ontology#Man")
+ * &#64;EquivalentClass("http://some.ontology#Man")
  * public class Person {
  *   ...
  * }

@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import thewebsemantic.annotations.Uri;
 
 @SuppressWarnings("deprecation")
@@ -25,7 +27,12 @@ public class TypeWrapperFactory {
 	 * @param c a bean class
 	 * @return instance of TypeWrapper based on bean gathered info
 	 */
-	public static TypeWrapper newwrapper(Class<?> c) {		
+	public static TypeWrapper newwrapper(Class<?> c) {
+		
+		// check if the class is a hibernate proxy
+		if (HibernateProxy.class.isAssignableFrom(c))
+			c = c.getSuperclass();
+		
 		BeanInfo info = TypeWrapper.beanInfo(c);
 		
 		if (c.isEnum())

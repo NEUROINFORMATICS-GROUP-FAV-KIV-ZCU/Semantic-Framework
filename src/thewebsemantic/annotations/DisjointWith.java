@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * <p>
  * Example of use:
  * <code><pre>
- * @DisjointWith("http://some.ontology#Animal")
+ * &#64;DisjointWith("http://some.ontology#Animal")
  * public class Person {
  *   ...
  * }

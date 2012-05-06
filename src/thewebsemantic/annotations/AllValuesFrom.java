@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   @AllValuesFrom("http://some.ontology#Dog")
+ *   &#64;AllValuesFrom("http://some.ontology#Dog")
  *   public Set&lt;Animal&gt; pets;
  * }
  * </pre> </code>

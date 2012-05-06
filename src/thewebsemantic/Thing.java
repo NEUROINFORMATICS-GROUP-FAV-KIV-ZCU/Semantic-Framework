@@ -14,6 +14,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.Base.NullType;
+import thewebsemantic.annotations.Namespace;
+import thewebsemantic.annotations.RdfType;
 
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Literal;

@@ -2,7 +2,7 @@ package thewebsemantic.vocabulary;
 
 import thewebsemantic.As;
 import thewebsemantic.AttrFunctional;
-import thewebsemantic.Namespace;
+import thewebsemantic.annotations.Namespace;
 
 /**
  * This class is not used in actual version of JenaBean.

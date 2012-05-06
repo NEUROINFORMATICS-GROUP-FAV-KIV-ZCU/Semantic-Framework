@@ -116,7 +116,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 				continue;
 			if (!Modifier.isTransient(field.getModifiers()))
 				values.add(new FieldContext(o, field, field.equals(idfield)));
-		}
+		}		
 		return values.toArray(new ValuesContext[0]);
 	}
 

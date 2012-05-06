@@ -15,8 +15,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.proxy.HibernateProxy;
 
 import thewebsemantic.annotations.Ignore;
+import thewebsemantic.annotations.Namespace;
+import thewebsemantic.annotations.RdfProperty;
 import thewebsemantic.binding.Persistable;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -95,14 +98,10 @@ public abstract class TypeWrapper {
 	 * @return instance of TypeWrapper
 	 */
 	public static synchronized TypeWrapper type(Object o) {
-		
-		// wrap original class instead of proxy
-		/*if (o instanceof HibernateProxy) {
-		    // ProxyHelper vrati puvodni tridu - bohuzel v soucasny verzi Portalu pada
-			return wrap(HibernateProxyHelper.getClassWithoutInitializingProxy(o));
-		}*/
-		
-		if (o instanceof Persistable)
+		if (o instanceof HibernateProxy) {
+			return wrap(o.getClass().getSuperclass());
+		}		
+		else if (o instanceof Persistable)
 			return wrap(o.getClass().getSuperclass());
 		else
 			return wrap(o.getClass());
@@ -147,7 +146,7 @@ public abstract class TypeWrapper {
 			if (property.getReadMethod().isAnnotationPresent(Ignore.class))
 				continue;
 			values.add(new PropertyContext(o, property));
-		}
+		}			
 		return values.toArray(new ValuesContext[0]);
 
 	}

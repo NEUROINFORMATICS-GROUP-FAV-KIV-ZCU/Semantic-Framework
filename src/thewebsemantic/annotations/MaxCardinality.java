@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   @MaxCardinality(5)
+ *   &#64;MaxCardinality(5)
  *   private Set&lt;Car&gt; cars;
  * }
  * </pre> </code>

@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * <code> <pre>
  * public class Person {
  *   ...
- *   @Inverse("data.pojo#child")
+ *   &#64;Inverse("data.pojo#child")
  *   private Person parent;
  * }
  * </pre> </code>

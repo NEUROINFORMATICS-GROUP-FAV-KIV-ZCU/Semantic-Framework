@@ -3,8 +3,8 @@ package thewebsemantic.vocabulary;
 import java.util.Collection;
 
 import thewebsemantic.As;
-import thewebsemantic.Namespace;
 import thewebsemantic.Thing;
+import thewebsemantic.annotations.Namespace;
 
 @Namespace("http://www.w3.org/2000/01/rdf-schema#")
 public interface Rdfs extends As {

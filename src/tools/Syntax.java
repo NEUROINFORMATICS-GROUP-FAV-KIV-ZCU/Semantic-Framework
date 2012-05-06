@@ -37,7 +37,7 @@ public class Syntax {
 	 * This syntax is not supported by Jena, only by the OWL API.
 	 * @see <a href="http://www.w3.org/TR/2009/REC-owl2-syntax-20091027">Functional-Style Syntax</a>
 	 */
-	public static final String OWL_FUNCTIONAL = "OWL_FUNCTIONAL";
+	public static final String OWL_FUNCTIONAL = "OWL-FUNCTIONAL";
 	
 	/** 
 	 * RDF Core's Triple Notation.

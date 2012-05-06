@@ -6,6 +6,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.AllValuesFrom;
 import thewebsemantic.annotations.Cardinality;
@@ -84,10 +86,15 @@ public class Base {
 		javaclass.addProperty(RDFS.label, "Java class");
 		javaclass.addProperty(RDFS.comment, "This property determines the Java class that was mapped into declaring resource.");
 		sequence = m.createProperty(SEQUENCE);
+		m.setNsPrefix("semantic", "http://thewebsemantic.com#");
 		m.leaveCriticalSection();
 	}
 
-
+	
+	/**
+	 * Returns the RDF model.
+	 * @return RDF model
+	 */
 	public Model getModel() {
 		return m;
 	}
@@ -113,7 +120,7 @@ public class Base {
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
 		
-		OntProperty property = createProperty(ctx);
+		OntProperty property = createProperty(ctx);  // map the attribute to rdf:Property
 		
 		// Annotation processing follows
 		
@@ -326,10 +333,8 @@ public class Base {
 			// setting rdfs:range of the ObjectProperty
 			Class<?> rangeClass = ctx.isCollectionType() ? ctx.t() : ctx.type();
 			if (rangeClass != null && rangeClass.getPackage() != null) {
-				// only classes from pojo package - provisional solution
-				if (rangeClass.getPackage().getName().contains("pojo")) {
-					/*Resource range = om.createClass(new DefaultTypeWrapper(rangeClass).typeUri());
-					property.setRange(range);*/
+				// only classes from the same package - provisional solution
+				if (rangeClass.getPackage().equals(ctx.subject.getClass().getPackage())) {
 					property.setRange(getOWLClass(rangeClass));
 				}
 			}
@@ -350,15 +355,9 @@ public class Base {
 	 * @return resource representing given class
 	 */
 	protected Resource getOWLClass(Class<?> cls) {
-		
 		OntClass resource = om.createClass(TypeWrapper.typeUri(cls));
-		
-		// TODO this is a makeshift solution of the problem with proxies
-		// check if the name was retrieved from javassist proxy instead of original class
-        String className = cls.getName();
-		if (className.contains("_$$_javassist"))
-			className = className.substring(0, className.indexOf("_$$_javassist"));
-		
+		String className = HibernateProxy.class.isAssignableFrom(cls) ? 
+								cls.getSuperclass().getName() : cls.getName();
 		return resource.addProperty(javaclass, className);
 	}
 
@@ -377,11 +376,21 @@ public class Base {
 	}
 	
 	
+	/**
+	 * Returns URI of a resource that the bean is mapped to.
+	 * @param bean - mapped bean
+	 * @return URI of the resource
+	 */
 	protected String getURI(Object bean) {
         return (isBound(bean)) ? binder.getUri(bean) : type(bean).typeUri();
 	}
 
-
+	
+	/**
+	 * Determines whether the object was already bound.
+	 * @param o - mapped object
+	 * @return true if the object was already bound, otherwise false
+	 */
 	protected boolean isBound(Object o) {
 		return binder.isBound(o.getClass());
 	}

@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
  * <code><pre>
  * public class Person {
  *   ...
- *   @EquivalentProperty("http://some.ontology#givenName")
+ *   &#64;EquivalentProperty("http://some.ontology#givenName")
  *   private String name;
  * }
  * </pre></code>

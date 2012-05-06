@@ -21,6 +21,7 @@ import thewebsemantic.annotations.InverseOf;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
 import thewebsemantic.annotations.MaxCardinality;
+import thewebsemantic.annotations.Namespace;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.SomeValuesFrom;
 import thewebsemantic.annotations.SymmetricProperty;
@@ -43,7 +44,7 @@ import thewebsemantic.annotations.VersionInfo;
 // @Deprecated
 @DisjointWith("http://kiv.zcu.cz/pojo#Animal")
 @ComplementOf("http://kiv.zcu.cz#nonPerson")
-public class Person implements java.io.Serializable {
+public class Person extends PersonSuperclass implements java.io.Serializable {
 
 	@Id
 	private int personId;
@@ -54,9 +55,9 @@ public class Person implements java.io.Serializable {
 	@SeeAlso("http://www.kiv.zcu.cz/koukniTaky_atribut")
 	@IsDefinedBy("http://www.kiv.zcu.cz/isdefinedby")
 	@EquivalentProperty("http://www.jina.adresa.cz/ontologie#krestni_jmeno")
-	@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
+	//@SomeValuesFrom(uri="http://www.nejaka.adresa.cz/ceskaJmena")
 	//@AllValuesFrom(uri="http://ontology#names")
-	@HasValue(stringValue="Jakub")
+	//@HasValue(stringValue="Jakub")
 	private String givenname;
 
 
@@ -102,7 +103,7 @@ public class Person implements java.io.Serializable {
 	private Set<ResearchGroupMembership> researchGroupMemberships = new HashSet<ResearchGroupMembership>(
 			0);
 	
-	@MaxCardinality(3)
+	//@MaxCardinality(3)
 	private Set<EyesDefect> eyesDefects = new HashSet<EyesDefect>(0);
 	private Set<Measuration> measurationsForPersonId = new HashSet<Measuration>(0);
 	private Set<ResearchGroup> researchGroups = new HashSet<ResearchGroup>(0);

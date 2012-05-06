@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * <code><pre>
  * public class Person {
  *   ...
- *   @Cardinality(3)
+ *   &#64;Cardinality(3)
  *   private Set&lt;Person&gt; children;
  * }
  * </pre></code>

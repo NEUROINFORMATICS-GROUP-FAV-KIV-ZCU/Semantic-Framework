@@ -1,4 +1,5 @@
 package example;
+
 import example.pojo.Data;
 import example.pojo.EyesDefect;
 import example.pojo.Hardware;
@@ -18,7 +19,8 @@ import java.util.Set;
  * This class creates testing data.
  */
 public class TestingData {
-
+	
+	// list of data objects
     private ArrayList<Object> dataList = new ArrayList<Object>();
     
     private Set<Measuration> measurations = new HashSet<Measuration>(0);
@@ -78,7 +80,11 @@ public class TestingData {
         dataList.add((Object) m4);
 
     }
-
+    
+    /**
+     * Returns the list of data objects.
+     * @return - list of data objects
+     */
     public ArrayList<Object> getDataList() {
         return dataList;
     }

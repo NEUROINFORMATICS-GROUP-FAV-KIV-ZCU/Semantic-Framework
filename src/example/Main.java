@@ -45,16 +45,19 @@ public class Main {
 			/* get the ontology document in RDF/XML */
 			out = new FileOutputStream("ontologyDocument.owl");
 			jbe.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
+			out.close();
 			
 			/* get the ontology schema in RDF/XML */
 			out = new FileOutputStream("ontologySchema.owl");
 			jbe.writeOntologySchema(out, Syntax.RDF_XML_ABBREV);
+			out.close();
 			
 			/* convert the ontology to OWL/XML using OWL API */
 			InputStream in = jbe.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 			owlApi = new OwlApiTool(in);
 			out = new FileOutputStream("ontologyDocumentOwlApi.owl");
 			owlApi.writeOntologyDocument(out, Syntax.OWL_XML);
+			out.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

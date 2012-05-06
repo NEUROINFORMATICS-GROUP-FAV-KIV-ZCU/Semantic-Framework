@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import thewebsemantic.annotations.Namespace;
 import thewebsemantic.binding.Persistable;
 import thewebsemantic.lazy.LazyList;
 import thewebsemantic.lazy.LazySet;

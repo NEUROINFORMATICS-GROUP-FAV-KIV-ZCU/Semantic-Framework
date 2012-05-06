@@ -41,7 +41,6 @@ import java.lang.annotation.Target;
  * or property inequality in OWL Lite or DL.
  * </p>
  * 
- * @see AllDifferent
  * @author Jakub Krauz
  * 
  * @deprecated Use of this annotation is permitted for OWL Full output only.
@@ -50,5 +49,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AllDifferent {
+	
 	String[] value();
 }

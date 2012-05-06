@@ -3,6 +3,10 @@ package thewebsemantic;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import org.hibernate.proxy.HibernateProxy;
+
+import thewebsemantic.annotations.RdfType;
+
 /**
  * This class contains static methods used to make simplier processes
  * that gather specific informations about beans classes.
@@ -61,12 +65,8 @@ public class Util {
 		if (rdfType != null)
 			return rdfType.value();
 		
-		String name = c.getSimpleName();
-		
-		// TODO this is a makeshift solution of the problem with proxies
-		// check if the name was retrieved from javassist proxy instead of original class
-		if (name.contains("_$$_javassist"))
-			name = name.substring(0, name.indexOf("_$$_javassist"));
+		String name = HibernateProxy.class.isAssignableFrom(c) ? 
+						c.getSuperclass().getSimpleName() : c.getSimpleName();
 		
 		return name;
 	}

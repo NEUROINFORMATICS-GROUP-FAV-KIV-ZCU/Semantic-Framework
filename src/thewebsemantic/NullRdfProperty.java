@@ -1,6 +1,8 @@
 package thewebsemantic;
 
 import java.lang.annotation.Annotation;
+
+import thewebsemantic.annotations.RdfProperty;
 /**
  * Interface represents default RdfProperty annotation values, if the
  * RdfProperty annotation is not present over the attribut or getter method

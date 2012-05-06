@@ -1,65 +1,72 @@
-<class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
-  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+<class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
   <interface id="1" corner="BOTTOM_RIGHT" language="java" name="tools.JenaBeanExtension" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/JenaBeanExtension.java" binary="false">    
-    <position x="146" y="131" width="-1" height="-1"/>    
+    <position x="162" y="4" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" name="tools.JenaBeanExtensionTool" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/JenaBeanExtensionTool.java" binary="false">    
-    <position x="526" y="162" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+    <position x="535" y="45" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="3" corner="BOTTOM_RIGHT" language="java" name="tools.Ontology" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/Ontology.java" binary="false">    
-    <position x="99" y="469" width="-1" height="-1"/>    
+    <position x="97" y="392" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <interface id="4" corner="BOTTOM_RIGHT" language="java" name="tools.OwlApi" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/OwlApi.java" binary="false">    
-    <position x="577" y="423" width="-1" height="-1"/>    
+    <position x="577" y="292" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
   <class id="5" corner="BOTTOM_RIGHT" language="java" name="tools.OwlApiTool" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/OwlApiTool.java" binary="false">    
-    <position x="576" y="594" width="-1" height="-1"/>    
+    <position x="577" y="481" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="6" corner="BOTTOM_RIGHT" language="java" name="tools.Syntax" project="JenaBeanExtension" 
     file="/JenaBeanExtension/src/tools/Syntax.java" binary="false">    
-    <position x="324" y="482" width="-1" height="-1"/>    
+    <position x="328" y="443" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false"/>      
-      <operations public="true" package="false" protected="false" private="false"/>    
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <realization id="7">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="4"/>  
   </realization>  
-  <realization id="8">    
-    <null/>    
+  <dependency id="8">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <realization id="10">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
-    <attributes public="true" package="false" protected="false" private="false"/>    
-    <operations public="true" package="false" protected="false" private="false"/>  
+    <attributes public="true" package="true" protected="true" private="false"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
   </classifier-display>  
   <association-display labels="true" multiplicity="true"/>
 </class-diagram>

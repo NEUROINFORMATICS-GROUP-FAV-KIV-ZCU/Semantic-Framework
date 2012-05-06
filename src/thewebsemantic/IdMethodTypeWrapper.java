@@ -80,7 +80,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 				continue;
 			boolean idmethod = idReadMethod.equals(property.getReadMethod());
 			values.add(new PropertyContext(o, property, idmethod));
-		}
+		}		
 		return values.toArray(new ValuesContext[0]);
 	}
 
@@ -105,7 +105,7 @@ public class IdMethodTypeWrapper extends TypeWrapper {
 
 	public Object toProxyBean(Resource source, AnnotationHelper jpa) {
 		try {
-			Class cls = jpa.getProxy(c);
+			Class<?> cls = jpa.getProxy(c);
 			Object obj = cls.newInstance();
 			if (uriid && idWriteMethod != null)
 				idWriteMethod.invoke(obj, URI.create(source.getURI()));

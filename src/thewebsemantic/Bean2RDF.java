@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.proxy.HibernateProxy;
+
 import thewebsemantic.annotations.AllDifferent;
 import thewebsemantic.annotations.Comment;
 import thewebsemantic.annotations.ComplementOf;
@@ -19,6 +21,8 @@ import thewebsemantic.annotations.EquivalentClass;
 import thewebsemantic.annotations.Id;
 import thewebsemantic.annotations.IsDefinedBy;
 import thewebsemantic.annotations.Label;
+import thewebsemantic.annotations.Namespace;
+import thewebsemantic.annotations.RdfProperty;
 import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.VersionInfo;
@@ -168,14 +172,7 @@ public class Bean2RDF extends Base {
 	}
 
 	
-	private Resource _write(Object bean, boolean shallow) {
-		
-		// retrieve original class if proxy received
-		/*if (bean instanceof HibernateProxy) {
-		    // since Portal uses Hibernate only proxies are received, but this causes exceptions unfortunatelly
-			bean = ((HibernateProxy) bean).getHibernateLazyInitializer().getImplementation();
-		}*/
-		
+	private Resource _write(Object bean, boolean shallow) {		
 		return (cycle.contains(bean)) ? existing(bean) : write(bean, toResource(bean), shallow);
 	}
 	
@@ -213,122 +210,163 @@ public class Bean2RDF extends Base {
      *
      * @param bean - the bean we are saving or updating to the triple store
      * @return resource referencing saved bean
+     * @throws MyException 
      */
     private Resource getOWLClass(Object bean) {
+    	OntClass owlClass = om.createClass(getURI(bean));    	
+    	addSuperClasses(bean.getClass(), owlClass);
+        applyAnnotations(bean.getClass(), owlClass);
+        
+        String className = (bean instanceof HibernateProxy) ? 
+				bean.getClass().getSuperclass().getName() : bean.getClass().getName();
+        return m.getResource(getURI(bean)).addProperty(javaclass, className);
+    }
+    
+    
+    /**
+     * Adds definitions of superclasses.
+     * 
+     * @param cls - Java class (which is mapped)
+     * @param owlClass - resource in which the Java class is mapped
+     * @return OWL class
+     */
+    private Resource addSuperClasses(Class<?> cls, OntClass owlClass) {
     	
-    	OntClass owlClass = om.createClass(getURI(bean));
+    	if (HibernateProxy.class.isAssignableFrom(cls))
+    		return addSuperClasses(cls.getSuperclass(), owlClass);
     	
-        // Version info
-        if (bean.getClass().isAnnotationPresent(VersionInfo.class)) {
-            owlClass.setVersionInfo(bean.getClass().getAnnotation(VersionInfo.class).value());
+    	Class<?> superClass = cls.getSuperclass();
+    	Class<?>[] interfaces = cls.getInterfaces();
+    	try {
+    		if (superClass.getPackage().equals(cls.getPackage())) {
+    			OntClass owlSuperClass = (OntClass) getOWLClass(superClass);
+    			applyAnnotations(superClass, owlSuperClass);
+    			owlClass.addSuperClass(owlSuperClass);
+    			addSuperClasses(superClass, owlSuperClass);
+    		}
+    		for (Class<?> interfaceCls : interfaces) {
+    			if (interfaceCls.getPackage().equals(cls.getPackage())) {
+    				OntClass owlSuperClass = (OntClass) getOWLClass(interfaceCls);
+    				applyAnnotations(interfaceCls, owlSuperClass);
+    				owlClass.addSuperClass(owlSuperClass);
+    			}
+    		}
+    	} catch (Exception e) {
+    		// nothing, just continue
+    	}
+    	
+    	return owlClass;
+    }
+    
+    
+    /**
+     * Adds class axioms determined by present annotations.
+     * 
+     * @param cls - Java class (which contains annotations)
+     * @param owlClass - OWL class in which the Java class was mapped
+     * @return OWL class
+     */
+    private Resource applyAnnotations(Class<?> cls, OntClass owlClass) {
+    	
+    	// Version info
+        if (cls.isAnnotationPresent(VersionInfo.class)) {
+            owlClass.setVersionInfo(cls.getAnnotation(VersionInfo.class).value());
         }
 
         // Comment
-        if (bean.getClass().isAnnotationPresent(Comment.class)) {
-        	String language = bean.getClass().getAnnotation(Comment.class).lang();
-            owlClass.setComment(bean.getClass().getAnnotation(Comment.class).value(),
+        if (cls.isAnnotationPresent(Comment.class)) {
+        	String language = cls.getAnnotation(Comment.class).lang();
+            owlClass.setComment(cls.getAnnotation(Comment.class).value(),
             		language.equals("") ? null : language);
         }
         
         // SeeAlso
-        if (bean.getClass().isAnnotationPresent(SeeAlso.class)) {
-        	String seeAlso = bean.getClass().getAnnotation(SeeAlso.class).value();
+        if (cls.isAnnotationPresent(SeeAlso.class)) {
+        	String seeAlso = cls.getAnnotation(SeeAlso.class).value();
             Resource res = ResourceFactory.createResource(seeAlso);
             owlClass.setSeeAlso(res);
         }
         
         // Label
-        if (bean.getClass().isAnnotationPresent(Label.class)) {
-        	String language = bean.getClass().getAnnotation(Label.class).lang();
-        	owlClass.setLabel(bean.getClass().getAnnotation(Label.class).value(),
+        if (cls.isAnnotationPresent(Label.class)) {
+        	String language = cls.getAnnotation(Label.class).lang();
+        	owlClass.setLabel(cls.getAnnotation(Label.class).value(),
         			language.equals("") ? null : language);
         }
 
         // IsDefinedBy
-        if (bean.getClass().isAnnotationPresent(IsDefinedBy.class)) {
-        	String value = bean.getClass().getAnnotation(IsDefinedBy.class).value();
+        if (cls.isAnnotationPresent(IsDefinedBy.class)) {
+        	String value = cls.getAnnotation(IsDefinedBy.class).value();
             Resource res = ResourceFactory.createResource(value);
             owlClass.setIsDefinedBy(res);
         }
         
         // EquivalentClass
-        if (bean.getClass().isAnnotationPresent(EquivalentClass.class)) {
-            OntClass eqClass = om.createClass(bean.getClass().getAnnotation(EquivalentClass.class).value());
+        if (cls.isAnnotationPresent(EquivalentClass.class)) {
+            OntClass eqClass = om.createClass(cls.getAnnotation(EquivalentClass.class).value());
             owlClass.setEquivalentClass(eqClass);
         }
         
         // DisjointWith
-        if (bean.getClass().isAnnotationPresent(DisjointWith.class)) {
-        	OntClass disClass = om.createClass(bean.getClass().getAnnotation(DisjointWith.class).value());
+        if (cls.isAnnotationPresent(DisjointWith.class)) {
+        	OntClass disClass = om.createClass(cls.getAnnotation(DisjointWith.class).value());
         	owlClass.setDisjointWith(disClass);
         }
         
         // ComplementOf
-        if (bean.getClass().isAnnotationPresent(ComplementOf.class)) {
-        	OntClass comClass = om.createClass(bean.getClass().getAnnotation(ComplementOf.class).value());
+        if (cls.isAnnotationPresent(ComplementOf.class)) {
+        	OntClass comClass = om.createClass(cls.getAnnotation(ComplementOf.class).value());
         	owlClass.convertToComplementClass(comClass);
         }
         
         // Deprecated
-        if (bean.getClass().isAnnotationPresent(Deprecated.class)) {
+        if (cls.isAnnotationPresent(Deprecated.class)) {
         	owlClass.addProperty(RDF.type, OWL.DeprecatedClass);
         }
         
         // SameAs
-        if (bean.getClass().isAnnotationPresent(SameAs.class)) {
-            String same = bean.getClass().getAnnotation(SameAs.class).value();
+        if (cls.isAnnotationPresent(SameAs.class)) {
+            String same = cls.getAnnotation(SameAs.class).value();
             Resource res = ResourceFactory.createResource(same);
             owlClass.setSameAs(res);
         }
         
         // DifferentFrom
-        if (bean.getClass().isAnnotationPresent(DifferentFrom.class)) {
-        	String different = bean.getClass().getAnnotation(DifferentFrom.class).value();
+        if (cls.isAnnotationPresent(DifferentFrom.class)) {
+        	String different = cls.getAnnotation(DifferentFrom.class).value();
         	Resource res = ResourceFactory.createResource(different);
         	owlClass.setDifferentFrom(res);
         }
         
         // AllDifferent
-        if (bean.getClass().isAnnotationPresent(AllDifferent.class)) {
+        if (cls.isAnnotationPresent(AllDifferent.class)) {
         	com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
-        	Resource res = om.createResource(getURI(bean));
-        	allDif.addDistinctMember(res);  // pridani anotovane tridy
-        	String[] values = bean.getClass().getAnnotation(AllDifferent.class).value();
+        	allDif.addDistinctMember(owlClass);  // add annotated class
+        	String[] values = cls.getAnnotation(AllDifferent.class).value();
+        	Resource res;
         	for (String value : values) {
         		res = ResourceFactory.createResource(value);
         		allDif.addDistinctMember(res);
         	}
         }
         
-        
-        // TODO this is a makeshift solution of the problem with proxies
-		// check if the name was retrieved from javassist proxy instead of original class
-        String className = bean.getClass().getName();
-		if (className.contains("_$$_javassist"))
-			className = className.substring(0, className.indexOf("_$$_javassist"));
-		
-        return m.getResource(getURI(bean)).addProperty(javaclass, className);
+    	return owlClass;
     }
 
 	
+    
 	private Resource write(Object bean, Resource subject, boolean shallow) {		
 		cycle.add(bean);
-		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
-			
-			// TODO remove
-			//tohle je jen pomocny vypis
-			//System.out.println(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
-			//logger.error(p.subject.getClass().getName() + ":  " + p.type() + " (" + p.getName() + ")");
-			
+		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {			
 			if (!(shallow && p.type().isAssignableFrom(Collection.class)) || forceDeep)
 				saveOrUpdate(subject, p);
-		}
+		}	
 		return subject;
 	}
 
 	
 	/**
-	 * Saves values of attributes do the model.
+	 * Saves values of attributes to the model.
 	 * 
 	 * @param subject - resource which owns the property and value
 	 * @param pc - saved attribute
@@ -381,19 +419,14 @@ public class Bean2RDF extends Base {
 	 */
 	private void setPropertyValue(Resource subject, Property property, Object o) {		
 		Statement s = subject.getProperty(property);
-		Resource existing=null;
-		if (s!=null ) {
+		Resource existing = null;
+		if (s != null) {
 			existing = s.getResource();
 			if (existing.isAnon())
 				existing.removeProperties();
 		}
 		subject.removeAll(property).addProperty(property, _write(o, true));
 	}
-	
-	
-	/*public void n3() {
-		m.write(System.out,"N3");
-	}*/
 	
     
     

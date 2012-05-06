@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
  * <p>
  * Example of use:
  * <code><pre>
- * @ComplementOf("http://some.ontology#EverythingExceptPersons")
+ * &#64;ComplementOf("http://some.ontology#EverythingExceptPersons")
  * public class Person {
  *   ...
  * }

@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import thewebsemantic.As;
 import thewebsemantic.AttrFunctional;
-import thewebsemantic.Namespace;
 import thewebsemantic.Thing;
+import thewebsemantic.annotations.Namespace;
 
 /**
  * This class is not used in actual version of JenaBean.
