@@ -18,8 +18,9 @@ import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.*;
 
 /**
- * This tool controls the OWL API library.
- * User can convert among serialization syntaxes.
+ * This tool controls the OWL API library.<br>
+ * User can convert the ontology serialization from Jena to other syntaxes.
+ * The OWL API supports OWL/XML, RDF/XML, TURTLE and OWL Functional-Style.
  * 
  * @author Jakub Krauz
  */
@@ -37,7 +38,7 @@ public class OwlApiTool implements OwlApi {
 	
 	/**
 	 * Loads ontology from the ontology document.
-	 * @param ontologyDocument document describing ontology
+	 * @param ontologyDocument ontology document
 	 * @throws OWLOntologyCreationException if problems loading ontology occurred
 	 */
 	public OwlApiTool(InputStream ontologyDocument) throws OWLOntologyCreationException {

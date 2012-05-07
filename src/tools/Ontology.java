@@ -7,8 +7,8 @@ import java.util.Arrays;
  * An instance of this class can be used to create ontology axioms.
  * Available properties can be set using appropriate setters.
  * The instance must be passed on to the JenaBeanExtension
- * using the <code>setOntology()</code> method so as the ontology
- * header would be included in the ontology document.
+ * using the <code>setOntology()</code> method in {@link JenaBeanExtension}
+ * so as the ontology header would be included in the ontology document.
  * 
  * @author Jakub Krauz
  */

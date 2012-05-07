@@ -36,16 +36,17 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
- * This tool controls the transformation from OOP to OWL.
+ * This tool controls the transformation from OOP to OWL.<br>
  * User can transform an object-oriented data model into an OWL ontology.
- * The RDF (OWL) model is created in Jena.
+ * The RDF (OWL) model is created in Jena. Serialization of the ontology
+ * is provided in several syntaxes (RDF/XML, TURTLE, N-TRIPLE, N3).
  * 
  * @author Jakub Krauz
  */
 public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
-	/** default language of the ontology document */
-	public static final String DEFAULT_LANG = Syntax.RDF_XML;
+	/** Default syntax of the ontology document. */
+	public static final String DEFAULT_SYNTAX = Syntax.RDF_XML;
 	
 	/** logger */
 	private Log log = LogFactory.getLog(getClass());
@@ -58,8 +59,8 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 
 	/**
-	 * Loads data from the list of objects and creates an ontology model
-	 * in the default specification (OWL-DL without inferencing).
+	 * Creates an empty ontology model in the default specification
+	 * (OWL-DL without inferencing).
 	 */
 	public JenaBeanExtensionTool() {
 		/* parameter OntModelSpec.OWL_DL_MEM disables reasoner included
@@ -70,14 +71,13 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	/**
-	 * Creates an empty ontology model in the given specification
-	 * (e.g. OWL Full, OWL-DL, OWL-Lite, without reasoning or with an inferencer etc.).
+	 * Creates an empty ontology model in the given specification.<br>
+	 * The specification can be e.g. OWL Full, OWL-DL, OWL-Lite,
+	 * without reasoning or with an inferencer etc.
 	 * If the <code>specification</code> argument is null, the default specification
 	 * <code>OntModelSpec.OWL_DL_MEM</code> is used.<br>
-	 *
-	 * @see OntModelSpec
 	 * 
-	 * @param specification - specification of the ontology model
+	 * @param specification specification of the ontology model
 	 */
 	public JenaBeanExtensionTool(OntModelSpec specification) {
 		OntModelSpec spec = (specification == null) ? OntModelSpec.OWL_DL_MEM : specification;
@@ -86,14 +86,15 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	/**
-	 * Creates an ontology model in the given specification and loads statements from
-	 * a specified ontology document. This document can contain additional statements
-	 * that cannot be gathered from the object-oriented model, such as an ontology
+	 * Creates an ontology model and loads statements from
+	 * a specified ontology document.<br>
+	 * This document can contain additional statements
+	 * that cannot be gathered from the object-oriented model, such as the ontology
 	 * header etc. Syntax of the ontology document (or serialization of a RDF-based graph)
 	 * is specified by the <code>syntax</code> argument.
 	 * 
-	 * @param ontologyDocument - stream containing statements to be loaded
-	 * @param syntax - syntax of the serialization of statements
+	 * @param ontologyDocument stream containing statements to be loaded
+	 * @param syntax syntax of the serialization of statements
 	 */
 	public JenaBeanExtensionTool(InputStream ontologyDocument, String syntax) {
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
@@ -120,7 +121,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 
 	@Override
 	public InputStream getOntologyDocument() {
-		return getOntologyDocument(DEFAULT_LANG);
+		return getOntologyDocument(DEFAULT_SYNTAX);
 	}
 	
 	
@@ -134,18 +135,18 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void writeOntologyDocument(OutputStream out) {
-		writeOntologyDocument(out, DEFAULT_LANG);
+		writeOntologyDocument(out, DEFAULT_SYNTAX);
 	}
 	
 	
 	@Override
-	public void writeOntologyDocument(OutputStream out, String lang) {
-		if (! Syntax.isValidSyntaxName(lang)) {
-			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
-			lang = DEFAULT_LANG;
+	public void writeOntologyDocument(OutputStream out, String syntax) {
+		if (! Syntax.isValidSyntaxName(syntax)) {
+			log.error("Unsupported syntax name: " + syntax + "! Writing ontology in the default syntax...");
+			syntax = DEFAULT_SYNTAX;
 		}
-		RDFWriter writer = model.getWriter(lang);
-		if (lang.contains("XML")) {
+		RDFWriter writer = model.getWriter(syntax);
+		if (syntax.contains("XML")) {
 			writer.setProperty("showXmlDeclaration", true);
 			writer.setProperty("xmlbase", xmlBase + "#");
 			//writer.setProperty("allowBadURIs", true);
@@ -158,18 +159,18 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	
 	@Override
-	public InputStream getOntologySchema(String lang) {
+	public InputStream getOntologySchema(String syntax) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		writeOntologySchema(out, lang);
+		writeOntologySchema(out, syntax);
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 	
 	
 	@Override
-	public void writeOntologySchema(OutputStream out, String lang) {
-		if (! Syntax.isValidSyntaxName(lang)) {
-			log.error("Unsupported syntax name: " + lang + "! Writing ontology in the default syntax...");
-			lang = DEFAULT_LANG;
+	public void writeOntologySchema(OutputStream out, String syntax) {
+		if (! Syntax.isValidSyntaxName(syntax)) {
+			log.error("Unsupported syntax name: " + syntax + "! Writing ontology in the default syntax...");
+			syntax = DEFAULT_SYNTAX;
 		}		
 		
 		OntModel schema = ModelFactory.createOntologyModel(model.getSpecification());
@@ -186,8 +187,8 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			schema.remove(schema.listStatements(selector));
 		}
 
-		RDFWriter writer = schema.getWriter(lang);
-		if (lang.contains("XML")) {
+		RDFWriter writer = schema.getWriter(syntax);
+		if (syntax.contains("XML")) {
 			writer.setProperty("showXmlDeclaration", true);
 			writer.setProperty("xmlbase", xmlBase + "#");
 			writer.setProperty("relativeURIs", "");

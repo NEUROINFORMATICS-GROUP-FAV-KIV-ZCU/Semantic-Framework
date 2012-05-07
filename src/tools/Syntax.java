@@ -83,7 +83,7 @@ public class Syntax {
 	/**
 	 * Checks if the given string equals one of the predefined syntax
 	 * names.
-	 * @param syntaxName - checked syntax name
+	 * @param syntaxName checked syntax name
 	 * @return true if the string is a valid syntax name, else false
 	 */
 	public static boolean isValidSyntaxName(String syntaxName) {

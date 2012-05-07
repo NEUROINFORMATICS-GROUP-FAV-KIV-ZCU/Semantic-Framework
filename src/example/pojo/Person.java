@@ -44,7 +44,7 @@ import thewebsemantic.annotations.VersionInfo;
 // @Deprecated
 @DisjointWith("http://kiv.zcu.cz/pojo#Animal")
 @ComplementOf("http://kiv.zcu.cz#nonPerson")
-public class Person extends PersonSuperclass implements java.io.Serializable {
+public class Person implements java.io.Serializable {
 
 	@Id
 	private int personId;
