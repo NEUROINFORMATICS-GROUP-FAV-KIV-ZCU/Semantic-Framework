@@ -36,8 +36,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
- * This tool controls the transformation library. User can transform an
- * object-oriented data model into OWL ontology.
+ * This tool controls the transformation from OOP to OWL.
+ * User can transform an object-oriented data model into an OWL ontology.
+ * The RDF (OWL) model is created in Jena.
  * 
  * @author Jakub Krauz
  */

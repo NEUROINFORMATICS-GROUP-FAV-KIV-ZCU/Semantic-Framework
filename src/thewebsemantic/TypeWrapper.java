@@ -374,7 +374,7 @@ public abstract class TypeWrapper {
 	 * Method returns a Java bean based on the URI name of selected resource.
 	 * 
 	 * @param source
-	 * @return
+	 * @return bean
 	 * @throws Exception
 	 */
 	public final Object toBean(Resource source) {

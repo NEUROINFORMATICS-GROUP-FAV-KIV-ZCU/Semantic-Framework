@@ -45,7 +45,7 @@ public class IdFieldTypeWrapper extends TypeWrapper {
 	 * Returns the value of this field specified by bean in param
 	 * 
 	 * @param bean
-	 * @return
+	 * @return id of the bean
 	 */
 	@Override
 	public String id(Object bean) {

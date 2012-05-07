@@ -38,7 +38,7 @@ public class Sparql {
 	 * @param m jena model
 	 * @param c Java Class to which the OWL type is bound to
 	 * @param query a full SPARQL query
-	 * @return
+	 * @return collection of beans
 	 */
 	public static <T> LinkedList<T> exec(Model m, Class<T> c, String query) {
 		RDF2Bean reader = new RDF2Bean(m);

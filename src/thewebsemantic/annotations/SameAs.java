@@ -31,7 +31,8 @@ import java.lang.annotation.Target;
  * equality in OWL Lite or DL.
  * </p>
  * 
- * @see EquivalentClass, EquivalentProperty
+ * @see EquivalentClass
+ * @see EquivalentProperty
  * @author Jan Hrbek, Jakub Krauz
  * 
  * @deprecated Use of this annotation is permitted for OWL Full output only.

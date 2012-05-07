@@ -13,15 +13,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * <code>Namespace</code> annotation like this:
  * 
  * <code><pre>
- * @Namespace(&quot;http://xmlns.com/foaf/0.1/&quot;) 
+ * &#64;Namespace(&quot;http://xmlns.com/foaf/0.1/&quot;) 
  * public interface Foaf extends As {
  *  // ... } 
  * </pre></code>
  * 
  * @see Thing
- * @see Foaf
- * @see Geo
- * @see Sioc
+ * @see vocabulary.Foaf
+ * @see vocabulary.Geo
+ * @see vocabulary.Sioc
  */
 public interface As {
 	

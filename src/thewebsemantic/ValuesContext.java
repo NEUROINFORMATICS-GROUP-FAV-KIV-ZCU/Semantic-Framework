@@ -31,7 +31,7 @@ public abstract class ValuesContext {
 
 	/**
 	 * Returns preset URI of the loaded accessible object.
-	 * @return
+	 * @return uri
 	 */
 	public abstract String uri();
 

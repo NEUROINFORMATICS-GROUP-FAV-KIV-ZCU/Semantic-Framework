@@ -118,7 +118,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @see Namespace
 	 * @param <T>
 	 * @param c
-	 * @return
+	 * @return collection of individuals having type c
 	 */
 	public <T> Collection<T> load(Class<T> c) {
 		return load(c, true, none);
@@ -137,7 +137,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @param <T>
 	 * @param c
 	 * @param includes
-	 * @return
+	 * @return collection of individuals having type c
 	 */
 	public <T> Collection<T> load(Class<T> c, String... includes) {
 		return load(c, true, includes);
@@ -148,7 +148,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * @param <T>
 	 * @param c
-	 * @return
+	 * @return collection of rdf entries
 	 */
 	protected synchronized <T> Collection<T> load(Class<T> c, boolean shallow,
 			String... includes) {
@@ -217,7 +217,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @param c
 	 * @param id
 	 * @param includes
-	 * @return
+	 * @return collection of individuals having type c
 	 * @throws NotFoundException
 	 */
 	public <T> T load(Class<T> c, String id, String[] includes)
@@ -275,7 +275,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * Loads an object from model with the same identifier as <tt>target</tt>.
 	 * 
 	 * @param target
-	 * @return
+	 * @return loaded object
 	 * @throws NotFoundException
 	 */
 	public synchronized <A> A load(A target) {
@@ -292,7 +292,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * returns true if target exists in the model
 	 * 
 	 * @param target
-	 * @return
+	 * @return true if exists, otherwise false
 	 */
 	public synchronized boolean exists(Object target) {
 		init(shallow, none);
@@ -317,7 +317,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * </code>
 	 * 
 	 * @param o
-	 * @return
+	 * @return filler for the bean
 	 */
 	@Deprecated
 	public Filler fill(Object o) {
@@ -359,7 +359,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * @param c
 	 * @param id
-	 * @return
+	 * @return true if found, otherwise false
 	 */
 	public boolean exists(Class<?> c, String id) {
 		return exists(wrap(c).uri(id));

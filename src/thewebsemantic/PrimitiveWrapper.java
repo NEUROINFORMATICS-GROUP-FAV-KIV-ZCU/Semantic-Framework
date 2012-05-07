@@ -98,7 +98,7 @@ public class PrimitiveWrapper {
 	 * a type that Jena internal support.
 	 * 
 	 * @param c - class to test
-	 * @return
+	 * @return true if primitive type, false otherwise
 	 */
 	public static boolean isPrimitive(Class<?> c) {
 		return c.isPrimitive() || CLASS_2_RESOURCE.containsKey(c)
@@ -111,7 +111,7 @@ public class PrimitiveWrapper {
 	 * a type that Jena internal support.
 	 * 
 	 * @param o - object to test
-	 * @return
+	 * @return true if primitive, false otherwise
 	 */
 	public static boolean isPrimitive(Object o) {
 		return isPrimitive(o.getClass());
@@ -122,7 +122,7 @@ public class PrimitiveWrapper {
 	 * Returns Jena's Resource to which the primitive type is mapped.
 	 * 
 	 * @param c
-	 * @return
+	 * @return resource representing primitive type
 	 */
 	public static Resource getPrimitiveResource(Class<?> c) {
 		if (c.isPrimitive())

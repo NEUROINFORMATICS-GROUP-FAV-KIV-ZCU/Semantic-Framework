@@ -147,7 +147,7 @@ public class Bean2RDF extends Base {
 	 * Saves the entire object graph starting with <tt>bean</tt>.
 	 * 
 	 * @param bean
-	 * @return
+	 * @return resource to which the bean is mapped
 	 */
 	public Resource saveDeep(Object bean) {
 		return write(bean, true);

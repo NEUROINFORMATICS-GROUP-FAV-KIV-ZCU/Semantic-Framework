@@ -33,7 +33,7 @@ public class JenaHelper {
 	 * 
 	 * @param l Converted literal
 	 * @param c target data type
-	 * @return
+	 * @return required Java datatype
 	 */
 	public static Object convertLiteral(Literal l, Class<?> c) {
 		if (c.equals(Date.class)) {
@@ -62,7 +62,7 @@ public class JenaHelper {
 	 * Model
 	 * 
 	 * @param l
-	 * @return
+	 * @return instance of Date
 	 */
 	public static Date date(Literal l) {
 		XSDDateTime date = (XSDDateTime) l.getValue();

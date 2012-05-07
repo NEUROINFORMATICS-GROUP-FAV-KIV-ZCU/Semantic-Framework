@@ -104,7 +104,7 @@ public class Base {
 	 * Method writes into the model a param ctx object gathered from bean.
 	 * 
 	 * @param ctx
-	 * @return
+	 * @return property to which the attribute is mapped
 	 */
 	protected Property toRdfProperty(ValuesContext ctx) {
 		return ctx.existsInModel(m) ? ctx.property(m) : applyEntailments(ctx);
@@ -367,7 +367,7 @@ public class Base {
 	 * exists
 	 * 
 	 * @param propDesc
-	 * @return
+	 * @return return type of the getter method
 	 */
 	protected Class<?> t(PropertyDescriptor propDesc) {
 		ParameterizedType type = (ParameterizedType) propDesc.getReadMethod()

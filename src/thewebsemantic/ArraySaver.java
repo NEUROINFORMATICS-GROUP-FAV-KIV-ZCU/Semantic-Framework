@@ -42,7 +42,7 @@ public class ArraySaver extends Saver {
          * param property
          * @param subject
          * @param property
-         * @return
+         * @return sequence
          */
 	protected Seq getSeq(Resource subject, Property property) {
 		try {
