@@ -15,9 +15,9 @@ public class Generate {
 		String url = args[0];
 		OntModel m = ModelFactory.createOntologyModel();
 		m.read(url);
-		ExtendedIterator it = m.listOntProperties();
+		ExtendedIterator<OntProperty> it = m.listOntProperties();
 		while(it.hasNext()) {
-			OntProperty op = (OntProperty)it.next();
+			OntProperty op = it.next();
 			if (op.getNameSpace().equals(url + "#") && op.isObjectProperty()) {
 				//System.out.println(op);
 				System.out.println("Collection<Thing> " + op.getLocalName() + "();");

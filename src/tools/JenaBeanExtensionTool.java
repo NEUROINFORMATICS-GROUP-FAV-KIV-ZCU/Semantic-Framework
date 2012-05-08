@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import thewebsemantic.Base;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
 
@@ -22,6 +23,7 @@ import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFList;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
@@ -268,11 +270,16 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	 */
 	private void declareAllClassesDisjoint(OntModel m) {
 		
-		/* create list with root classes */
+		/* create list with root classes from the OOM */
 		ExtendedIterator<OntClass> iterator = m.listHierarchyRootClasses();
 		RDFList list = m.createList();
-		while (iterator.hasNext())
-			list = list.with(iterator.next());
+		OntClass ontClass;
+		Property javaclass = m.createProperty(Base.JAVACLASS);
+		while (iterator.hasNext()) {
+			ontClass = iterator.next();
+			if (ontClass.hasProperty(javaclass))
+				list = list.with(ontClass);
+		}
 		
 		/* declare root classes disjoint */
 		Resource res = ResourceFactory.createResource();

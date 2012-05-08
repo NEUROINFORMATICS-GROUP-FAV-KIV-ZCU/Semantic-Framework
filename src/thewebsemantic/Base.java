@@ -115,7 +115,7 @@ public class Base {
 	 * Checks attributes's or method's annotations and if they are present
 	 * annotation rules are applied.
 	 * 
-	 * @param ctx - Loaded attribut or method
+	 * @param ctx loaded attribut or method
 	 * @return newly created OntProperty
 	 */
 	private Property applyEntailments(ValuesContext ctx) {
@@ -124,184 +124,149 @@ public class Base {
 		
 		// Annotation processing follows
 		
+		// SymmetricProperty
 		if (ctx.isAnnotatedBy(SymmetricProperty.class) ||
 				TypeWrapper.getRDFAnnotation(ctx.getAccessibleObject()).symmetric()) {
-			// check if the property is object property - else cannot be converted
 			if (property instanceof ObjectProperty)
 				property.convertToSymmetricProperty();
 		}
-
+		
+		// TransitiveProperty
 		if (ctx.isAnnotatedBy(TransitiveProperty.class)) {
-			// check if the property is object property - else cannot be converted
 			if (property instanceof ObjectProperty)
 				property.convertToTransitiveProperty();
 		}
 		
+		// FunctionalProperty
 		if (ctx.isAnnotatedBy(FunctionalProperty.class)) {
 			property.convertToFunctionalProperty();
 		}
 		
+		// InverseFunctionalProperty
 		if (ctx.isAnnotatedBy(InverseFunctionalProperty.class)) {
-			// check if the property is object property - else cannot be converted
 			if (property instanceof ObjectProperty)
 				property.convertToInverseFunctionalProperty();
 		}
-
+		
+		// InverseOf
 		if (ctx.isAnnotatedBy(InverseOf.class)) {
 			Property qc = ResourceFactory.createProperty(ctx.getAnnotation(InverseOf.class).value());
 			property.addInverseOf(qc);
 		}
-
+		
+		// Comment
 		if (ctx.isAnnotatedBy(Comment.class)) {
 			String language = ctx.getAnnotation(Comment.class).lang();
 			property.setComment(ctx.getAnnotation(Comment.class).value(), language.equals("") ? null : language);
 		}
 
+		// VersionInfo
 		if (ctx.isAnnotatedBy(VersionInfo.class)) {
 			property.setVersionInfo(ctx.getAnnotation(VersionInfo.class).value());
 		}
-
+		
+		// DataRange
 		if (ctx.isAnnotatedBy(DataRange.class)) {
 			Resource res = ResourceCreator.crDataRangeRest(ctx.getAnnotation(DataRange.class).value());
 			if (res != null)
 				property.addRange(res);
 		}
-
+		
+		// SeeAlso
 		if (ctx.isAnnotatedBy(SeeAlso.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SeeAlso.class).value());
 			if (res != null)
 				property.addSeeAlso(res);
 		}
 
+		// Label
 		if (ctx.isAnnotatedBy(Label.class)) {
 			String language = ctx.getAnnotation(Label.class).lang();
 			property.setLabel(ctx.getAnnotation(Label.class).value(), language.equals("") ? null : language);
 		}
 		
+		// EquivalentProperty
 		if (ctx.isAnnotatedBy(EquivalentProperty.class)) {
 			String uri = ctx.getAnnotation(EquivalentProperty.class).value();
 			Property eqProp = ResourceFactory.createProperty(uri);	
 			property.addEquivalentProperty(eqProp);
 		}
 		
+		// IsDefinedBy
 		if (ctx.isAnnotatedBy(IsDefinedBy.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(IsDefinedBy.class).value());
 			if (res != null)
 				property.setIsDefinedBy(res);
 		}
 		
+		// AllValuesFrom
 		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
-			Resource range;
-			String uriref = ctx.getAnnotation(AllValuesFrom.class).uri();
-			if (!uriref.equals("")) {
-				range = ResourceFactory.createResource(uriref);
-			} else {
-				RDFList list = om.createList();
-				String[] stringValues;
-				int[] intValues;
-				char[] charValues;
-				if ((stringValues = ctx.getAnnotation(AllValuesFrom.class).stringValues()).length > 0) {
-					for (String value : stringValues)
-						list = list.with(om.createTypedLiteral(value));
-				} else if ((intValues = ctx.getAnnotation(AllValuesFrom.class).intValues()).length > 0) {
-					for (int value : intValues)
-						list = list.with(om.createTypedLiteral(value));
-				} else if ((charValues = ctx.getAnnotation(AllValuesFrom.class).charValues()).length > 0) {
-					for (char value : charValues)
-						list = list.with(om.createTypedLiteral(value));
-				}
-				range = om.createDataRange(list);
-			}
+			Resource range = createAllValuesFromResource(ctx.getAnnotation(AllValuesFrom.class));
 			if (range != null) {
 				AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, property, range);
 				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 			}
 		}
 		
+		// SomeValuesFrom
 		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
-			Resource range;
-			String uriref = ctx.getAnnotation(SomeValuesFrom.class).uri();
-			if (!uriref.equals("")) {
-				range = ResourceFactory.createResource(uriref);
-			} else {
-				RDFList list = om.createList();
-				String[] stringValues;
-				int[] intValues;
-				char[] charValues;
-				if ((stringValues = ctx.getAnnotation(SomeValuesFrom.class).stringValues()).length > 0) {
-					for (String value : stringValues)
-						list = list.with(om.createTypedLiteral(value));
-				} else if ((intValues = ctx.getAnnotation(SomeValuesFrom.class).intValues()).length > 0) {
-					for (int value : intValues)
-						list = list.with(om.createTypedLiteral(value));
-				} else if ((charValues = ctx.getAnnotation(SomeValuesFrom.class).charValues()).length > 0) {
-					for (char value : charValues)
-						list = list.with(om.createTypedLiteral(value));
-				}
-				range = om.createDataRange(list);
-			}
+			Resource range = createSomeValuesFromResource(ctx.getAnnotation(SomeValuesFrom.class));
 			if (range != null) {
 				SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, property, range);
 				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 			}
 		}
 		
+		// HasValue
 		if (ctx.isAnnotatedBy(HasValue.class)) {
-			HasValue annotation = ctx.getAnnotation(HasValue.class);
-			RDFNode value = null;
-			if (! annotation.uri().equals(""))
-				value = ResourceFactory.createResource(annotation.uri());
-			else if (! annotation.stringValue().equals(""))
-				value = om.createTypedLiteral(annotation.stringValue());
-			else if (annotation.charValue() != HasValue.DEFAULT_CHAR)
-				value = om.createTypedLiteral(annotation.charValue());
-			else if (annotation.intValue() != HasValue.DEFAULT_INT)
-				value = om.createTypedLiteral(annotation.intValue());
+			RDFNode value = createHasValueNode(ctx.getAnnotation(HasValue.class));
 			if (value != null) {
 				HasValueRestriction restriction = om.createHasValueRestriction(null, property, value);
 				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 			}
 		}
 
-		
+		// Cardinality
 		if (ctx.isAnnotatedBy(Cardinality.class)) {
 			int cardinality = ctx.getAnnotation(Cardinality.class).value();
 			CardinalityRestriction restriction = om.createCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 		
+		// MaxCardinality
 		if (ctx.isAnnotatedBy(MaxCardinality.class)) {
 			int cardinality = ctx.getAnnotation(MaxCardinality.class).value();
 			MaxCardinalityRestriction restriction = om.createMaxCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 		
+		// MinCardinality
 		if (ctx.isAnnotatedBy(MinCardinality.class)) {
 			int cardinality = ctx.getAnnotation(MinCardinality.class).value();
 			MinCardinalityRestriction restriction = om.createMinCardinalityRestriction(null, property, cardinality);
 			restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
 		}
 		
+		// Deprecated
 		if (ctx.isAnnotatedBy(Deprecated.class)) {
 			property.addProperty(RDF.type, OWL.DeprecatedProperty);
 		}
 		
+		// AllDifferent
 		if (ctx.isAnnotatedBy(AllDifferent.class)) {
 			com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
         	allDif.addDistinctMember(property);  // add the annotated property
-        	String[] values = ctx.getAnnotation(AllDifferent.class).value();
-        	Resource res;
-        	for (String value : values) {
-        		res = ResourceFactory.createResource(value);
-        		allDif.addDistinctMember(res);
-        	}
+        	for (String value : ctx.getAnnotation(AllDifferent.class).value())
+        		allDif.addDistinctMember(ResourceFactory.createResource(value));
 		}
 		
+		// DifferentFrom
 		if (ctx.isAnnotatedBy(DifferentFrom.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(DifferentFrom.class).value());
 			property.addDifferentFrom(res);
 		}
 		
+		// SameAs
 		if (ctx.isAnnotatedBy(SameAs.class)) {
 			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SameAs.class).value());
 			property.addSameAs(res);
@@ -345,6 +310,95 @@ public class Base {
 		property.addDomain(domain);
 		
 		return property;
+	}
+	
+	
+	/**
+	 * Creates the resource for owl:allValuesFrom element.
+	 * 
+	 * @param annotation AllValuesFrom annotation
+	 * @return resource for owl:allValuesFrom
+	 */
+	private Resource createAllValuesFromResource(AllValuesFrom annotation) {
+		Resource range;
+		String uriref = annotation.uri();
+		if (!uriref.equals("")) {
+			range = ResourceFactory.createResource(uriref);
+		} else {
+			RDFList list = om.createList();
+			String[] stringValues;
+			int[] intValues;
+			char[] charValues;
+			if ((stringValues = annotation.stringValues()).length > 0) {
+				for (String value : stringValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else if ((intValues = annotation.intValues()).length > 0) {
+				for (int value : intValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else if ((charValues = annotation.charValues()).length > 0) {
+				for (char value : charValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else {
+				return null;
+			}
+			range = om.createDataRange(list);
+		}
+		return range;
+	}
+	
+	
+	/**
+	 * Creates the resource for owl:someValuesFrom element.
+	 * 
+	 * @param annotation SomeValuesFrom annotation
+	 * @return resource for owl:someValuesFrom
+	 */
+	private Resource createSomeValuesFromResource(SomeValuesFrom annotation) {
+		Resource range;
+		String uriref = annotation.uri();
+		if (!uriref.equals("")) {
+			range = ResourceFactory.createResource(uriref);
+		} else {
+			RDFList list = om.createList();
+			String[] stringValues;
+			int[] intValues;
+			char[] charValues;
+			if ((stringValues = annotation.stringValues()).length > 0) {
+				for (String value : stringValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else if ((intValues = annotation.intValues()).length > 0) {
+				for (int value : intValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else if ((charValues = annotation.charValues()).length > 0) {
+				for (char value : charValues)
+					list = list.with(om.createTypedLiteral(value));
+			} else {
+				return null;
+			}
+			range = om.createDataRange(list);
+		}
+		return range;
+	}
+	
+	
+	/**
+	 * Creates the resource for owl:hasValue element.
+	 * @param annotation HasValue annotation
+	 * @return resource for owl:hasValue
+	 */
+	private RDFNode createHasValueNode(HasValue annotation) {
+		RDFNode value;
+		if (! annotation.uri().equals(""))
+			value = ResourceFactory.createResource(annotation.uri());
+		else if (! annotation.stringValue().equals(""))
+			value = om.createTypedLiteral(annotation.stringValue());
+		else if (annotation.charValue() != HasValue.DEFAULT_CHAR)
+			value = om.createTypedLiteral(annotation.charValue());
+		else if (annotation.intValue() != HasValue.DEFAULT_INT)
+			value = om.createTypedLiteral(annotation.intValue());
+		else
+			value = null;
+		return value;
 	}
 	
 	
@@ -394,7 +448,8 @@ public class Base {
 	protected boolean isBound(Object o) {
 		return binder.isBound(o.getClass());
 	}
-
+	
+	
 	class NullType {
 	}
 

@@ -29,33 +29,32 @@ public class Main {
     	
     	JenaBeanExtension jbe;  // transformation tool
     	OwlApi owlApi;			// OWL API tool
-    	
-    	OutputStream out;
+    	OutputStream out;       // output stream for the ontology document
     	    	
 		try {
 			jbe = new JenaBeanExtensionTool();
 			
 			/* load the ontology header from a file */
-			jbe.loadStatements(new FileInputStream("ontologyHeader.owl"), Syntax.RDF_XML_ABBREV);
+			jbe.loadStatements(new FileInputStream("ontologyHeader.rdf.xml"), Syntax.RDF_XML_ABBREV);
 			/* load and transform the OOM */
 			jbe.loadOOM(dataList, false);
 			/* declare all classes disjoint - OWL 2 construct */
 			jbe.declareAllClassesDisjoint();
 			
 			/* get the ontology document in RDF/XML */
-			out = new FileOutputStream("ontologyDocument.owl");
+			out = new FileOutputStream("ontologyDocument.rdf.xml");
 			jbe.writeOntologyDocument(out, Syntax.RDF_XML_ABBREV);
 			out.close();
 			
 			/* get the ontology schema in RDF/XML */
-			out = new FileOutputStream("ontologySchema.owl");
+			out = new FileOutputStream("ontologySchema.rdf.xml");
 			jbe.writeOntologySchema(out, Syntax.RDF_XML_ABBREV);
 			out.close();
 			
 			/* convert the ontology to OWL/XML using OWL API */
 			InputStream in = jbe.getOntologyDocument(Syntax.RDF_XML_ABBREV);
 			owlApi = new OwlApiTool(in);
-			out = new FileOutputStream("ontologyDocumentOwlApi.owl");
+			out = new FileOutputStream("ontologyDocument.owl.xml");
 			owlApi.writeOntologyDocument(out, Syntax.OWL_XML);
 			out.close();
 			

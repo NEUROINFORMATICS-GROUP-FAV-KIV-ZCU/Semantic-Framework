@@ -157,8 +157,8 @@ public class Bean2RDF extends Base {
 	/**
 	 * Writes a bean to the triple store.
 	 * 
-	 * @param bean
-	 * @return
+	 * @param bean saved bean
+	 * @return resource referencing saved bean
 	 */
 	private synchronized Resource write(Object bean, boolean forceDeep) {
 		try {
@@ -172,6 +172,13 @@ public class Bean2RDF extends Base {
 	}
 
 	
+	/**
+	 * Writes bean to the model.
+	 * 
+	 * @param bean - saved bean
+	 * @param shallow
+	 * @return resource referencing saved bean
+	 */
 	private Resource _write(Object bean, boolean shallow) {		
 		return (cycle.contains(bean)) ? existing(bean) : write(bean, toResource(bean), shallow);
 	}
@@ -263,7 +270,7 @@ public class Bean2RDF extends Base {
      * Adds class axioms determined by present annotations.
      * 
      * @param cls - Java class (which contains annotations)
-     * @param owlClass - OWL class in which the Java class was mapped
+     * @param owlClass - OWL class in which the Java class is mapped
      * @return OWL class
      */
     private Resource applyAnnotations(Class<?> cls, OntClass owlClass) {
@@ -355,6 +362,14 @@ public class Bean2RDF extends Base {
 
 	
     
+    /**
+     * Writes bean's attributes to the model.
+     * 
+     * @param bean saved bean
+     * @param subject resource to which the bean is mapped
+     * @param shallow
+     * @return resource referencing saved bean
+     */
 	private Resource write(Object bean, Resource subject, boolean shallow) {		
 		cycle.add(bean);
 		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {			
@@ -393,11 +408,24 @@ public class Bean2RDF extends Base {
 	}
 
 	
+	/**
+	 * Determines whether <code>o</code> is normal object (which means it is neither array,
+	 * nor collection, nor map).
+	 * @param o tested object
+	 * @return true if the object is normal object
+	 */
 	private boolean isNormalObject(Object o) {
 		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map);
 	}
 
 	
+	/**
+	 * Returns RDFNode representing object <code>o</code>.
+	 * If the object is a bean, it is saved to the model.
+	 * 
+	 * @param o object
+	 * @return RDFNode representing the object
+	 */
 	protected RDFNode toRDFNode(Object o) {		
 		if (isPrimitive(o)) 
 			return PrimitiveWrapper.toLiteral(o);
