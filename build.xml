@@ -15,8 +15,8 @@
 	
 	<property name="version" value="3.3.5" />
 
-	<property name="jar.file" value="tags/jenabeanextension-${version}.jar" />
-	<property name="srcjar.file" value="tags/jenabeanextension-src-${version}.jar" />
+	<property name="jar.file" value="jenabeanextension-${version}.jar" />
+	<property name="srcjar.file" value="jenabeanextension-src-${version}.jar" />
 	<property name="src.dir" value="./src" />
 	<property name="bin.dir" value="./bin" />
 	<property name="lib.dir" value="./lib" />
@@ -29,7 +29,11 @@
 		=============================================================================== -->
 		<target name="compile">
 			<mkdir dir="${bin.dir}" />
-			<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false" />
+			<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false">
+				<classpath>
+					<fileset dir="${lib.dir}" />
+				</classpath>
+			</javac>
 		</target>
 
 		
@@ -92,6 +96,7 @@
 			<delete dir="${bin.dir}" />
 			<delete dir="${doc.dir}" />
 			<delete file="${jar.file}" />
+			<delete file="${srcjar.file}" />
 		</target>
 	
 </project>
