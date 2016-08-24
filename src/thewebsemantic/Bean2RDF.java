@@ -162,12 +162,15 @@ public class Bean2RDF extends Base {
 	 */
 	private synchronized Resource write(Object bean, boolean forceDeep) {
 		try {
+			logger.debug("Processing bean: "  + bean);
 			m.enterCriticalSection(Lock.WRITE);
+			logger.debug("In critical section, with bean: " + bean);
 			this.forceDeep = forceDeep;
 			cycle = new ArrayList<Object>();
 			return _write(bean, false);
 		} finally {
 			m.leaveCriticalSection();
+			logger.debug("leaved critical section, returned bean: " + bean);
 		}
 	}
 

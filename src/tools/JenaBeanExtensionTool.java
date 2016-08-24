@@ -115,7 +115,9 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 		log.debug("Started loading object-oriented model.");		
 		Bean2RDF loader = new Bean2RDF(model, structureOnly);
 		for (int i = 0; i < dataList.size(); i++) {
-			loader.save(dataList.get(i));
+			Object o = dataList.get(i);
+			log.debug("Processing bean: " + o);
+			loader.save(o);
 		}
 		log.debug("Ontology model was created.");
 	}
