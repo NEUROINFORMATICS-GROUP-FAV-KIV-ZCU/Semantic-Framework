@@ -13,7 +13,7 @@
 				clean	  - deletes everything except sources
 	</description>
 	
-	<property name="version" value="3.3.5" />
+	<property name="version" value="3.3.5.1" />
 
 	<property name="jar.file" value="jenabeanextension-${version}.jar" />
 	<property name="srcjar.file" value="jenabeanextension-src-${version}.jar" />

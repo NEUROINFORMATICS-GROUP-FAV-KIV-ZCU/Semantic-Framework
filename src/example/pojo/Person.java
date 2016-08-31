@@ -77,7 +77,7 @@ public class Person implements java.io.Serializable {
 	private String password;
 	
 	private String authority;
-	private Set<Measuration> measurationsForOwnerId = new HashSet<Measuration>(0);
+	private Set<Experiment> measurationsForOwnerId = new HashSet<Experiment>(0);
 	
 	private Set<Scenario> scenarios = new HashSet<Scenario>(0);
 	
@@ -87,9 +87,9 @@ public class Person implements java.io.Serializable {
 	@MaxCardinality(3)
 	private Set<EyesDefect> eyesDefects = new HashSet<EyesDefect>(0);
 	
-	private Set<Measuration> measurationsForPersonId = new HashSet<Measuration>(0);
+	private Set<Experiment> measurationsForPersonId = new HashSet<Experiment>(0);
 	private Set<ResearchGroup> researchGroups = new HashSet<ResearchGroup>(0);
-	private Set<Measuration> measurations = new HashSet<Measuration>(0);
+	private Set<Experiment> measurations = new HashSet<Experiment>(0);
 	private Set<HearingDefect> hearingDefects = new HashSet<HearingDefect>(0);
 
 
@@ -105,12 +105,12 @@ public class Person implements java.io.Serializable {
 
 
 	public Person(int personId, String givenname, String surname, Timestamp dateOfBirth,
-			char gender, String email, String phoneNumber, String note, String username,
-			String password, String authority, Set<Measuration> measurationsForOwnerId,
-			Set<Scenario> scenarios, Set<PersonAddParamsValues> personAddParamsValueses,
-			Set<ResearchGroupMembership> researchGroupMemberships, Set<EyesDefect> eyesDefects,
-			Set<Measuration> measurationsForPersonId, Set<ResearchGroup> researchGroups,
-			Set<Measuration> measurations, Set<HearingDefect> hearingDefects) {
+                  char gender, String email, String phoneNumber, String note, String username,
+                  String password, String authority, Set<Experiment> measurationsForOwnerId,
+                  Set<Scenario> scenarios, Set<PersonAddParamsValues> personAddParamsValueses,
+                  Set<ResearchGroupMembership> researchGroupMemberships, Set<EyesDefect> eyesDefects,
+                  Set<Experiment> measurationsForPersonId, Set<ResearchGroup> researchGroups,
+                  Set<Experiment> measurations, Set<HearingDefect> hearingDefects) {
 		this.personId = personId;
 		this.givenname = givenname;
 		this.surname = surname;
@@ -243,12 +243,12 @@ public class Person implements java.io.Serializable {
 	}
 
 
-	public Set<Measuration> getMeasurationsForOwnerId() {
+	public Set<Experiment> getMeasurationsForOwnerId() {
 		return this.measurationsForOwnerId;
 	}
 
 
-	public void setMeasurationsForOwnerId(Set<Measuration> measurationsForOwnerId) {
+	public void setMeasurationsForOwnerId(Set<Experiment> measurationsForOwnerId) {
 		this.measurationsForOwnerId = measurationsForOwnerId;
 	}
 
@@ -293,12 +293,12 @@ public class Person implements java.io.Serializable {
 	}
 
 
-	public Set<Measuration> getMeasurationsForPersonId() {
+	public Set<Experiment> getMeasurationsForPersonId() {
 		return this.measurationsForPersonId;
 	}
 
 
-	public void setMeasurationsForPersonId(Set<Measuration> measurationsForPersonId) {
+	public void setMeasurationsForPersonId(Set<Experiment> measurationsForPersonId) {
 		this.measurationsForPersonId = measurationsForPersonId;
 	}
 
@@ -313,12 +313,12 @@ public class Person implements java.io.Serializable {
 	}
 
 
-	public Set<Measuration> getMeasurations() {
+	public Set<Experiment> getMeasurations() {
 		return this.measurations;
 	}
 
 
-	public void setMeasurations(Set<Measuration> measurations) {
+	public void setMeasurations(Set<Experiment> measurations) {
 		this.measurations = measurations;
 	}
 

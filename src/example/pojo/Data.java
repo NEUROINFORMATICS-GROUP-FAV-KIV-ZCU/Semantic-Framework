@@ -15,7 +15,7 @@ public class Data implements java.io.Serializable {
 
     @Id
     private int dataId;
-    private Measuration measuration;
+    private Experiment measuration;
     private double samplingRate;
     private Blob data;
     private String mimetype;
@@ -25,7 +25,7 @@ public class Data implements java.io.Serializable {
     public Data() {
     }
 
-    public Data(int dataId, Measuration measuration, double samplingRate, Blob data, String mimetype, String filename) {
+    public Data(int dataId, Experiment measuration, double samplingRate, Blob data, String mimetype, String filename) {
         this.dataId = dataId;
         this.measuration = measuration;
         this.samplingRate = samplingRate;
@@ -34,7 +34,7 @@ public class Data implements java.io.Serializable {
         this.filename = filename;
     }
 
-    public Data(int dataId, Measuration measuration, double samplingRate, Blob data, String mimetype, String filename, Set<FileMetadata> fileMetadatas) {
+    public Data(int dataId, Experiment measuration, double samplingRate, Blob data, String mimetype, String filename, Set<FileMetadata> fileMetadatas) {
         this.dataId = dataId;
         this.measuration = measuration;
         this.samplingRate = samplingRate;
@@ -52,11 +52,11 @@ public class Data implements java.io.Serializable {
         this.dataId = dataId;
     }
 
-    public Measuration getMeasuration() {
+    public Experiment getMeasuration() {
         return this.measuration;
     }
 
-    public void setMeasuration(Measuration measuration) {
+    public void setMeasuration(Experiment measuration) {
         this.measuration = measuration;
     }
 

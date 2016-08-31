@@ -17,7 +17,7 @@ public class ResearchGroup implements java.io.Serializable {
     private String title;
     private String description;
     private Set<Scenario> scenarios = new HashSet<Scenario>(0);
-    private Set<Measuration> measurations = new HashSet<Measuration>(0);
+    private Set<Experiment> measurations = new HashSet<Experiment>(0);
     private Set<ResearchGroupMembership> researchGroupMemberships = new HashSet<ResearchGroupMembership>(0);
 
     public ResearchGroup() {
@@ -30,7 +30,7 @@ public class ResearchGroup implements java.io.Serializable {
         this.description = description;
     }
 
-    public ResearchGroup(int researchGroupId, Person person, String title, String description, Set<Scenario> scenarios, Set<Measuration> measurations, Set<ResearchGroupMembership> researchGroupMemberships) {
+    public ResearchGroup(int researchGroupId, Person person, String title, String description, Set<Scenario> scenarios, Set<Experiment> measurations, Set<ResearchGroupMembership> researchGroupMemberships) {
         this.researchGroupId = researchGroupId;
         this.person = person;
         this.title = title;
@@ -80,11 +80,11 @@ public class ResearchGroup implements java.io.Serializable {
         this.scenarios = scenarios;
     }
 
-    public Set<Measuration> getMeasurations() {
+    public Set<Experiment> getMeasurations() {
         return this.measurations;
     }
 
-    public void setMeasurations(Set<Measuration> measurations) {
+    public void setMeasurations(Set<Experiment> measurations) {
         this.measurations = measurations;
     }
 

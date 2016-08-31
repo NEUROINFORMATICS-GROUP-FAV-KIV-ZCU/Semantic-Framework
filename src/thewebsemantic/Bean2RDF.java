@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.proxy.HibernateProxy;
@@ -376,7 +377,7 @@ public class Bean2RDF extends Base {
 	private Resource write(Object bean, Resource subject, boolean shallow) {		
 		cycle.add(bean);
 		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {			
-			if (!(shallow && p.type().isAssignableFrom(Collection.class)) || forceDeep)
+			if (!(shallow && (p.type().isAssignableFrom(Collection.class))) || forceDeep)
 				saveOrUpdate(subject, p);
 		}	
 		return subject;
@@ -390,7 +391,8 @@ public class Bean2RDF extends Base {
 	 * @param pc - saved attribute
 	 */
 	private void saveOrUpdate(Resource subject, ValuesContext pc) {
-		Object o = pc.invokeGetter();		
+		Object o = pc.invokeGetter();
+		logger.debug("ValuesContext: " + pc +  ", getter: " + o);
 		Property property = toRdfProperty(pc);  // map the attribute to rdf:Property instance
 		
 		if ( Saver.supports(pc.type()) )

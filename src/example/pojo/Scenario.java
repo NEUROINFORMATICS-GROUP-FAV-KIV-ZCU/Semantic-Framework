@@ -20,7 +20,7 @@ public class Scenario implements java.io.Serializable {
     private int scenarioLength;
     private Clob scenarioXml;
     private String description;
-    private Set<Measuration> measurations = new HashSet<Measuration>(0);
+    private Set<Experiment> measurations = new HashSet<Experiment>(0);
 
     public Scenario() {
     }
@@ -31,7 +31,7 @@ public class Scenario implements java.io.Serializable {
         this.researchGroup = researchGroup;
     }
 
-    public Scenario(int scenarioId, Person person, ResearchGroup researchGroup, String title, int scenarioLength/*, Clob scenarioXml*/, String description, Set<Measuration> measurations) {
+    public Scenario(int scenarioId, Person person, ResearchGroup researchGroup, String title, int scenarioLength/*, Clob scenarioXml*/, String description, Set<Experiment> measurations) {
         this.scenarioId = scenarioId;
         this.person = person;
         this.researchGroup = researchGroup;
@@ -98,11 +98,11 @@ public class Scenario implements java.io.Serializable {
         this.description = description;
     }
 
-    public Set<Measuration> getMeasurations() {
+    public Set<Experiment> getMeasurations() {
         return this.measurations;
     }
 
-    public void setMeasurations(Set<Measuration> measurations) {
+    public void setMeasurations(Set<Experiment> measurations) {
         this.measurations = measurations;
     }
 }

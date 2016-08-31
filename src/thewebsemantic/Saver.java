@@ -2,11 +2,7 @@ package thewebsemantic;
 
 import java.lang.reflect.Array;
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -26,6 +22,7 @@ public abstract class Saver {
 		lookup.put(thewebsemantic.Resource.class, new ResourceSaver());
 		lookup.put(Collection.class, new CollectionSaver());
 		lookup.put(Set.class, new CollectionSaver());
+		lookup.put(Vector.class, new CollectionSaver());
 		lookup.put(List.class, new ListSaver());
 		lookup.put(Array.class, new ArraySaver());
 		lookup.put(URI.class, new ResourceSaver());

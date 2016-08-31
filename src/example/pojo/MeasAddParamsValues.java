@@ -11,13 +11,13 @@ public class MeasAddParamsValues implements java.io.Serializable {
     @Id
     private MeasAddParamsValuesId id;
     private MeasurationAdditionalParams measurationAdditionalParams;
-    private Measuration measuration;
+    private Experiment measuration;
     private String paramValue;
 
     public MeasAddParamsValues() {
     }
 
-    public MeasAddParamsValues(MeasAddParamsValuesId id, MeasurationAdditionalParams measurationAdditionalParams, Measuration measuration, String paramValue) {
+    public MeasAddParamsValues(MeasAddParamsValuesId id, MeasurationAdditionalParams measurationAdditionalParams, Experiment measuration, String paramValue) {
         this.id = id;
         this.measurationAdditionalParams = measurationAdditionalParams;
         this.measuration = measuration;
@@ -40,11 +40,11 @@ public class MeasAddParamsValues implements java.io.Serializable {
         this.measurationAdditionalParams = measurationAdditionalParams;
     }
 
-    public Measuration getMeasuration() {
+    public Experiment getMeasuration() {
         return this.measuration;
     }
 
-    public void setMeasuration(Measuration measuration) {
+    public void setMeasuration(Experiment measuration) {
         this.measuration = measuration;
     }
 

@@ -219,9 +219,10 @@ public abstract class TypeWrapper {
 	protected PropertyDescriptor[] descriptors() {
 		if (descriptors == null) {
 			Collection<PropertyDescriptor> results = new LinkedList<PropertyDescriptor>();
-			for (PropertyDescriptor p : info.getPropertyDescriptors())
+			for (PropertyDescriptor p : info.getPropertyDescriptors()) {
 				if (p.getWriteMethod() != null && p.getReadMethod() != null)
 					results.add(p);
+			}
 			descriptors = results.toArray(new PropertyDescriptor[0]);
 		}
 		return descriptors;

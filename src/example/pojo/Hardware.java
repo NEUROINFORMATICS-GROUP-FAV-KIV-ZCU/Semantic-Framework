@@ -16,7 +16,7 @@ public class Hardware implements java.io.Serializable {
     private String title;
     private String type;
     private String descriptioin;
-    private Set<Measuration> measurations = new HashSet<Measuration>(0);
+    private Set<Experiment> measurations = new HashSet<Experiment>(0);
 
     public Hardware() {
     }
@@ -27,7 +27,7 @@ public class Hardware implements java.io.Serializable {
         this.type = type;
     }
 
-    public Hardware(int hardwareId, String title, String type, String descriptioin, Set<Measuration> measurations) {
+    public Hardware(int hardwareId, String title, String type, String descriptioin, Set<Experiment> measurations) {
         this.hardwareId = hardwareId;
         this.title = title;
         this.type = type;
@@ -67,11 +67,11 @@ public class Hardware implements java.io.Serializable {
         this.descriptioin = descriptioin;
     }
 
-    public Set<Measuration> getMeasurations() {
+    public Set<Experiment> getMeasurations() {
         return this.measurations;
     }
 
-    public void setMeasurations(Set<Measuration> measurations) {
+    public void setMeasurations(Set<Experiment> measurations) {
         this.measurations = measurations;
     }
 }

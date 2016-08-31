@@ -69,6 +69,7 @@ class PropertyContext extends ValuesContext {
 	public Object invokeGetter() {		
 		Object result = null;
 		try {
+			logger.debug("readMethod:" + property.getReadMethod());
 			result = property.getReadMethod().invoke(subject);
 		} catch (Exception e) {
 			logger.warn("Error calling read method.", e);

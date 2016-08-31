@@ -1,35 +1,30 @@
 package example;
 
-import example.pojo.Data;
-import example.pojo.EyesDefect;
-import example.pojo.Hardware;
-import example.pojo.MeasAddParamsValues;
-import example.pojo.Measuration;
-import example.pojo.Person;
-import example.pojo.ResearchGroup;
-import example.pojo.Scenario;
-import example.pojo.Weather;
+
+import example.pojo.*;
+import example.pojo.Experiment;
+import odml.core.Property;
+import odml.core.Section;
+import odml.core.Value;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class creates testing data.
  */
 public class TestingData {
-	
-	// list of data objects
+
+    // list of data objects
     private ArrayList<Object> dataList = new ArrayList<Object>();
-    
-    private Set<Measuration> measurations = new HashSet<Measuration>(0);
+
+    private Set<Experiment> measurations = new HashSet<Experiment>(0);
     private Set<MeasAddParamsValues> measAddParamsValueses = new HashSet<MeasAddParamsValues>(0);
     private Set<Hardware> hardwares = new HashSet<Hardware>(0);
     private Set<Person> persons = new HashSet<Person>(0);
     private Set<Data> datas = new HashSet<Data>(0);
 
-    
+
     public TestingData() {
 
         Timestamp startMereni1 = Timestamp.valueOf("2008-11-20 10:20:00");
@@ -50,7 +45,7 @@ public class TestingData {
         Person p2 = new Person(2, "Hawkins", 'M');
         Person p3 = new Person(3, "Jones", 'M');
         Person p4 = new Person(4, "Green", 'F');
-        
+
         // add eyes defects to p4
         EyesDefect e1 = new EyesDefect(1, "cataract");
         EyesDefect e2 = new EyesDefect(2, "short-sightedness");
@@ -69,20 +64,47 @@ public class TestingData {
         Scenario s3 = new Scenario(3, p3, rg2);
         Scenario s4 = new Scenario(4, p4, rg2);
 
-        Measuration m1 = new Measuration(1, w1, s1, p1, rg1, p4, startMereni1, konecMereni1, -1, "weathernote", measAddParamsValueses, hardwares, persons, datas);
-        Measuration m2 = new Measuration(2, w2, s2, p2, rg2, p3, startMereni2, konecMereni2, 20, "weathernote", measAddParamsValueses, hardwares, persons, datas);
-        Measuration m3 = new Measuration(3, w3, s3, p3, rg3, p2, startMereni3, konecMereni3, -8, "weathernote", measAddParamsValueses, hardwares, persons, datas);
-        Measuration m4 = new Measuration(4, w4, s4, p4, rg4, p1, startMereni4, konecMereni4, -3, "weathernote", measAddParamsValueses, hardwares, persons, datas);
+        Experiment m1 = new Experiment(1, w1, s1, p1, rg1, p4, startMereni1, konecMereni1, -1, "weathernote", measAddParamsValueses, hardwares, persons, datas);
+        Experiment m2 = new Experiment(2, w2, s2, p2, rg2, p3, startMereni2, konecMereni2, 20, "weathernote", measAddParamsValueses, hardwares, persons, datas);
+        Experiment m3 = new Experiment(3, w3, s3, p3, rg3, p2, startMereni3, konecMereni3, -8, "weathernote", measAddParamsValueses, hardwares, persons, datas);
+        Experiment m4 = new Experiment(4, w4, s4, p4, rg4, p1, startMereni4, konecMereni4, -3, "weathernote", measAddParamsValueses, hardwares, persons, datas);
+
+        Vector<String> testVector = new Vector<String>();
+        for(int i = 0; i < 10; i++) {
+            testVector.add("TestVector:" + i);
+        }
+        m1.setTestVector(testVector);
+
+
+
+        try {
+            Section s = new Section("OdmlSection");
+            Section subsection = new Section("OdmlSubsection");
+            s.add(subsection);
+            Property p = new Property("TestOdmlProperty", "TestOdmlValue", "String");
+
+            subsection.add(p);
+           // m1.setMetadata(s);
+            dataList.add(s);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+/*
 
         dataList.add((Object) m1);
-        dataList.add((Object) m2);
+       dataList.add((Object) m2);
         dataList.add((Object) m3);
         dataList.add((Object) m4);
+*/
+
+
 
     }
-    
+
     /**
      * Returns the list of data objects.
+     *
      * @return - list of data objects
      */
     public ArrayList<Object> getDataList() {
