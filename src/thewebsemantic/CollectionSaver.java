@@ -37,7 +37,9 @@ public class CollectionSaver extends Saver {
 		subject.removeAll(property);
 		
 		for (Object obj : c)
-			subject.addProperty(property, writer.toRDFNode(obj));
+			if(obj != null) {
+				subject.addProperty(property, writer.toRDFNode(obj));
+			}
 	}
 	
 
