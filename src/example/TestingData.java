@@ -79,10 +79,8 @@ public class TestingData {
 
         try {
             Section s = new Section("OdmlSection");
-            Section subsection = new Section("OdmlSubsection");
-            s.add(subsection);
             Property p = new Property("TestOdmlProperty", "TestOdmlValue", "String");
-            subsection.add(p);
+            s.add(p);
            // m1.setMetadata(s);
             dataList.add(s);
 

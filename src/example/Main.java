@@ -57,12 +57,13 @@ public class Main {
 			out = new FileOutputStream("ontologyDocument.owl.xml");
 			owlApi.writeOntologyDocument(out, Syntax.OWL_XML);
 			out.close();
+			System.out.println("Transformation finished.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Transformation finished.");
+
     }
     
     

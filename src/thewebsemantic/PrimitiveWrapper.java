@@ -149,6 +149,7 @@ public class PrimitiveWrapper {
 	 * @return created Literal
 	 */
 	public static Literal toLiteral(Object o) {
+
 		
 		if (! isPrimitive(o.getClass()))
 			return null;

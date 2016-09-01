@@ -220,7 +220,7 @@ public abstract class TypeWrapper {
 		if (descriptors == null) {
 			Collection<PropertyDescriptor> results = new LinkedList<PropertyDescriptor>();
 			for (PropertyDescriptor p : info.getPropertyDescriptors()) {
-				if (p.getReadMethod() != null && p.getWriteMethod() != null)
+				if (p.getReadMethod() != null)
 					results.add(p);
 			}
 			descriptors = results.toArray(new PropertyDescriptor[0]);
@@ -344,7 +344,7 @@ public abstract class TypeWrapper {
 	protected static BeanInfo beanInfo(Class<?> c) {
 		try {
 
-			return Introspector.getBeanInfo(c);
+			return Introspector.getBeanInfo(c, java.lang.Object.class);
 		} catch (IntrospectionException e1) {
 			e1.printStackTrace();
 		}

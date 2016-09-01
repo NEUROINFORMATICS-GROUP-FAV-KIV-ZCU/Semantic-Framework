@@ -129,6 +129,7 @@ public class Bean2RDF extends Base {
 	 * @return jena resource representing <tt>bean</tt> within the model
 	 */
 	public Resource save(Object bean) {
+		logger.debug("Bean: " + bean);
 		return write(bean, false);
 	}
 
@@ -221,7 +222,6 @@ public class Bean2RDF extends Base {
      *
      * @param bean - the bean we are saving or updating to the triple store
      * @return resource referencing saved bean
-     * @throws MyException 
      */
     private Resource getOWLClass(Object bean) {
     	OntClass owlClass = om.createClass(getURI(bean));    	
