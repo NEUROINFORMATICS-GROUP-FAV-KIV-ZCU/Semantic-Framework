@@ -7,8 +7,9 @@ import java.lang.reflect.ParameterizedType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Encapsulates bean's properties (accessor methods).
@@ -61,7 +62,7 @@ class PropertyContext extends ValuesContext {
 
 	@Override
 	public boolean existsInModel(Model m) {
-		return m.getGraph().contains(Node.createURI(uri()), Node.ANY, Node.ANY);
+		return m.getGraph().contains(NodeFactory.createURI(uri()), Node.ANY, Node.ANY);
 	}
 
 

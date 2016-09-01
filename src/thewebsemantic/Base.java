@@ -2,7 +2,6 @@ package thewebsemantic;
 
 import static thewebsemantic.TypeWrapper.type;
 
-import com.hp.hpl.jena.rdf.model.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.ParameterizedType;
 
@@ -32,27 +31,27 @@ import thewebsemantic.annotations.VersionInfo;
 import thewebsemantic.binder.Binder;
 import thewebsemantic.binder.BinderImp;
 
-import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
-import com.hp.hpl.jena.ontology.CardinalityRestriction;
-import com.hp.hpl.jena.ontology.HasValueRestriction;
-import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
-import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.SomeValuesFromRestriction;
-import com.hp.hpl.jena.ontology.impl.OntModelImpl;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFList;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import org.apache.jena.ontology.AllValuesFromRestriction;
+import org.apache.jena.ontology.CardinalityRestriction;
+import org.apache.jena.ontology.HasValueRestriction;
+import org.apache.jena.ontology.MaxCardinalityRestriction;
+import org.apache.jena.ontology.MinCardinalityRestriction;
+import org.apache.jena.ontology.ObjectProperty;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.ontology.SomeValuesFromRestriction;
+import org.apache.jena.ontology.impl.OntModelImpl;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.shared.Lock;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 
 import thewebsemantic.semantAnnot.ResourceCreator;
 
@@ -167,14 +166,14 @@ public class Base {
 		
 		// DataRange
 		if (ctx.isAnnotatedBy(DataRange.class)) {
-			Resource res = ResourceCreator.crDataRangeRest(ctx.getAnnotation(DataRange.class).value());
+			org.apache.jena.rdf.model.Resource res = ResourceCreator.crDataRangeRest(ctx.getAnnotation(DataRange.class).value());
 			if (res != null)
 				property.addRange(res);
 		}
 		
 		// SeeAlso
 		if (ctx.isAnnotatedBy(SeeAlso.class)) {
-			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SeeAlso.class).value());
+			org.apache.jena.rdf.model.Resource res = ResourceFactory.createResource(ctx.getAnnotation(SeeAlso.class).value());
 			if (res != null)
 				property.addSeeAlso(res);
 		}
@@ -194,14 +193,14 @@ public class Base {
 		
 		// IsDefinedBy
 		if (ctx.isAnnotatedBy(IsDefinedBy.class)) {
-			Resource res = ResourceFactory.createResource(ctx.getAnnotation(IsDefinedBy.class).value());
+			org.apache.jena.rdf.model.Resource  res = ResourceFactory.createResource(ctx.getAnnotation(IsDefinedBy.class).value());
 			if (res != null)
 				property.setIsDefinedBy(res);
 		}
 		
 		// AllValuesFrom
 		if (ctx.isAnnotatedBy(AllValuesFrom.class)) {
-			Resource range = createAllValuesFromResource(ctx.getAnnotation(AllValuesFrom.class));
+			org.apache.jena.rdf.model.Resource range = createAllValuesFromResource(ctx.getAnnotation(AllValuesFrom.class));
 			if (range != null) {
 				AllValuesFromRestriction restriction = om.createAllValuesFromRestriction(null, property, range);
 				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
@@ -210,7 +209,7 @@ public class Base {
 		
 		// SomeValuesFrom
 		if (ctx.isAnnotatedBy(SomeValuesFrom.class)) {
-			Resource range = createSomeValuesFromResource(ctx.getAnnotation(SomeValuesFrom.class));
+			org.apache.jena.rdf.model.Resource range = createSomeValuesFromResource(ctx.getAnnotation(SomeValuesFrom.class));
 			if (range != null) {
 				SomeValuesFromRestriction restriction = om.createSomeValuesFromRestriction(null, property, range);
 				restriction.setSubClass(om.getOntClass(getURI(ctx.subject)));
@@ -254,7 +253,7 @@ public class Base {
 		
 		// AllDifferent
 		if (ctx.isAnnotatedBy(AllDifferent.class)) {
-			com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
+			org.apache.jena.ontology.AllDifferent allDif = om.createAllDifferent();
         	allDif.addDistinctMember(property);  // add the annotated property
         	for (String value : ctx.getAnnotation(AllDifferent.class).value())
         		allDif.addDistinctMember(ResourceFactory.createResource(value));
@@ -262,13 +261,13 @@ public class Base {
 		
 		// DifferentFrom
 		if (ctx.isAnnotatedBy(DifferentFrom.class)) {
-			Resource res = ResourceFactory.createResource(ctx.getAnnotation(DifferentFrom.class).value());
+			org.apache.jena.rdf.model.Resource  res = ResourceFactory.createResource(ctx.getAnnotation(DifferentFrom.class).value());
 			property.addDifferentFrom(res);
 		}
 		
 		// SameAs
 		if (ctx.isAnnotatedBy(SameAs.class)) {
-			Resource res = ResourceFactory.createResource(ctx.getAnnotation(SameAs.class).value());
+			org.apache.jena.rdf.model.Resource res = ResourceFactory.createResource(ctx.getAnnotation(SameAs.class).value());
 			property.addSameAs(res);
 		}
 
@@ -289,7 +288,7 @@ public class Base {
 		if (ctx.isPrimitive()) {
 			property = om.createDatatypeProperty(ctx.uri());
 			// setting rdfs:range of the DatatypeProperty
-			Resource range;
+			org.apache.jena.rdf.model.Resource range;
 			if ((range = PrimitiveWrapper.getPrimitiveResource(ctx.type())) != null
 					&& !ctx.isAnnotatedBy(DataRange.class))
 				property.setRange(range);
@@ -319,8 +318,8 @@ public class Base {
 	 * @param annotation AllValuesFrom annotation
 	 * @return resource for owl:allValuesFrom
 	 */
-	private Resource createAllValuesFromResource(AllValuesFrom annotation) {
-		Resource range;
+	private org.apache.jena.rdf.model.Resource  createAllValuesFromResource(AllValuesFrom annotation) {
+		org.apache.jena.rdf.model.Resource range;
 		String uriref = annotation.uri();
 		if (!uriref.equals("")) {
 			range = ResourceFactory.createResource(uriref);
@@ -353,8 +352,8 @@ public class Base {
 	 * @param annotation SomeValuesFrom annotation
 	 * @return resource for owl:someValuesFrom
 	 */
-	private Resource createSomeValuesFromResource(SomeValuesFrom annotation) {
-		Resource range;
+	private org.apache.jena.rdf.model.Resource createSomeValuesFromResource(SomeValuesFrom annotation) {
+		org.apache.jena.rdf.model.Resource  range;
 		String uriref = annotation.uri();
 		if (!uriref.equals("")) {
 			range = ResourceFactory.createResource(uriref);
@@ -408,7 +407,7 @@ public class Base {
 	 * @param cls - referenced class
 	 * @return resource representing given class
 	 */
-	protected Resource getOWLClass(Class<?> cls) {
+	protected org.apache.jena.rdf.model.Resource getOWLClass(Class<?> cls) {
 		OntClass resource = om.createClass(TypeWrapper.typeUri(cls));
 		String className = HibernateProxy.class.isAssignableFrom(cls) ? 
 								cls.getSuperclass().getName() : cls.getName();

@@ -11,8 +11,8 @@ import thewebsemantic.Sparql;
 import thewebsemantic.binder.Binder;
 import thewebsemantic.binder.BinderImp;
 
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * This class provides read and write operations over Jena Model using JenaBean
@@ -96,7 +96,7 @@ public class Jenabean  {
 	}
 
 	public static <E> E load(Class<E> c, String id) throws NotFoundException{
-		return myself.reader().load(c, id);
+		return (E) myself.reader().load(c, id);
 	}
 	
 	public static <E> Collection<E> load(Class<E> c) {
@@ -117,7 +117,7 @@ public class Jenabean  {
 		return Sparql.exec(myself.model, c, query);
 	}
 
-	public void bindAll(String... s) {
+	public void bindAll(String s) {
 		reader.bindAll(s);
 	}
 }

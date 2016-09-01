@@ -28,16 +28,16 @@ import thewebsemantic.annotations.SameAs;
 import thewebsemantic.annotations.SeeAlso;
 import thewebsemantic.annotations.VersionInfo;
 
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.shared.Lock;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
 
 /**
  * <p>
@@ -351,7 +351,7 @@ public class Bean2RDF extends Base {
         
         // AllDifferent
         if (cls.isAnnotationPresent(AllDifferent.class)) {
-        	com.hp.hpl.jena.ontology.AllDifferent allDif = om.createAllDifferent();
+        	org.apache.jena.ontology.AllDifferent allDif = om.createAllDifferent();
         	allDif.addDistinctMember(owlClass);  // add annotated class
         	String[] values = cls.getAnnotation(AllDifferent.class).value();
         	Resource res;
@@ -434,7 +434,7 @@ public class Bean2RDF extends Base {
 	protected RDFNode toRDFNode(Object o) {		
 		if (isPrimitive(o)) 
 			return PrimitiveWrapper.toLiteral(o);
-		else if (o instanceof URI || o instanceof thewebsemantic.Resource)
+		else if (o instanceof URI || o instanceof Resource)
 			return m.createResource(o.toString());
 		else
 			return _write(o, true);

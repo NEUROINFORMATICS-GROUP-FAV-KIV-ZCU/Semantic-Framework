@@ -2,7 +2,7 @@ package thewebsemantic.binder;
 
 import java.util.HashMap;
 
-import com.hp.hpl.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntClass;
 
 
 public class BinderImp implements Binder {

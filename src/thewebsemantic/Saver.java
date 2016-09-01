@@ -4,8 +4,8 @@ import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.*;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Class contains methods to detect Collection type of intput data, and
@@ -19,7 +19,7 @@ public abstract class Saver {
 	private static Map<Class<?>, Saver> lookup = new HashMap<Class<?>, Saver>();
 
 	static {
-		lookup.put(thewebsemantic.Resource.class, new ResourceSaver());
+		lookup.put(Resource.class, new ResourceSaver());
 		lookup.put(Collection.class, new CollectionSaver());
 		lookup.put(Set.class, new CollectionSaver());
 		lookup.put(Vector.class, new CollectionSaver());

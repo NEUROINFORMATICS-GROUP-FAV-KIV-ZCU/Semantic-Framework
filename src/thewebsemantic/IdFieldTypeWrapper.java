@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 
 import thewebsemantic.annotations.Ignore;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * IdFieldTypeWrapper represents a TypeWrapper that wraps bean's attribute

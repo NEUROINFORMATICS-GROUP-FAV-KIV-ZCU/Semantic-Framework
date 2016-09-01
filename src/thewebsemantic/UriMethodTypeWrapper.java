@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * This class represents wrapper of classes methods that has URI annoatation
@@ -54,7 +54,7 @@ public class UriMethodTypeWrapper extends TypeWrapper {
 
 	@Override
 	public Object toProxyBean(Resource source, AnnotationHelper jpa) {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 }

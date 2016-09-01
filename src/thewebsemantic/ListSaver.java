@@ -3,10 +3,11 @@ package thewebsemantic;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import thewebsemantic.lazy.Lazy;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
+
 
 public class ListSaver extends Saver {
 

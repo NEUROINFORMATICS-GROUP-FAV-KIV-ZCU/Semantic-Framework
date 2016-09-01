@@ -2,7 +2,7 @@ package thewebsemantic;
 
 
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Provides standard polymorphic interface for {@link Thing} vocabulary

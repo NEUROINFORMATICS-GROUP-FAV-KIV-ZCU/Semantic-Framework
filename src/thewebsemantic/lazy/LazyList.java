@@ -5,20 +5,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+
 
 
 @SuppressWarnings("unchecked")
 public class LazyList implements List, Lazy {
 
-	private transient Resource subject;
+	private transient org.apache.jena.rdf.model.Resource  subject;
 	private transient Provider reader;
 	private List data;
 	private Class type;
 	private String propertyUri;
 	private boolean modified = false;
 	
-	public LazyList(Resource i, String propertyUri, Class type, Provider r2b) {
+	public LazyList(org.apache.jena.rdf.model.Resource  i, String propertyUri, Class type, Provider r2b) {
 		this.subject = i;
 		this.propertyUri = propertyUri;
 		this.type = type;

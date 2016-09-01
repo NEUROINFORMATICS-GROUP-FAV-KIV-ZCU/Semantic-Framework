@@ -2,7 +2,7 @@ package thewebsemantic.binding;
 
 import thewebsemantic.binder.Binder;
 
-import com.hp.hpl.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntClass;
 
 public class Binding {
 

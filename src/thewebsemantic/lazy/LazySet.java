@@ -5,19 +5,19 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 @SuppressWarnings("unchecked")
 public class LazySet implements Set, Lazy {
 
-	private transient Resource i;
+	private transient org.apache.jena.rdf.model.Resource i;
 	private transient Provider reader;
 	private Set data;
 	private String propertyUri;
 	private Class type;
 	private boolean modified = false;
 
-	public LazySet(Resource i, String propertyUri, Class type, Provider r2b) {
+	public LazySet(org.apache.jena.rdf.model.Resource i, String propertyUri, Class type, Provider r2b) {
 		this.i = i;
 		this.propertyUri = propertyUri;
 		this.type = type;

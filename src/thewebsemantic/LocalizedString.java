@@ -1,6 +1,6 @@
 package thewebsemantic;
 
-import com.hp.hpl.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Literal;
 /**
  * This class is used to determinate language of gathered Literal, if the
  * language of Literal is defined.

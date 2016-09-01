@@ -7,8 +7,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
 import thewebsemantic.Base.NullType;
 
 /**

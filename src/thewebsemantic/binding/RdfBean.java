@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import thewebsemantic.NotFoundException;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * This class provides all basic generic operations over Jenabean using class

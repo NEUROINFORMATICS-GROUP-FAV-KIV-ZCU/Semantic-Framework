@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Semantic-Framework:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Semantic_Framework_jar</output-path>
+    <root id="archive" name="Semantic-Framework.jar">
+      <element id="module-output" name="Semantic-Framework" />
+    </root>
+  </artifact>
+</component>

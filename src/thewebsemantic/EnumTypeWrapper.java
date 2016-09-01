@@ -1,8 +1,8 @@
 package thewebsemantic;
 
-import static thewebsemantic.Util.last;
+import org.apache.jena.rdf.model.Resource;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import static thewebsemantic.Util.last;
 
 /**
  * EnumTypeWrapper represents a wrapping TypeWrapper descendant class that wraps

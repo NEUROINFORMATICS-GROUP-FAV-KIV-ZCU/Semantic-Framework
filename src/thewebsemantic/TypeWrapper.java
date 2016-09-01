@@ -22,7 +22,7 @@ import thewebsemantic.annotations.Namespace;
 import thewebsemantic.annotations.RdfProperty;
 import thewebsemantic.binding.Persistable;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Retrieves annotation information as well as other type related operations on
@@ -220,7 +220,7 @@ public abstract class TypeWrapper {
 		if (descriptors == null) {
 			Collection<PropertyDescriptor> results = new LinkedList<PropertyDescriptor>();
 			for (PropertyDescriptor p : info.getPropertyDescriptors()) {
-				if (p.getWriteMethod() != null && p.getReadMethod() != null)
+				if (p.getReadMethod() != null && p.getWriteMethod() != null)
 					results.add(p);
 			}
 			descriptors = results.toArray(new PropertyDescriptor[0]);
@@ -343,6 +343,7 @@ public abstract class TypeWrapper {
 	 */
 	protected static BeanInfo beanInfo(Class<?> c) {
 		try {
+
 			return Introspector.getBeanInfo(c);
 		} catch (IntrospectionException e1) {
 			e1.printStackTrace();

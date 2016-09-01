@@ -1,8 +1,7 @@
 package thewebsemantic;
 
-import static com.hp.hpl.jena.graph.Node.ANY;
-import static com.hp.hpl.jena.graph.Node.createURI;
-import static com.hp.hpl.jena.vocabulary.RDF.type;
+import static org.apache.jena.graph.Node.ANY;
+import static org.apache.jena.vocabulary.RDF.type;
 import static thewebsemantic.JenaHelper.convertLiteral;
 import static thewebsemantic.TypeWrapper.instanceURI;
 import static thewebsemantic.TypeWrapper.typeUri;
@@ -19,24 +18,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.impl.ResourceImpl;
 import thewebsemantic.annotations.Namespace;
 import thewebsemantic.binding.Persistable;
 import thewebsemantic.lazy.LazyList;
 import thewebsemantic.lazy.LazySet;
 import thewebsemantic.lazy.Provider;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Seq;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.shared.PropertyNotFoundException;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.shared.Lock;
+import org.apache.jena.shared.PropertyNotFoundException;
+import org.apache.jena.vocabulary.RDF;
 
 /**
  * RDF2Bean converts one or more RDF nodes into java beans. Normally these are
@@ -104,9 +97,9 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * <code>
 	 * Collection<Customer> customers = myRDF2Bean.load(Customer.class)
-	 * ...
+	 * ..
 	 * myRDF2Bean.fill(aCustomer).with("orders");
-	 * foreach(Order o: aCustomer.getOrders())...
+	 * foreach(Order o: aCustomer.getOrders())..
 	 * </code>
 	 * 
 	 * You may also use this alternate method to fill collection properties:
@@ -139,7 +132,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @param includes
 	 * @return collection of individuals having type c
 	 */
-	public <T> Collection<T> load(Class<T> c, String... includes) {
+	public <T> Collection<T> load(Class<T> c, String[] includes) {
 		return load(c, true, includes);
 	}
 
@@ -151,7 +144,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @return collection of rdf entries
 	 */
 	protected synchronized <T> Collection<T> load(Class<T> c, boolean shallow,
-			String... includes) {
+			String[] includes) {
 		init(shallow, includes);
 		try {
 			return loadAll(c);
@@ -205,7 +198,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * Similar to load(Class, String), with the ability to include
 	 * non-functional Collection based properties. <tt>includes</tt> should be
 	 * an array of property names, for example, if you want to load a customer
-	 * with their orders and recent purchases...
+	 * with their orders and recent purchases..
 	 * 
 	 * <code>
 	 * RDF2Bean reader = new RDF2Bean(model);
@@ -240,7 +233,7 @@ public class RDF2Bean extends Base implements Provider {
 		return load(c, id.toString(), true);
 	}
 
-	public <T> T load(Class<T> c, Resource r) {
+	public <T> T load(Class<T> c, org.apache.jena.rdf.model.Resource r) {
 		return load(c, r, true, new String[0]);
 	}
 
@@ -261,7 +254,7 @@ public class RDF2Bean extends Base implements Provider {
 		}
 	}
 
-	private synchronized <T> T load(Class<T> c, Resource r, boolean shallow,
+	private synchronized <T> T load(Class<T> c, org.apache.jena.rdf.model.Resource r, boolean shallow,
 			String[] includes) {
 		init(shallow, includes);
 		try {
@@ -281,7 +274,7 @@ public class RDF2Bean extends Base implements Provider {
 	public synchronized <A> A load(A target) {
 		init(shallow, none);
 		try {
-			Resource source = m.getResource(instanceURI(target));
+			org.apache.jena.rdf.model.Resource source = m.getResource(instanceURI(target));
 			return (A)applyProperties(source, target);
 		} finally {
 			m.leaveCriticalSection();
@@ -312,7 +305,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * <code>
 	 * RDF2Bean rdf2bean = new RDF2Bean(model);
-	 * ...
+	 * ..
 	 * rdf2bean.fill(myBean).with("children");
 	 * </code>
 	 * 
@@ -335,7 +328,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * <code>
 	 * RDF2Bean rdf2bean = new RDF2Bean(model);
-	 * ...
+	 * ..
 	 * rdf2bean.fill(myBean,"children");
 	 * </code>
 	 * 
@@ -366,7 +359,7 @@ public class RDF2Bean extends Base implements Provider {
 	}
 
 	public boolean exists(String uri) {
-		return m.getGraph().contains(createURI(uri), ANY, ANY);
+		return m.getGraph().contains(NodeFactory.createURI(uri), ANY, ANY);
 	}
 
 	private <T> T toObject(Class<T> c, String id) {
@@ -385,20 +378,20 @@ public class RDF2Bean extends Base implements Provider {
 		}
 	}
 	
-	private <T> T toObject(Class<T> c, Resource i) { 
-		if (c == thewebsemantic.Resource.class)
-			return (T) new thewebsemantic.Resource(i.getURI());
+	private <T> T toObject(Class<T> c, org.apache.jena.rdf.model.Resource i) {
+		if (c == Resource.class)
+			return (T) new ResourceImpl(i.getURI());
 		else if (c == URI.class)
 			return (T) URI.create(i.getURI());
 		else
 			return (i != null) ? (T) testCycle(i, c) : null;
 	}
 
-	private Object testCycle(Resource i, Class<?> c) {
+	private Object testCycle(org.apache.jena.rdf.model.Resource  i, Class<?> c) {
 		return (isCycle(i)) ? cachedObject(i) : applyProperties(i, c);
 	}
 
-	private Object cachedObject(Resource i) {
+	private Object cachedObject(org.apache.jena.rdf.model.Resource  i) {
 		return cycle.get(key(i));
 	}
 
@@ -409,10 +402,10 @@ public class RDF2Bean extends Base implements Provider {
 		if (node.isLiteral()) 
 			return (T) convertLiteral(node, c);
 		else
-			return toObject(c, node.as(Resource.class));
+			return toObject(c, node.as(org.apache.jena.rdf.model.Resource.class));
 	}
 	
-	private boolean isCycle(Resource i) {
+	private boolean isCycle(org.apache.jena.rdf.model.Resource  i) {
 		return cycle.containsKey(key(i));
 	}
 
@@ -422,12 +415,12 @@ public class RDF2Bean extends Base implements Provider {
          * @param i
          * @return
          */
-	private String key(Resource i) {
+	private String key(org.apache.jena.rdf.model.Resource i) {
 		return (i.isAnon()) ? i.getId().toString() : i.getURI();
 	}
 
 	private Object fillWithChildren(Object target, String propertyName) {
-		Resource source = m.getResource(instanceURI(target));
+		org.apache.jena.rdf.model.Resource source = m.getResource(instanceURI(target));
 		for (ValuesContext p : TypeWrapper.valueContexts(target))
 			if (match(propertyName, p))
 				fill(source, p);
@@ -439,11 +432,11 @@ public class RDF2Bean extends Base implements Provider {
 				&& (p.isAggregateType());
 	}
 
-	private Object applyProperties(Resource source, Class c) {
+	private Object applyProperties(org.apache.jena.rdf.model.Resource source, Class c) {
 		return applyProperties(source, newInstance(source, c));
 	}
 
-	private Object applyProperties(Resource source, Object target) {
+	private Object applyProperties(org.apache.jena.rdf.model.Resource source, Object target) {
 		cycle.put(source.getURI(), target);
 		// first get non-aggregate singular values
 		for (ValuesContext ctx : TypeWrapper.valueContexts(target))
@@ -473,7 +466,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @param target
 	 */
 	public void init(Object target) {
-		Resource node = m.getResource(instanceURI(target)); 
+		org.apache.jena.rdf.model.Resource node = m.getResource(instanceURI(target));
 		for (ValuesContext ctx : TypeWrapper.valueContexts(target)) {
 			if ( ctx.isCollectionOrSet() && ctx.invokeGetter() == null)
 				ctx.setProperty(new LazySet(node, ctx.uri(), ctx.t(), this));
@@ -486,7 +479,7 @@ public class RDF2Bean extends Base implements Provider {
 
 	private void generateid(Object target, ValuesContext ctx) {
 		String uri = TypeWrapper.type(target).typeUri();
-		Resource r = m.createResource(uri);
+		org.apache.jena.rdf.model.Resource  r = m.createResource(uri);
 		int idx=0;
 		try {
 			Statement s = r.getRequiredProperty(sequence);
@@ -498,7 +491,7 @@ public class RDF2Bean extends Base implements Provider {
 		r.removeAll(sequence).addProperty(sequence, m.createTypedLiteral(idx+1));
 	}
 
-	private Object newInstance(Resource source, Class c) {
+	private Object newInstance(org.apache.jena.rdf.model.Resource source, Class c) {
 		try {
 			TypeWrapper t = wrap(javaclass(source, c));
 			return (jpa.proxyRequired()) ?
@@ -519,10 +512,10 @@ public class RDF2Bean extends Base implements Provider {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private Class<?> javaclass(Resource source, Class<?> c)
+	private Class<?> javaclass(org.apache.jena.rdf.model.Resource source, Class<?> c)
 			throws ClassNotFoundException {		
 		StmtIterator it = source.listProperties(RDF.type);
-		Resource oc = null;
+		org.apache.jena.rdf.model.Resource oc = null;
 		while (it.hasNext()) {
 			oc = it.nextStatement().getResource();
 			Class<?> declared = declaredClass(oc);
@@ -535,7 +528,7 @@ public class RDF2Bean extends Base implements Provider {
 		throw new NotBoundException(source.getURI() + " exists but is not bound to or able to coerce as " + c);
 	}
 
-	private Class<?> declaredClass(Resource oc) throws ClassNotFoundException {
+	private Class<?> declaredClass(org.apache.jena.rdf.model.Resource oc) throws ClassNotFoundException {
 		Class<?> result = NoBinding.class;
 		if (binder.getClass(oc.getURI()) != null)
 			result = binder.getClass(oc.getURI());
@@ -549,7 +542,7 @@ public class RDF2Bean extends Base implements Provider {
 		return result;			
 	}
 
-	private Resource rdfType(Class<?> c) {
+	private org.apache.jena.rdf.model.Resource rdfType(Class<?> c) {
 		return m.getResource((binder.isBound(c)) ? binder.getUri(c) : typeUri(c));
 	}
 
@@ -565,7 +558,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private void apply(Resource i, ValuesContext ctx) {
+	private void apply(org.apache.jena.rdf.model.Resource i, ValuesContext ctx) {
 		if ( (ctx.isCollection() || ctx.isSet()) && (shallow && !included(ctx.getName())) ) {
 			ctx.setProperty(new LazySet(i, ctx.uri(), ctx.t(), this));
 			return;
@@ -578,7 +571,7 @@ public class RDF2Bean extends Base implements Provider {
 		it.close();
 	}
 
-	private void fill(Resource i, ValuesContext ctx) {
+	private void fill(org.apache.jena.rdf.model.Resource i, ValuesContext ctx) {
 		Property p = m.createProperty(ctx.uri());
 		StmtIterator values = i.listProperties(p);
 		if (ctx.isArray()) {
@@ -594,15 +587,17 @@ public class RDF2Bean extends Base implements Provider {
 		values.close();
 	}
 
-	public Set lazySet(Resource i, String propertyUri, Class type) {
+	@Override
+	public Set lazySet(org.apache.jena.rdf.model.Resource i, String propertyUri, Class type) {
 		Property p = m.createProperty(propertyUri);
 		StmtIterator values = i.listProperties(p);
 		Set l = fillCollection(type, values);
 		values.close();
 		return l;
 	}	
-	
-	public List lazyList(Resource i, String propertyUri, Class type) {
+
+	@Override
+	public List lazyList(org.apache.jena.rdf.model.Resource i, String propertyUri, Class type) {
 		Property p = m.createProperty(propertyUri);
 		List l = null;
 		StmtIterator values = i.listProperties(p);
@@ -646,7 +641,7 @@ public class RDF2Bean extends Base implements Provider {
 		return list;
 	}
 
-	private void applyURI(ValuesContext ctx, Resource resource) {
+	private void applyURI(ValuesContext ctx, org.apache.jena.rdf.model.Resource resource) {
 		ctx.setProperty(URI.create(resource.getURI()));
 	}
 
@@ -677,7 +672,7 @@ public class RDF2Bean extends Base implements Provider {
 		return results;
 	}
 
-	private void applyIndividual(ValuesContext ctx, Resource i) {
+	private void applyIndividual(ValuesContext ctx, org.apache.jena.rdf.model.Resource  i) {
 		ctx.setProperty(toObject(ctx.type(), i));
 	}
 
@@ -694,7 +689,7 @@ public class RDF2Bean extends Base implements Provider {
 	 * 
 	 * @param pkg
 	 */
-	public void bindAll(String... pkg) {
+	public void bindAll(String pkg) {
 		ResolverUtil<Object> resolver = new ResolverUtil<Object>();
 		resolver.findAnnotated(Namespace.class, pkg);
 		Set<Class<? extends Object>> classes = resolver.getClasses();
@@ -717,11 +712,11 @@ public class RDF2Bean extends Base implements Provider {
 	 * Prepares this reader to bind to all annotated classes in 
 	 * provided list of package.
 	 */	
-	public void bind(Package... packages) {
-		for (Package p : packages)
+	public void bind(Package packages) {
+		for (Package p : packages.getPackages())
 			bindAll(p.getName());
 	}
-	
+
 }
 /*
  * Copyright (c) 2007

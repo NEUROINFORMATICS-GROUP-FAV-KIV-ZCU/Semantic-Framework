@@ -1,5 +1,6 @@
 package tools;
 
+import java.beans.Introspector;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,24 +19,24 @@ import thewebsemantic.Base;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.UserDefNamespace;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFList;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.RDFWriter;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Selector;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.vocabulary.OWL2;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.RDFWriter;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Selector;
+import org.apache.jena.rdf.model.SimpleSelector;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.OWL2;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 
 /**
  * This tool controls the transformation from OOP to OWL.<br>
@@ -112,6 +113,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void loadOOM(List<Object> dataList, boolean structureOnly) {
+		Introspector.setBeanInfoSearchPath(new String[] {"test.neexistujici"});
 		log.debug("Started loading object-oriented model.");		
 		Bean2RDF loader = new Bean2RDF(model, structureOnly);
 		for (int i = 0; i < dataList.size(); i++) {
@@ -210,7 +212,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 			log.error("I/O error occured when closing the input stream associated with the ontology configuration document.");
 		}
 		try {
-			com.hp.hpl.jena.ontology.Ontology ont = model.listOntologies().next();
+			org.apache.jena.ontology.Ontology ont = model.listOntologies().next();
 			UserDefNamespace.set(ont.getURI());
 			setBase(ont.getURI());
 			if (ont.getVersionInfo() == null)
@@ -241,7 +243,7 @@ public class JenaBeanExtensionTool implements JenaBeanExtension {
 	
 	@Override
 	public void setOntology(Ontology ontology) {		
-		com.hp.hpl.jena.ontology.Ontology res = model.createOntology(ontology.getUri());
+		org.apache.jena.ontology.Ontology res = model.createOntology(ontology.getUri());
 		String value;
 		String[] valueArray;
 		if ((value = ontology.getBackwardCompatibleWith()) != null)

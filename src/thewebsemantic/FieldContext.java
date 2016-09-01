@@ -7,9 +7,10 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.Model;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * Encapsulates bean's fields (attributes).
@@ -48,7 +49,7 @@ class FieldContext extends ValuesContext {
 
 	@Override
 	public boolean existsInModel(Model m) {
-		return m.getGraph().contains(Node.createURI(uri()), Node.ANY, Node.ANY);
+		return m.getGraph().contains(NodeFactory.createURI(uri()), Node.ANY, Node.ANY);
 	}
 
 

@@ -2,8 +2,8 @@ package thewebsemantic;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jena.rdf.model.Resource;
 
-import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DefaultTypeWrapper extends TypeWrapper {
 	
