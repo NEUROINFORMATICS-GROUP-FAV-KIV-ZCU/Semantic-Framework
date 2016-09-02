@@ -70,34 +70,33 @@ public class TestingData {
         Experiment m4 = new Experiment(4, w4, s4, p4, rg4, p1, startMereni4, konecMereni4, -3, "weathernote", measAddParamsValueses, hardwares, persons, datas);
 
         Vector<String> testVector = new Vector<String>();
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             testVector.add("TestVector:" + i);
         }
         m1.setTestVector(testVector);
-
 
 
         try {
             Section s = new Section("OdmlSection");
             Section subsection = new Section("OdmlSubsection");
             s.add(subsection);
-            Property p = new Property("TestOdmlProperty", "TestOdmlValue", "String");
+            for (int i = 0; i < 5; i++) {
+                subsection.add(new Property("TestOdmlProperty", "TestOdmlValue" + i, "String"));
 
-            subsection.add(p);
-           // m1.setMetadata(s);
-            dataList.add(s);
+            }
+
+         //   m1.setElasticExperiment(elastic);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-/*
+
 
         dataList.add((Object) m1);
-       dataList.add((Object) m2);
+  /*     dataList.add((Object) m2);
         dataList.add((Object) m3);
         dataList.add((Object) m4);
 */
-
 
 
     }

@@ -34,8 +34,8 @@ public class Experiment implements java.io.Serializable {
     private Set<Person> persons = new HashSet<Person>(0);
     private Set<Data> datas = new HashSet<Data>(0);
     private Vector<String> testVector = new Vector<String>();
-    private Section metadata;
-    
+  //  private ExperimentElastic elasticExperiment;
+
     public Experiment() {
     }
 
@@ -189,13 +189,6 @@ public class Experiment implements java.io.Serializable {
         this.testVector = testVector;
     }
 
-    public Section getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(Section metadata) {
-        this.metadata = metadata;
-    }
 }
 
 

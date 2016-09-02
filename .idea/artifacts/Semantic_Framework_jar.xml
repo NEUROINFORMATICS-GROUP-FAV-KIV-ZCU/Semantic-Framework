@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Semantic-Framework:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Semantic_Framework_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Semantic-Framework.jar">
+        <element id="module-output" name="Semantic-Framework" />
+      </element>
+      <element id="library" level="project" name="lib" />
+      <element id="library" level="project" name="odml-java-lib-1.1.7" />
+      <element id="library" level="project" name="owlapi" />
+      <element id="library" level="project" name="slf4j-api-1.7.21" />
+      <element id="library" level="project" name="jena-2.6" />
+      <element id="library" level="project" name="joda-time-2.0" />
+      <element id="library" level="project" name="jdom-1.1.3" />
+    </root>
+  </artifact>
+</component>

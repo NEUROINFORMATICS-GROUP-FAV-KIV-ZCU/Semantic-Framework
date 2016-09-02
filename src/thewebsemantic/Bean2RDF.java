@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -376,7 +377,8 @@ public class Bean2RDF extends Base {
      */
 	private Resource write(Object bean, Resource subject, boolean shallow) {		
 		cycle.add(bean);
-		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {			
+		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
+			logger.debug("ValuesContext: " + p);
 			if (!(shallow && (p.type().isAssignableFrom(Collection.class))) || forceDeep)
 				saveOrUpdate(subject, p);
 		}	
@@ -394,7 +396,6 @@ public class Bean2RDF extends Base {
 		Object o = pc.invokeGetter();
 		logger.debug("ValuesContext: " + pc +  ", getter: " + o);
 		Property property = toRdfProperty(pc);  // map the attribute to rdf:Property instance
-		
 		if ( Saver.supports(pc.type()) )
 			Saver.of(pc.type()).save(this, subject, property, o);
 		else if (o == null)
@@ -420,7 +421,7 @@ public class Bean2RDF extends Base {
 	 * @return true if the object is normal object
 	 */
 	private boolean isNormalObject(Object o) {
-		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map);
+		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map) && !(o instanceof Vector);
 	}
 
 	
