@@ -343,7 +343,20 @@ public abstract class TypeWrapper {
 	 */
 	protected static BeanInfo beanInfo(Class<?> c) {
 		try {
-			return Introspector.getBeanInfo(c, java.lang.Object.class);
+//			Class stopClass = java.lang.Object.class;
+//			boolean isSuper = false;
+//			for (Class i = c.getSuperclass(); i != null; i = i.getSuperclass()) {
+//				if (c == stopClass) {
+//					isSuper = true;
+//				}
+//			}
+//			BeanInfo ret;
+//			if(isSuper) {
+//				ret = Introspector.getBeanInfo(c, stopClass);
+//			} else {
+//				ret = Introspector.getBeanInfo(c);
+//			}
+			return  Introspector.getBeanInfo(c, c.getSuperclass());
 		} catch (IntrospectionException e1) {
 			e1.printStackTrace();
 		}

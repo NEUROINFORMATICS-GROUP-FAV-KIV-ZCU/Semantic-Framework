@@ -24,6 +24,7 @@ public abstract class Saver {
 		lookup.put(Set.class, new CollectionSaver());
 		lookup.put(Vector.class, new CollectionSaver());
 		lookup.put(List.class, new ListSaver());
+		lookup.put(ArrayList.class, new ListSaver());
 		lookup.put(Array.class, new ArraySaver());
 		lookup.put(URI.class, new ResourceSaver());
 	}

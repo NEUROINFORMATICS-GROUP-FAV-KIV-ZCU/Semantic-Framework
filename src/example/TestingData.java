@@ -25,6 +25,7 @@ public class TestingData {
     private Set<Data> datas = new HashSet<Data>(0);
 
 
+
     public TestingData() {
 
         Timestamp startMereni1 = Timestamp.valueOf("2008-11-20 10:20:00");
@@ -85,7 +86,7 @@ public class TestingData {
 
             }
 
-         //   m1.setElasticExperiment(elastic);
+            m1.setMetadata(s);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -421,7 +421,7 @@ public class Bean2RDF extends Base {
 	 * @return true if the object is normal object
 	 */
 	private boolean isNormalObject(Object o) {
-		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map) && !(o instanceof Vector);
+		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map) && !(o instanceof Vector) && !(o instanceof ArrayList);
 	}
 
 	
