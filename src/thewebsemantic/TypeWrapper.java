@@ -2,17 +2,13 @@ package thewebsemantic;
 
 import static thewebsemantic.Util.last;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
+import java.beans.*;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.proxy.HibernateProxy;
@@ -145,7 +141,17 @@ public abstract class TypeWrapper {
 		for (PropertyDescriptor property : descriptors()) {
 			if (property.getReadMethod().isAnnotationPresent(Ignore.class))
 				continue;
-			values.add(new PropertyContext(o, property));
+			try {
+				Field f = o.getClass().getDeclaredField(property.getName());
+				if(f !=  null) {
+					values.add(new PropertyContext(o, property));
+				}
+			} catch (Exception e) {
+				//if such a field doesn't exist it is not added to "values"
+				//nothing more is not needed
+				logger.debug(e);
+			}
+
 		}			
 		return values.toArray(new ValuesContext[0]);
 
@@ -220,8 +226,9 @@ public abstract class TypeWrapper {
 		if (descriptors == null) {
 			Collection<PropertyDescriptor> results = new LinkedList<PropertyDescriptor>();
 			for (PropertyDescriptor p : info.getPropertyDescriptors()) {
-				if (p.getReadMethod() != null)
+				if (p.getReadMethod() != null) {
 					results.add(p);
+				}
 			}
 			descriptors = results.toArray(new PropertyDescriptor[0]);
 		}
@@ -343,19 +350,6 @@ public abstract class TypeWrapper {
 	 */
 	protected static BeanInfo beanInfo(Class<?> c) {
 		try {
-//			Class stopClass = java.lang.Object.class;
-//			boolean isSuper = false;
-//			for (Class i = c.getSuperclass(); i != null; i = i.getSuperclass()) {
-//				if (c == stopClass) {
-//					isSuper = true;
-//				}
-//			}
-//			BeanInfo ret;
-//			if(isSuper) {
-//				ret = Introspector.getBeanInfo(c, stopClass);
-//			} else {
-//				ret = Introspector.getBeanInfo(c);
-//			}
 			return  Introspector.getBeanInfo(c, c.getSuperclass());
 		} catch (IntrospectionException e1) {
 			e1.printStackTrace();
