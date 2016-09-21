@@ -151,6 +151,17 @@ public abstract class TypeWrapper {
 				//nothing more is not needed
 				logger.debug(e);
 			}
+			//TODO - hack solely because of odml lib
+			try {
+				Field f = o.getClass().getDeclaredField("sub" + property.getName());
+				if(f !=  null) {
+					values.add(new PropertyContext(o, property));
+				}
+			} catch (Exception e) {
+				//if such a field doesn't exist it is not added to "values"
+				//nothing more is not needed
+				logger.debug(e);
+			}
 
 		}			
 		return values.toArray(new ValuesContext[0]);
