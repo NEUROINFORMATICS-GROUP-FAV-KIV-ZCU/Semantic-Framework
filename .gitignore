@@ -1,0 +1,11 @@
+.idea
+lib
+target
+*.project
+*.iml
+bin
+.project
+.classpath
+.settings
+nb-configuration.xml
+/logs
