@@ -8,4 +8,5 @@ bin
 .classpath
 .settings
 nb-configuration.xml
+Semantic-Framework.iml
 /logs
