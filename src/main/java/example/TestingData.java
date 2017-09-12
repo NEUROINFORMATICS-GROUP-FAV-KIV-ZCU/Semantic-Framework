@@ -92,12 +92,21 @@ public class TestingData {
             e.printStackTrace();
         }
 
+        String[] oneArray = new String[] {"jedna", "dva", "tri"};
+
+        Group g = new Group();
+        g.setOneArray(oneArray);
+        g.setSingleObject("test single");
+
+
+        System.out.println(g.getSingleObject().getClass());
 
         dataList.add((Object) m1);
-  /*     dataList.add((Object) m2);
+        dataList.add(g);
+       dataList.add((Object) m2);
         dataList.add((Object) m3);
         dataList.add((Object) m4);
-*/
+
 
 
     }

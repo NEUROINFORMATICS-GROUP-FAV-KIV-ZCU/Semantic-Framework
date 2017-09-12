@@ -405,7 +405,9 @@ public class Bean2RDF extends Base {
 		else if (isNormalObject(o))
 			setPropertyValue(subject, property, o);
 		else
-			logger.warn(MessageFormat.format("Skipped unsupported property type {0} on {1}", pc.type(), pc.subject.getClass()));
+			Saver.of(o.getClass()).save(this, subject, property, o);
+
+			//logger.warn(MessageFormat.format("Skipped unsupported property type {0} on {1}", pc.type(), pc.subject.getClass()));
 
 		// removing data if we need only their structure
 		if (structureOnly) {
@@ -421,7 +423,7 @@ public class Bean2RDF extends Base {
 	 * @return true if the object is normal object
 	 */
 	private boolean isNormalObject(Object o) {
-		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map) && !(o instanceof Vector) && !(o instanceof ArrayList);
+		return !o.getClass().isArray() && !(o instanceof Collection) && !(o instanceof Map) && !(o instanceof Vector) && !(o instanceof ArrayList && !(o instanceof Object));
 	}
 
 	
