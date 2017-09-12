@@ -379,7 +379,7 @@ public class Bean2RDF extends Base {
 		cycle.add(bean);
 		for (ValuesContext p : TypeWrapper.valueContexts(bean)) {
 			logger.debug("ValuesContext: " + p);
-			if (!(shallow && (p.type().isAssignableFrom(Collection.class))) || forceDeep)
+			if (!(shallow && (p.type().isAssignableFrom(Collection.class)) && p.type().isArray() ) || forceDeep)
 				saveOrUpdate(subject, p);
 		}	
 		return subject;

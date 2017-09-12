@@ -25,7 +25,6 @@ public class TestingData {
     private Set<Data> datas = new HashSet<Data>(0);
 
 
-
     public TestingData() {
 
         Timestamp startMereni1 = Timestamp.valueOf("2008-11-20 10:20:00");
@@ -92,21 +91,26 @@ public class TestingData {
             e.printStackTrace();
         }
 
-        String[] oneArray = new String[] {"jedna", "dva", "tri"};
+        String[] oneArray = new String[]{"jedna", "dva", "tri"};
 
         Group g = new Group();
-        g.setOneArray(oneArray);
-        g.setSingleObject("test single");
+
+        Dataset d = new Dataset();
+
+        List<Dataset> datasets = new LinkedList<Dataset>();
+
+        datasets.add(d);
+        g.setDatasets(datasets);
+        d.setOneArray(oneArray);
+        d.setSingleObject("test single");
 
 
-        System.out.println(g.getSingleObject().getClass());
 
         dataList.add((Object) m1);
         dataList.add(g);
-       dataList.add((Object) m2);
+        dataList.add((Object) m2);
         dataList.add((Object) m3);
         dataList.add((Object) m4);
-
 
 
     }
